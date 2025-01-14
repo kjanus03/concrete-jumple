@@ -52,7 +52,7 @@ public class GameController extends GameLoop {
         // Handle collisions between player, enemies, and platforms
         handleCollisions();
         // Follow the player's vertical position with the camera
-        if (player.getY() < firstPlatform.getY()) {
+        if (player.getY() < gameRoot.getHeight() / 2) {
             followPlayer();
         }
     }

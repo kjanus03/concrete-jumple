@@ -23,12 +23,20 @@ public class CollisionManager {
                 !(entityBounds.getTranslateY() + entityBounds.getHeight() <= platformBounds.getTranslateY());
     }
 
+    public boolean isEntityCollidingWalls(Entity entity) {
+        Rectangle entityBounds = entity.getView();
+        return entityBounds.getTranslateX() <= 0 || entityBounds.getTranslateX() + entityBounds.getWidth() >= 800;
+    }
+
     // Method to analyze and handle collisions for any entity
     public void analyzeEntityCollisions(Entity entity, Platform platform) {
         if (isEntityOnPlatform(entity, platform)) {
             entity.landOnPlatform(platform);
         } else if (isEntityCollidingSide(entity, platform)) {
             entity.stopHorizontalMovement();
+        } else if (isEntityCollidingWalls(entity)) {
+            entity.stopHorizontalMovement();
         }
+
     }
 }

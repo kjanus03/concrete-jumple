@@ -7,32 +7,20 @@ import java.util.List;
 public class Map {
     private List<Platform> platforms;
     private Pane gameRoot;
+    private PlatformGenerator platformGenerator;
 
     public Map(Pane root) {
         this.gameRoot = root;
-        this.platforms = new ArrayList<>();
-        createPlatforms();
+        this.platformGenerator = new PlatformGenerator();
+        this.platforms = platformGenerator.generatePlatforms();
+        addPlatformsToGameRoot();
     }
 
-    private void createPlatforms() {
-        Platform groundPlatform = new Platform(0, 580, 800, 20);  // A wide platform at the bottom
 
-        Platform platform1 = new Platform(100, 400, 200, 20);
-        Platform platform2 = new Platform(350, 300, 150, 20);
-        Platform platform3 = new Platform(600, 200, 250, 20);
-
-        platforms.add(groundPlatform);
-        platforms.add(platform1);
-        platforms.add(platform2);
-        platforms.add(platform3);
-
-        gameRoot.getChildren().addAll(
-                groundPlatform.getView(),
-                platform1.getView(),
-                platform2.getView(),
-                platform3.getView()
-        );
-
+    private void addPlatformsToGameRoot() {
+        for (Platform platform : platforms) {
+            gameRoot.getChildren().add(platform.getView());
+        }
         System.out.println("Map created with " + platforms.size() + " platforms");
     }
 
