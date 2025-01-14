@@ -9,12 +9,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        Pane root = new Pane();  // The root pane where all game elements will be added
-        Scene scene = new Scene(root, 800, 600);  // Window size: 800x600
+//        Config config = new Config();
+        Pane root = new Pane();
+        Scene scene = new Scene(root, 800, 600);
 
-        // Initialize GameController, which manages the game
-        GameController gameController = new GameController(root);
-        gameController.startGame(scene);  // Pass the scene to the controller for key listeners
+        GameController gameController = new GameController(root, scene);
+        gameController.startGame();
 
         stage.setTitle("Platformer Game");
         stage.setScene(scene);

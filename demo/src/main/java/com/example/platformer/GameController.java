@@ -3,67 +3,102 @@ package com.example.platformer;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class GameController extends GameLoop {
     private Player player;
+    private List<Enemy> enemies;
+    private Map map;  // The Map that holds all platforms
     private Pane gameRoot;
-    private Set<KeyCode> activeKeys;  // Track currently pressed keys
+    private CollisionManager collisionManager;  // Use CollisionManager for all collision analysis
+    private Platform firstPlatform;
 
-    public GameController(Pane root) {
+    public GameController(Pane root, Scene scene) {
         this.gameRoot = root;
-        this.activeKeys = new HashSet<>();  // Initialize the set for tracking active keys
+        this.collisionManager = new CollisionManager();
+        setupInputHandling(scene);  // Setup keyboard input handling
     }
 
-    public void startGame(Scene scene) {
-        // Initialize player and level
-        player = new Player(50, 50);  // Player starts at (50, 50)
+    public void startGame() {
+        // Initialize player
+        player = new Player(50, 550);  // Start player slightly above the ground platform
         gameRoot.getChildren().add(player.getView());
 
-        // Create key listeners for movement
-        addKeyListeners(scene);
+        // Initialize the map, which will create and add platforms to the game root
+        map = new Map(gameRoot);
+        firstPlatform = map.getFirstPlatform();
+
+        // Create enemies (if any)
+        enemies = List.of(
+                new Enemy(400, 300, player),
+                new Enemy(600, 300, player)
+        );
+        gameRoot.getChildren().addAll(
+                enemies.get(0).getView(), enemies.get(1).getView()
+        );
 
         // Start the game loop
         start();
     }
 
-    // Add key press and release listeners
-    private void addKeyListeners(Scene scene) {
-        // When a key is pressed, add it to the set of active keys
-        scene.setOnKeyPressed(event -> {
-            activeKeys.add(event.getCode());
-        });
-
-        // When a key is released, remove it from the set of active keys
-        scene.setOnKeyReleased(event -> {
-            activeKeys.remove(event.getCode());
-        });
-    }
-
     @Override
     protected void update(double deltaTime) {
-        // Update player movements based on active keys
-        handleKeyPresses();
-
-        // Update player (gravity, etc.)
+        // Update player and enemies
         player.update(deltaTime);
+        for (Enemy enemy : enemies) {
+            enemy.update(deltaTime);
+        }
 
-        // Handle other game mechanics (collision, etc.)
+        // Handle collisions between player, enemies, and platforms
+        handleCollisions();
+        // Follow the player's vertical position with the camera
+        if (player.getY() < firstPlatform.getY()) {
+            followPlayer();
+        }
     }
 
-    // Handle movement based on pressed keys
-    private void handleKeyPresses() {
-        if (activeKeys.contains(KeyCode.LEFT)) {
-            player.moveLeft();
+    private void handleCollisions() {
+        // Get platforms from the map and check for collisions
+        List<Platform> platforms = map.getPlatforms();
+
+        // Check collisions for player
+        for (Platform platform : platforms) {
+            collisionManager.analyzeEntityCollisions(player, platform);
         }
-        if (activeKeys.contains(KeyCode.RIGHT)) {
-            player.moveRight();
-        }
-        if (activeKeys.contains(KeyCode.SPACE)) {
-            player.jump();
+
+        // Check collisions for each enemy
+        for (Enemy enemy : enemies) {
+            for (Platform platform : platforms) {
+                collisionManager.analyzeEntityCollisions(enemy, platform);
+            }
         }
     }
+
+    // Handle keyboard input for player movement and jumping
+    private void setupInputHandling(Scene scene) {
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.LEFT) {
+                player.moveLeft();  // Move player left
+            } else if (event.getCode() == KeyCode.RIGHT) {
+                player.moveRight();  // Move player right
+            } else if (event.getCode() == KeyCode.SPACE) {
+                player.jump();  // Make player jump if possible
+            }
+        });
+
+        scene.setOnKeyReleased(event -> {
+            // Stop horizontal movement when left or right keys are released
+            if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
+                player.stopMoving();
+            }
+        });
+    }
+
+    // Method to follow the player's vertical position with the camera
+    public void followPlayer() {
+        double playerY = player.getY();
+        double offset = playerY - gameRoot.getHeight() / 2;  // Offset to center the player on the screen
+        gameRoot.setTranslateY(-offset);
+    }
+
 }

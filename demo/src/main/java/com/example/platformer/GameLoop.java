@@ -12,11 +12,9 @@ public abstract class GameLoop extends AnimationTimer {
             return;
         }
 
-        // Calculate the time difference between frames (in nanoseconds)
         long deltaTime = now - previousTime;
         previousTime = now;
 
-        // Update game state
         update(deltaTime / 1e9);  // Convert nanoseconds to seconds
     }
 
