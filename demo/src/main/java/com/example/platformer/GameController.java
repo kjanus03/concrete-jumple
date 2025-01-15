@@ -3,19 +3,25 @@ package com.example.platformer;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends GameLoop {
     private Player player;
-    private List<Enemy> enemies;
+    private ArrayList<Enemy> enemies;
     private Map map;  // The Map that holds all platforms
     private Pane gameRoot;
     private CollisionManager collisionManager;  // Use CollisionManager for all collision analysis
-    private Platform firstPlatform;
+    private List<Platform> platformsWithEnemies;
+
+    private EnemyGenerator enemyGenerator;
 
     public GameController(Pane root, Scene scene) {
         this.gameRoot = root;
         this.collisionManager = new CollisionManager();
+        this.platformsWithEnemies = new ArrayList<>();
+        this.enemies = new ArrayList<>();
         setupInputHandling(scene);  // Setup keyboard input handling
     }
 
@@ -26,16 +32,15 @@ public class GameController extends GameLoop {
 
         // Initialize the map, which will create and add platforms to the game root
         map = new Map(gameRoot);
-        firstPlatform = map.getFirstPlatform();
 
-        // Create enemies (if any)
-        enemies = List.of(
-                new Enemy(400, 300, player),
-                new Enemy(600, 300, player)
-        );
-        gameRoot.getChildren().addAll(
-                enemies.get(0).getView(), enemies.get(1).getView()
-        );
+        // Generate enemies
+        enemyGenerator = new EnemyGenerator(map, 0.5, player);
+        enemies = enemyGenerator.generateEnemies();
+
+        for (Enemy enemy : enemies) {
+            gameRoot.getChildren().add(enemy.getView());
+        }
+
 
         // Start the game loop
         start();
@@ -45,6 +50,7 @@ public class GameController extends GameLoop {
     protected void update(double deltaTime) {
         // Update player and enemies
         player.update(deltaTime);
+
         for (Enemy enemy : enemies) {
             enemy.update(deltaTime);
         }
@@ -55,6 +61,7 @@ public class GameController extends GameLoop {
         if (player.getY() < gameRoot.getHeight() / 2) {
             followPlayer();
         }
+
     }
 
     private void handleCollisions() {
