@@ -15,10 +15,11 @@ public class GameController extends GameLoop {
     private ArrayList<Buff> buffs;
     private Map map;  // The Map that holds all platforms
     private Pane gameRoot;
-    private Goal goal = new Goal(1000, 1000);
+    private Goal goal;
     private CollisionManager collisionManager;  // Use CollisionManager for all collision analysis
 
     private EnemyGenerator enemyGenerator;
+    private GameTimer gameTimer;
 
     public GameController(Pane root, Scene scene) {
         this.gameRoot = root;
@@ -26,6 +27,7 @@ public class GameController extends GameLoop {
         this.enemies = new ArrayList<>();
         this.buffs = new ArrayList<>();
         this.goal = new Goal(100, 100);
+        this.gameTimer = new GameTimer();
         setupInputHandling(scene);  // Setup keyboard input handling
     }
 
@@ -55,6 +57,8 @@ public class GameController extends GameLoop {
         this.goal.generateGoal(map.getPlatforms().get(map.getPlatforms().size() - 1));
         gameRoot.getChildren().add(goal.getView());
 
+        gameRoot.getChildren().add(gameTimer.getTimerText());
+
         // Start the game loop
         start();
     }
@@ -78,6 +82,10 @@ public class GameController extends GameLoop {
         if (player.getY() < gameRoot.getHeight() / 2) {
             followPlayer();
         }
+
+       // keeping the timer in the top right corner
+        double timerY = -gameRoot.getTranslateY() + 30;
+        gameTimer.update(deltaTime, timerY);
 
     }
 
@@ -114,6 +122,7 @@ public class GameController extends GameLoop {
 
         if (collisionManager.areEntitiesColliding(player, goal)) {
             System.out.println("You win!");
+            gameTimer.stop();
             stop();
         }
     }
