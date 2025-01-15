@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    private MusicPlayer musicPlayer;
+
+
     @Override
     public void start(Stage stage) {
 //        Config config = new Config();
@@ -15,6 +18,9 @@ public class Main extends Application {
 
         GameController gameController = new GameController(root, scene);
         gameController.startGame();
+
+        this.musicPlayer = new MusicPlayer("src/main/assets/audio/soundtrack.mp3");
+        musicPlayer.play();
 
         stage.setTitle("Platformer Game");
         stage.setScene(scene);

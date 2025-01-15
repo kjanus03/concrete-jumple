@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameController extends GameLoop {
@@ -105,16 +106,19 @@ public class GameController extends GameLoop {
             }
         }
 
-        for (Buff buff : buffs) {
+        Iterator<Buff> iterator = buffs.iterator();
+        while (iterator.hasNext()) {
+            Buff buff = iterator.next();
             for (Platform platform : platforms) {
                 collisionManager.analyzeEntityCollisions(buff, platform);
             }
             if (collisionManager.areEntitiesColliding(player, buff)) {
                 player.applyJumpBuff(buff);
                 gameRoot.getChildren().remove(buff.getView());
-                buffs.remove(buff);
+                iterator.remove(); // Use the iterator to remove the element
             }
         }
+
 
         if (collisionManager.isEntityCollidingWalls(player)) {
             player.handleWallCollision();
