@@ -1,4 +1,6 @@
-package com.example.platformer;
+package Generators;
+import com.example.platformer.Platform;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +15,8 @@ public class PlatformGenerator {
     private double maxVerticalGap = 150;  // Maximum vertical gap between platforms
     private double minVerticalGap = 50;  // Minimum vertical gap between platforms
     private int platformCount = 100;  // Number of platforms to generate
+
+    private int lastGeneratedX = 0;  // X position of the last generated platform
 
     public PlatformGenerator() {
         this.random = new Random();

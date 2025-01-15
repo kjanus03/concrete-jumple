@@ -1,5 +1,7 @@
 package com.example.platformer;
 
+import Generators.BuffGenerator;
+import Generators.EnemyGenerator;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
@@ -10,18 +12,20 @@ import java.util.List;
 public class GameController extends GameLoop {
     private Player player;
     private ArrayList<Enemy> enemies;
+    private ArrayList<Buff> buffs;
     private Map map;  // The Map that holds all platforms
     private Pane gameRoot;
+    private Goal goal = new Goal(1000, 1000);
     private CollisionManager collisionManager;  // Use CollisionManager for all collision analysis
-    private List<Platform> platformsWithEnemies;
 
     private EnemyGenerator enemyGenerator;
 
     public GameController(Pane root, Scene scene) {
         this.gameRoot = root;
         this.collisionManager = new CollisionManager();
-        this.platformsWithEnemies = new ArrayList<>();
         this.enemies = new ArrayList<>();
+        this.buffs = new ArrayList<>();
+        this.goal = new Goal(100, 100);
         setupInputHandling(scene);  // Setup keyboard input handling
     }
 
@@ -34,13 +38,22 @@ public class GameController extends GameLoop {
         map = new Map(gameRoot);
 
         // Generate enemies
-        enemyGenerator = new EnemyGenerator(map, 0.5, player);
-        enemies = enemyGenerator.generateEnemies();
-
+        enemyGenerator = new EnemyGenerator(map, 0.25, player);
+        enemies = enemyGenerator.generateEntities();
         for (Enemy enemy : enemies) {
             gameRoot.getChildren().add(enemy.getView());
         }
 
+        // Generate buffs
+        BuffGenerator buffGenerator = new BuffGenerator(map, 0.4);
+        buffs = buffGenerator.generateEntities();
+        for (Buff buff : buffs) {
+            gameRoot.getChildren().add(buff.getView());
+        }
+
+        //generate goal on the last platform
+        this.goal.generateGoal(map.getPlatforms().get(map.getPlatforms().size() - 1));
+        gameRoot.getChildren().add(goal.getView());
 
         // Start the game loop
         start();
@@ -53,6 +66,10 @@ public class GameController extends GameLoop {
 
         for (Enemy enemy : enemies) {
             enemy.update(deltaTime);
+        }
+
+        for (Buff buff : buffs) {
+            buff.update(deltaTime);
         }
 
         // Handle collisions between player, enemies, and platforms
@@ -79,17 +96,39 @@ public class GameController extends GameLoop {
                 collisionManager.analyzeEntityCollisions(enemy, platform);
             }
         }
+
+        for (Buff buff : buffs) {
+            for (Platform platform : platforms) {
+                collisionManager.analyzeEntityCollisions(buff, platform);
+            }
+            if (collisionManager.areEntitiesColliding(player, buff)) {
+                player.applyJumpBuff(buff);
+                gameRoot.getChildren().remove(buff.getView());
+                buffs.remove(buff);
+            }
+        }
+
+        if (collisionManager.isEntityCollidingWalls(player)) {
+            player.handleWallCollision();
+        }
+
+        if (collisionManager.areEntitiesColliding(player, goal)) {
+            System.out.println("You win!");
+            stop();
+        }
     }
 
     // Handle keyboard input for player movement and jumping
     private void setupInputHandling(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.LEFT) {
-                player.moveLeft();  // Move player left
-            } else if (event.getCode() == KeyCode.RIGHT) {
-                player.moveRight();  // Move player right
-            } else if (event.getCode() == KeyCode.SPACE) {
-                player.jump();  // Make player jump if possible
+            if (!player.hasCollisionCooldown()) {
+                if (event.getCode() == KeyCode.LEFT) {
+                    player.moveLeft();  // Move player left
+                } else if (event.getCode() == KeyCode.RIGHT) {
+                    player.moveRight();  // Move player right
+                } else if (event.getCode() == KeyCode.SPACE) {
+                    player.jump();  // Make player jump if possible
+                }
             }
         });
 

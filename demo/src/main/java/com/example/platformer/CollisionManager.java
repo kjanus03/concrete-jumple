@@ -25,8 +25,15 @@ public class CollisionManager {
 
     public boolean isEntityCollidingWalls(Entity entity) {
         Rectangle entityBounds = entity.getView();
-        return entityBounds.getTranslateX() <= 0 || entityBounds.getTranslateX() + entityBounds.getWidth() >= 800;
+        boolean colliding = entityBounds.getTranslateX() <= 0 ||
+                entityBounds.getTranslateX() + entityBounds.getWidth() >= 800;
+
+        if (!colliding && entity instanceof Player) {
+            ((Player) entity).resetWallCollision(); // Reset collision state if not colliding
+        }
+        return colliding;
     }
+
 
     // Method to analyze and handle collisions for any entity
     public void analyzeEntityCollisions(Entity entity, Platform platform) {
@@ -34,9 +41,13 @@ public class CollisionManager {
             entity.landOnPlatform(platform);
         } else if (isEntityCollidingSide(entity, platform)) {
             entity.stopHorizontalMovement();
-        } else if (isEntityCollidingWalls(entity)) {
-            entity.stopHorizontalMovement();
         }
+    }
 
+    public boolean areEntitiesColliding(Entity entity1, Entity entity2) {
+        Rectangle entity1Bounds = entity1.getView();
+        Rectangle entity2Bounds = entity2.getView();
+
+        return entity1Bounds.getBoundsInParent().intersects(entity2Bounds.getBoundsInParent());
     }
 }

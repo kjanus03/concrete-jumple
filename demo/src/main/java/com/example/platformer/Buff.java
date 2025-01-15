@@ -3,22 +3,19 @@ package com.example.platformer;
 import javafx.scene.shape.Rectangle;
 
 
-public class Buff {
+public class Buff extends Entity {
     protected double x, y;
-    protected Rectangle buffView;
     private int jumpBuff;
 
-    public Buff(double x, double y, double width, double height, int jumpBuff) {
+    private int duration;
+
+    public Buff(double x, double y, int jumpBuff, int duration) {
+        super(x, y, 30, 30);
         this.x = x;
         this.y = y;
         this.jumpBuff = jumpBuff;
-        this.buffView = new Rectangle(width, height);
-        this.buffView.setTranslateX(x);
-        this.buffView.setTranslateY(y);
-    }
-
-    public Rectangle getView() {
-        return buffView;
+        this.duration = duration;
+        this.entityView.setStyle("-fx-fill: green;");
     }
 
     public double getX() {
@@ -31,5 +28,9 @@ public class Buff {
 
     public int getJumpBuff() {
         return jumpBuff;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

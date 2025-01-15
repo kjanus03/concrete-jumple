@@ -26,4 +26,8 @@ public class Platform {
     public double getY() {
         return y;
     }
+
+    public int getWidth() {
+        return (int) platformView.getWidth();
+    }
 }
