@@ -37,7 +37,7 @@ public class Main extends Application implements GameEndListener {
         gameController.startGame();
 
         // Music and Database
-        this.musicPlayer = new MusicPlayer("src/main/assets/audio/soundtrack.mp3");
+        this.musicPlayer = new MusicPlayer("src/main/resources/audio/soundtrack.mp3");
         musicPlayer.play();
         this.databaseManager = new DatabaseManager();
 
