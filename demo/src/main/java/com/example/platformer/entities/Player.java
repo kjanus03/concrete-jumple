@@ -39,10 +39,12 @@ public class Player extends Entity {
 
         };
         spriteView = new ImageView(idleSprites[0]); // Start with the first idle sprite
-        spriteView.setFitWidth(30); // Match entity size
-        spriteView.setFitHeight(30);
+        spriteView.setFitWidth(32); // Match entity size
+        spriteView.setFitHeight(54);
 
-        entityView.setStyle("-fx-fill: blue;");  // Add some color to differentiate
+        // make entity view transparent
+        entityView.setOpacity(0);
+
         jumpForce = 750;  // Set the initial jump force
         speed = 200;  // Set the initial speed
         defaultSpeed = speed;  // Store the default speed
@@ -90,6 +92,9 @@ public class Player extends Entity {
         if (!canJump) {
             velocityY += GRAVITY * deltaTime;
         }
+
+        spriteView.setTranslateX(x);
+        spriteView.setTranslateY(y);
     }
 
 
@@ -172,11 +177,13 @@ public class Player extends Entity {
     public void setX(double x) {
         this.x = x;
         entityView.setTranslateX(x);
+        spriteView.setTranslateX(x);
     }
 
     public void setY(double y) {
         this.y = y;
         entityView.setTranslateY(y);
+        spriteView.setTranslateY(y);
     }
 
     public void enemyCollision() {
@@ -213,5 +220,9 @@ public class Player extends Entity {
 
     public boolean isInvincible() {
         return isInvincible;
+    }
+
+    public ImageView getSpriteView() {
+        return spriteView;
     }
 }

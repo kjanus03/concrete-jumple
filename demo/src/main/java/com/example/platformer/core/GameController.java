@@ -45,6 +45,7 @@ public class GameController extends GameLoop {
         // Initialize player
         player = new Player(50, 550);  // Start player slightly above the ground platform
         gameRoot.getChildren().add(player.getView());
+        gameRoot.getChildren().add(player.getSpriteView());
 
         // Initialize the com.example.platformer.map, which will create and add platforms to the game root
         map = new Map(gameRoot);
