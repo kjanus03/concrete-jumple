@@ -13,7 +13,7 @@ public class GameTimer {
         timerText = new Text();
         timerText.setFont(Font.font(20));  // Set font size for the timer text
         timerText.setFill(Color.BLACK);  // Set text color to white
-        timerText.setX(700);  // Position the timer text near the top-right corner
+        timerText.setX(680);  // Position the timer text near the top-right corner
         timerText.setY(30);
     }
 
@@ -29,7 +29,9 @@ public class GameTimer {
     private void displayTime() {
         int minutes = (int) (elapsedTime / 60);
         int seconds = (int) (elapsedTime % 60);
-        timerText.setText(String.format("%02d:%02d", minutes, seconds));
+        int milliseconds = (int) ((elapsedTime % 1) * 1000);
+        timerText.setText(String.format("%02d:%02d:%03d", minutes, seconds, milliseconds));
+
     }
 
     // Method to stop the timer
@@ -40,5 +42,10 @@ public class GameTimer {
     // Method to get the timer text for adding to the scene
     public Text getTimerText() {
         return timerText;
+    }
+
+    // Method to get the elapsed time
+    public double getElapsedTime() {
+        return elapsedTime;
     }
 }

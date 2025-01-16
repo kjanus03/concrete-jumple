@@ -2,11 +2,13 @@ package com.example.platformer;
 
 import Generators.BuffGenerator;
 import Generators.EnemyGenerator;
+import highscores.HighScore;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class GameController extends GameLoop {
 
     private EnemyGenerator enemyGenerator;
     private GameTimer gameTimer;
+    private HighScore score;
+
+    private GameEndListener gameEndListener;
 
     public GameController(Pane root, Scene scene) {
         this.gameRoot = root;
@@ -125,9 +130,7 @@ public class GameController extends GameLoop {
         }
 
         if (collisionManager.areEntitiesColliding(player, goal)) {
-            System.out.println("You win!");
-            gameTimer.stop();
-            stop();
+            endGame();
         }
     }
 
@@ -158,6 +161,20 @@ public class GameController extends GameLoop {
         double playerY = player.getY();
         double offset = playerY - gameRoot.getHeight() / 2;  // Offset to center the player on the screen
         gameRoot.setTranslateY(-offset);
+    }
+
+    public void setGameEndListener(GameEndListener listener) {
+        this.gameEndListener = listener;
+    }
+
+    private void endGame() {
+        System.out.println("You win with time " + gameTimer.getElapsedTime());
+        gameTimer.stop();
+        stop();
+
+        if (gameEndListener != null) {
+            gameEndListener.onGameEnd(new HighScore("Player", new Date(), gameTimer.getElapsedTime()));
+        }
     }
 
 }

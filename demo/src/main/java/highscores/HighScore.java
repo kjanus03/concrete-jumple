@@ -5,9 +5,9 @@ import java.util.Date;
 public class HighScore {
     private String username;
     private Date date;
-    private int score;
+    private double score;
 
-    public HighScore(String username, Date date, int score) {
+    public HighScore(String username, Date date, double score) {
         this.username = username;
         this.date = date;
         this.score = score;
@@ -19,6 +19,6 @@ public class HighScore {
     public Date getDate() { return date; }
     public void setDate(Date date) { this.date = date; }
 
-    public int getScore() { return score; }
+    public double getScore() { return score; }
     public void setScore(int score) { this.score = score; }
 }
