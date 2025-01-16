@@ -1,8 +1,8 @@
-package generators;
+package com.example.platformer.generators;
 
-import entities.Entity;
-import map.Map;
-import map.Platform;
+import com.example.platformer.entities.Entity;
+import com.example.platformer.map.Map;
+import com.example.platformer.map.Platform;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public abstract class AbstractEntityGenerator<T extends Entity> {
     protected Map map;
     protected double entityDensity;
 
-    // Tracks the x-offset for entities generated on each platform
+    // Tracks the x-offset for com.example.platformer.entities generated on each platform
     private final java.util.Map<Platform, Double> platformOffsets = new HashMap<>();
 
     public AbstractEntityGenerator(Map map, double entityDensity) {

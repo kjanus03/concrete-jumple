@@ -9,8 +9,16 @@ module com.example.demo {
     requires com.fasterxml.jackson.databind;
     requires javafx.media;
 
-    opens com.example.platformer to javafx.fxml, com.fasterxml.jackson.databind;
-    exports com.example.platformer;
-    exports generators;
-    opens generators to com.fasterxml.jackson.databind, javafx.fxml;
+//    opens com.example.platformer to javafx.fxml, com.fasterxml.jackson.databind;
+//    exports com.example.platformer;
+    exports com.example.platformer.generators;
+    opens com.example.platformer.generators to com.fasterxml.jackson.databind, javafx.fxml;
+    exports com.example.platformer.entities;
+    opens com.example.platformer.entities to com.fasterxml.jackson.databind, javafx.fxml;
+    exports com.example.platformer.map;
+    opens com.example.platformer.map to com.fasterxml.jackson.databind, javafx.fxml;
+    exports com.example.platformer.core;
+    opens com.example.platformer.core to com.fasterxml.jackson.databind, javafx.fxml;
+    exports com.example.platformer.ui;
+    opens com.example.platformer.ui to com.fasterxml.jackson.databind, javafx.fxml;
 }

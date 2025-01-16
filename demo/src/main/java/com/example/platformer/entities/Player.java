@@ -1,8 +1,10 @@
-package entities;
+package com.example.platformer.entities;
 
-import map.Platform;
+import com.example.platformer.map.Platform;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -21,8 +23,25 @@ public class Player extends Entity {
 
     private final ArrayList<Buff> activeBuffs;
 
+    // Sprite-related fields
+    private final ImageView spriteView; // ImageView for displaying the sprite
+    private final Image[] idleSprites; // Array of idle sprite images
+    private Timeline idleAnimation; // Timeline for idle animation
+    private boolean isIdle = true; // Track if the player is idle
+
     public Player(double x, double y) {
-        super(x, y, 30, 30);  // Initialize a 30x30 rectangle for the player
+        super(x, y, 32, 54);  // Initialize a rectangle for the
+
+        // Load idle sprites
+        idleSprites = new Image[]{
+                new Image(getClass().getResource("/sprites/characters/main/idle_0.png").toExternalForm()),
+                new Image(getClass().getResource("/sprites/characters/main/idle_1.png").toExternalForm())
+
+        };
+        spriteView = new ImageView(idleSprites[0]); // Start with the first idle sprite
+        spriteView.setFitWidth(30); // Match entity size
+        spriteView.setFitHeight(30);
+
         entityView.setStyle("-fx-fill: blue;");  // Add some color to differentiate
         jumpForce = 750;  // Set the initial jump force
         speed = 200;  // Set the initial speed
@@ -30,17 +49,49 @@ public class Player extends Entity {
         defaultJumpForce = jumpForce;  // Store the default jump force
         activeBuffs = new ArrayList<>();
         isInvincible = false;
+
+        setupIdleAnimation();
+    }
+
+    private void setupIdleAnimation() {
+        // Create a timeline to cycle through idle sprites
+        idleAnimation = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), event -> {
+                    // Cycle between the two idle sprites
+                    if (spriteView.getImage() == idleSprites[0]) {
+                        spriteView.setImage(idleSprites[1]);
+                    } else {
+                        spriteView.setImage(idleSprites[0]);
+                    }
+                })
+        );
+        idleAnimation.setCycleCount(Timeline.INDEFINITE);
     }
 
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
 
-        // Check if player is still in the air and should be falling
+        // Check if the player is idle (not moving)
+        if (velocityX == 0 && canJump) {
+            if (!isIdle) {
+                isIdle = true;
+                idleAnimation.play(); // Start idle animation
+            }
+        } else {
+            if (isIdle) {
+                isIdle = false;
+                idleAnimation.stop(); // Stop idle animation
+                spriteView.setImage(idleSprites[0]); // Reset to first frame
+            }
+        }
+
+        // Apply gravity if the player is in the air
         if (!canJump) {
-            velocityY += GRAVITY * deltaTime;  // Apply gravity if the player is in the air
+            velocityY += GRAVITY * deltaTime;
         }
     }
+
 
     public void jump() {
         if (canJump) {
@@ -94,14 +145,16 @@ public class Player extends Entity {
     public void handleWallCollision() {
         if (!isTouchingWall) {
             isTouchingWall = true; // Set the flag to prevent repeated collisions
+            if (velocityX >= 0) {
+                x -= 5; // Move the player back to prevent sticking to the wall
+            } else {
+                x += 5; // Move the player back to prevent sticking to the wall
+            }
 
             // Reverse direction
             velocityX = -velocityX;
-            System.out.println("Wall collision");
-            System.out.println("VelocityX: " + velocityX);
-
             // Apply upward bounce
-            velocityY -= 200;
+            velocityY -= 300;
 
             // Start a brief cooldown to disable input
             wallCollisionCooldown = true;
@@ -144,7 +197,7 @@ public class Player extends Entity {
     }
 
     public void resetWallCollision() {
-        isTouchingWall = false; // Reset the wall collision state
+        isTouchingWall = false;
     }
 
     public ArrayList<Buff> getActiveBuffs() {

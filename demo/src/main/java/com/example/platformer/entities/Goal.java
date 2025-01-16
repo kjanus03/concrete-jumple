@@ -1,7 +1,6 @@
-package entities;
+package com.example.platformer.entities;
 
-import entities.Entity;
-import map.Platform;
+import com.example.platformer.map.Platform;
 
 public class Goal extends Entity {
     protected double x, y;

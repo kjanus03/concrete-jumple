@@ -1,6 +1,8 @@
-package entities;
+package com.example.platformer.entities;
 
-import map.Platform;
+import com.example.platformer.map.Platform;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Entity {

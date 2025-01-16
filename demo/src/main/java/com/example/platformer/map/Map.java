@@ -1,6 +1,7 @@
-package map;
+package com.example.platformer.map;
 
-import generators.PlatformGenerator;
+import com.example.platformer.generators.PlatformGenerator;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 import java.util.List;
@@ -19,8 +20,19 @@ public class Map {
 
 
     private void addPlatformsToGameRoot() {
-        for (Platform platform : platforms) {
-            gameRoot.getChildren().add(platform.getView());
+        for (int i = 0; i < platforms.size(); i++) {
+            gameRoot.getChildren().add(platforms.get(i).getView());
+            // add text label platforms number to the game root, the label will be displayed on the platform
+            Label label = new Label(String.valueOf(i));
+            // set the number in the middle of the platform in front of a grey background
+            label.setTranslateX(platforms.get(i).getX() + platforms.get(i).getWidth() / 2 - 5);
+            label.setTranslateY(platforms.get(i).getY());
+            // set the font size to 20
+            label.setStyle("-fx-font-size: 20;");
+            label.setStyle("-fx-background-color: #cccccc;");
+            gameRoot.getChildren().add(label);
+
+
         }
         System.out.println("Map created with " + platforms.size() + " platforms");
     }
@@ -29,9 +41,6 @@ public class Map {
         return platforms;
     }
 
-    public Platform getFirstPlatform() {
-        return platforms.get(1);
-    }
 
     public String toString() {
         return "Map with " + platforms.size() + " platforms";

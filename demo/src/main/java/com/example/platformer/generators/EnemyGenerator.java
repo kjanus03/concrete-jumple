@@ -1,9 +1,9 @@
-package generators;
+package com.example.platformer.generators;
 
-import entities.Enemy;
-import map.Map;
-import map.Platform;
-import entities.Player;
+import com.example.platformer.entities.Enemy;
+import com.example.platformer.map.Map;
+import com.example.platformer.map.Platform;
+import com.example.platformer.entities.Player;
 
 public class EnemyGenerator extends AbstractEntityGenerator<Enemy> {
     private Player player;

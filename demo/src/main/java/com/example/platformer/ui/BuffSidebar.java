@@ -1,7 +1,7 @@
-package ui;
+package com.example.platformer.ui;
 
-import entities.Buff;
-import entities.Player;
+import com.example.platformer.entities.Buff;
+import com.example.platformer.entities.Player;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -61,9 +61,9 @@ public class BuffSidebar {
                 // Remove the corresponding label from the sidebar
                 Label label = buffLabels.get(buff);
                 sidebar.getChildren().remove(label);
-                return true; // Remove the buff from the map
+                return true; // Remove the buff from the com.example.platformer.map
             }
-            return false; // Keep the buff in the map
+            return false; // Keep the buff in the com.example.platformer.map
         });
     }
 

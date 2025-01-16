@@ -1,4 +1,4 @@
-package highscores;
+package com.example.platformer.highscores;
 
 import java.util.Date;
 

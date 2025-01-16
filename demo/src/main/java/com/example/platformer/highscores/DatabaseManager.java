@@ -1,4 +1,4 @@
-package highscores;
+package com.example.platformer.highscores;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.Sorts;
@@ -18,7 +18,7 @@ public class DatabaseManager {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         // Access the 'game' database
         database = mongoClient.getDatabase("game");
-        // Access the 'highscores' collection
+        // Access the 'com.example.platformer.highscores' collection
         highScoresCollection = database.getCollection("highscores");
     }
 
