@@ -7,10 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class GameController extends GameLoop {
     private Player player;
@@ -23,7 +20,7 @@ public class GameController extends GameLoop {
 
     private EnemyGenerator enemyGenerator;
     private GameTimer gameTimer;
-    private HighScore score;
+    private BuffSidebar buffSidebar;
 
     private GameEndListener gameEndListener;
 
@@ -84,6 +81,14 @@ public class GameController extends GameLoop {
 
         // Handle collisions between player, enemies, and platforms
         handleCollisions();
+
+        if (buffSidebar != null) {
+            for (Buff buff : player.getActiveBuffs()) {
+                buffSidebar.updateBuff(buff);
+            }
+            buffSidebar.removeBuffs(new HashSet<>(player.getActiveBuffs()));
+        }
+
         // Follow the player's vertical position with the camera
         if (player.getY() < gameRoot.getHeight() / 2) {
             followPlayer();
@@ -92,6 +97,8 @@ public class GameController extends GameLoop {
        // keeping the timer in the top right corner
         double timerY = -gameRoot.getTranslateY() + 30;
         gameTimer.update(deltaTime, timerY);
+
+
 
     }
 
@@ -120,8 +127,10 @@ public class GameController extends GameLoop {
             if (collisionManager.areEntitiesColliding(player, buff)) {
                 player.applyJumpBuff(buff);
                 gameRoot.getChildren().remove(buff.getView());
-                iterator.remove(); // Use the iterator to remove the element
+                iterator.remove();
+                buffSidebar.addBuff(buff);
             }
+
         }
 
 
@@ -163,6 +172,9 @@ public class GameController extends GameLoop {
         gameRoot.setTranslateY(-offset);
     }
 
+    public void setBuffSidebar(BuffSidebar buffSidebar) {
+        this.buffSidebar = buffSidebar;
+    }
     public void setGameEndListener(GameEndListener listener) {
         this.gameEndListener = listener;
     }

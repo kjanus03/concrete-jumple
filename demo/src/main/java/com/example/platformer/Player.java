@@ -4,20 +4,24 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class Player extends Entity {
     private boolean canJump = false;
     private double jumpForce;
     private double defaultJumpForce;  // The default jump force
-    private Timeline buffTimer;  // Timer for the buff duration
     private boolean isTouchingWall = false;
     private boolean collisionCooldown = false; // Cooldown to temporarily disable movement
     private Timeline cooldownTimer;
+
+    private ArrayList<Buff> activeBuffs;
 
     public Player(double x, double y) {
         super(x, y, 30, 30);  // Initialize a 30x30 rectangle for the player
         entityView.setStyle("-fx-fill: blue;");  // Add some color to differentiate
         jumpForce = 700;  // Set the initial jump force
         defaultJumpForce = jumpForce;  // Store the default jump force
+        activeBuffs = new ArrayList<>();
     }
 
     @Override
@@ -57,20 +61,21 @@ public class Player extends Entity {
 
     public void applyJumpBuff(Buff buff) {
         this.jumpForce += buff.getJumpBuff();
+        this.activeBuffs.add(buff);
 
-        // Stop any existing buff timer
-        if (buffTimer != null) {
-            buffTimer.stop();
-        }
-
-        // Start a new timer for the buff duration
-        buffTimer = new Timeline(new KeyFrame(
-                Duration.seconds(buff.getDuration()),
-                event -> removeJumpBuff(buff)
-        ));
-        buffTimer.setCycleCount(1);
-        buffTimer.play();
+        buff.startTimer(() -> {
+            removeJumpBuff(buff);
+        });
     }
+
+    private void removeJumpBuff(Buff buff) {
+        this.jumpForce -= buff.getJumpBuff();
+        if (this.jumpForce < defaultJumpForce) {
+            this.jumpForce = defaultJumpForce;
+        }
+        this.activeBuffs.remove(buff);
+    }
+
 
     public void handleWallCollision() {
         if (!isTouchingWall) {
@@ -115,14 +120,11 @@ public class Player extends Entity {
         return collisionCooldown;
     }
 
-
     public void resetWallCollision() {
         isTouchingWall = false; // Reset the wall collision state
     }
-    private void removeJumpBuff(Buff buff) {
-        this.jumpForce -= buff.getJumpBuff();
-        if (this.jumpForce < defaultJumpForce) {
-            this.jumpForce = defaultJumpForce;  // Ensure the jump force doesn't drop below default
-        }
+
+    public ArrayList<Buff> getActiveBuffs() {
+        return activeBuffs;
     }
 }

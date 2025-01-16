@@ -4,29 +4,41 @@ import highscores.DatabaseManager;
 import highscores.HighScore;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-
-public class Main extends Application implements GameEndListener{
+public class Main extends Application implements GameEndListener {
 
     private MusicPlayer musicPlayer;
     private DatabaseManager databaseManager;
-
+    private BuffSidebar buffSidebar;
 
     @Override
     public void start(Stage stage) {
-//        Config config = new Config();
-        Pane root = new Pane();
-        Scene scene = new Scene(root, 800, 600);
+        // Root layout with a BorderPane
+        BorderPane root = new BorderPane();
 
-        GameController gameController = new GameController(root, scene);
-        gameController.startGame();
+        // Gameplay Pane
+        Pane gamePane = new Pane();
+        root.setCenter(gamePane);
+
+        // Sidebar
+        buffSidebar = new BuffSidebar();
+        root.setRight(buffSidebar.getSidebar());
+
+        // Scene
+        Scene scene = new Scene(root, 900, 600); // Adjusted width for the sidebar
+
+        // GameController
+        GameController gameController = new GameController(gamePane, scene);
+        gameController.setBuffSidebar(buffSidebar); // Pass the sidebar to GameController
         gameController.setGameEndListener(this);
+        gameController.startGame();
 
+        // Music and Database
         this.musicPlayer = new MusicPlayer("src/main/assets/audio/soundtrack.mp3");
         musicPlayer.play();
-
         this.databaseManager = new DatabaseManager();
 
         stage.setTitle("Platformer Game");
@@ -36,7 +48,7 @@ public class Main extends Application implements GameEndListener{
 
     @Override
     public void onGameEnd(HighScore score) {
-        this.musicPlayer = null;
+        musicPlayer = null;
         databaseManager.insertHighScore(score);
         System.out.println("Score saved to the database: " + score);
     }
