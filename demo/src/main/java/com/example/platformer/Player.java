@@ -8,8 +8,11 @@ import java.util.ArrayList;
 
 public class Player extends Entity {
     private boolean canJump = false;
+    private int speed;
+    private final int defaultSpeed;
+    private boolean isInvincible;
     private double jumpForce;
-    private double defaultJumpForce;  // The default jump force
+    private final double defaultJumpForce;
     private boolean isTouchingWall = false;
     private boolean collisionCooldown = false; // Cooldown to temporarily disable movement
     private Timeline cooldownTimer;
@@ -19,9 +22,12 @@ public class Player extends Entity {
     public Player(double x, double y) {
         super(x, y, 30, 30);  // Initialize a 30x30 rectangle for the player
         entityView.setStyle("-fx-fill: blue;");  // Add some color to differentiate
-        jumpForce = 700;  // Set the initial jump force
+        jumpForce = 750;  // Set the initial jump force
+        speed = 200;  // Set the initial speed
+        defaultSpeed = speed;  // Store the default speed
         defaultJumpForce = jumpForce;  // Store the default jump force
         activeBuffs = new ArrayList<>();
+        isInvincible = false;
     }
 
     @Override
@@ -41,12 +47,10 @@ public class Player extends Entity {
         }
     }
 
-    public void moveLeft() {
-        velocityX = -200;
-    }
+    public void moveLeft() { velocityX = -this.speed; }
 
     public void moveRight() {
-        velocityX = 200;
+        velocityX = this.speed;
     }
 
     public void stopMoving() {
@@ -59,19 +63,25 @@ public class Player extends Entity {
         canJump = true;  // Allow jumping after landing on the platform
     }
 
-    public void applyJumpBuff(Buff buff) {
-        this.jumpForce += buff.getJumpBuff();
+    public void applyBuff(Buff buff) {
+        switch (buff.getType()) {
+            case JUMP -> this.jumpForce += buff.getBuffAmount();
+            case SPEED -> this.speed += buff.getBuffAmount();
+            case INVINCIBILITY -> this.isInvincible = true;
+        }
+
         this.activeBuffs.add(buff);
 
         buff.startTimer(() -> {
-            removeJumpBuff(buff);
+            removeBuff(buff);
         });
     }
 
-    private void removeJumpBuff(Buff buff) {
-        this.jumpForce -= buff.getJumpBuff();
-        if (this.jumpForce < defaultJumpForce) {
-            this.jumpForce = defaultJumpForce;
+    private void removeBuff(Buff buff) {
+        switch (buff.getType()) {
+            case JUMP -> this.jumpForce = defaultJumpForce;
+            case SPEED -> this.speed = defaultSpeed;
+            case INVINCIBILITY -> this.isInvincible = false;
         }
         this.activeBuffs.remove(buff);
     }

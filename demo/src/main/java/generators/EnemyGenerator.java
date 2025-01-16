@@ -1,4 +1,4 @@
-package Generators;
+package generators;
 
 import com.example.platformer.Enemy;
 import com.example.platformer.Map;

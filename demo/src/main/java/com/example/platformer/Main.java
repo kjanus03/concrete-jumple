@@ -28,7 +28,7 @@ public class Main extends Application implements GameEndListener {
         root.setRight(buffSidebar.getSidebar());
 
         // Scene
-        Scene scene = new Scene(root, 900, 600); // Adjusted width for the sidebar
+        Scene scene = new Scene(root, 940, 600); // Adjusted width for the sidebar
 
         // GameController
         GameController gameController = new GameController(gamePane, scene);

@@ -1,6 +1,6 @@
 package com.example.platformer;
 
-import Generators.PlatformGenerator;
+import generators.PlatformGenerator;
 import javafx.scene.layout.Pane;
 
 import java.util.List;

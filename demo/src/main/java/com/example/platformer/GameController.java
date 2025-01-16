@@ -1,7 +1,7 @@
 package com.example.platformer;
 
-import Generators.BuffGenerator;
-import Generators.EnemyGenerator;
+import generators.BuffGenerator;
+import generators.EnemyGenerator;
 import highscores.HighScore;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -125,7 +125,7 @@ public class GameController extends GameLoop {
                 collisionManager.analyzeEntityCollisions(buff, platform);
             }
             if (collisionManager.areEntitiesColliding(player, buff)) {
-                player.applyJumpBuff(buff);
+                player.applyBuff(buff);
                 gameRoot.getChildren().remove(buff.getView());
                 iterator.remove();
                 buffSidebar.addBuff(buff);

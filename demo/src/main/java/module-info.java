@@ -11,6 +11,6 @@ module com.example.demo {
 
     opens com.example.platformer to javafx.fxml, com.fasterxml.jackson.databind;
     exports com.example.platformer;
-    exports Generators;
-    opens Generators to com.fasterxml.jackson.databind, javafx.fxml;
+    exports generators;
+    opens generators to com.fasterxml.jackson.databind, javafx.fxml;
 }

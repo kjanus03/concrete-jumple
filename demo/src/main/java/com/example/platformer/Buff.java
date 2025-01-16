@@ -2,28 +2,40 @@ package com.example.platformer;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
 public class Buff extends Entity {
 
-    private int jumpBuff;
+    private int buffAmount;
+
     private int duration;
-    private Timeline timer; // Timer for this buff
-    private Runnable onBuffEnd; // Action to perform when buff ends
+    private Timeline timer;
+    private Runnable onBuffEnd; // action to perform when buff ends
+    private BuffType type;
 
-    public Buff(double x, double y, int jumpBuff, int duration) {
+    public Buff(double x, double y, int buffAmount, int duration, BuffType type) {
         super(x, y, 30, 30);
-        this.jumpBuff = jumpBuff;
+        this.buffAmount = buffAmount;
         this.duration = duration;
-        this.entityView.setStyle("-fx-fill: green;");
+        this.type = type;
+        // color depnding on type
+        if (type == BuffType.JUMP) {
+            this.entityView.setFill(Paint.valueOf("green"));
+        } else if (type == BuffType.SPEED) {
+            this.entityView.setFill(Paint.valueOf("purple"));
+        }
+        else if (type == BuffType.INVINCIBILITY) {
+            this.entityView.setFill(Paint.valueOf("orange"));
+        }
     }
 
-    public int getJumpBuff() {
-        return jumpBuff;
+    public int getBuffAmount() {
+        return buffAmount;
     }
 
-    public int getDuration() {
-        return duration;
+    public BuffType getType() {
+        return type;
     }
 
     public void startTimer(Runnable onBuffEnd) {

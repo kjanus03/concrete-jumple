@@ -15,6 +15,7 @@ public class BuffSidebar {
 
     public BuffSidebar() {
         sidebar = new VBox(10); // Vertical layout with spacing
+        sidebar.setPrefWidth(140); // Set the preferred width of the sidebar
         sidebar.setStyle("-fx-padding: 10; -fx-background-color: #cccccc;"); // Styling
         buffLabels = new HashMap<>();
     }
@@ -34,7 +35,7 @@ public class BuffSidebar {
     public void updateBuff(Buff buff) {
         if (buffLabels.containsKey(buff)) {
             Label label = buffLabels.get(buff);
-            label.setText("Super Jump: " + String.format("%.1f", buff.getRemainingTime()) + "s");
+            label.setText(buff.getType() + " " + String.format("%.1f", buff.getRemainingTime()) + "s");
         }
     }
 

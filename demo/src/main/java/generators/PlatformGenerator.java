@@ -1,4 +1,4 @@
-package Generators;
+package generators;
 import com.example.platformer.Platform;
 
 import java.util.ArrayList;
