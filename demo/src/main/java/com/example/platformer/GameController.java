@@ -43,7 +43,7 @@ public class GameController extends GameLoop {
         map = new Map(gameRoot);
 
         // Generate enemies
-        enemyGenerator = new EnemyGenerator(map, 0.25, player);
+        enemyGenerator = new EnemyGenerator(map, 0.35, player);
         enemies = enemyGenerator.generateEntities();
         for (Enemy enemy : enemies) {
             gameRoot.getChildren().add(enemy.getView());
@@ -111,12 +111,23 @@ public class GameController extends GameLoop {
             collisionManager.analyzeEntityCollisions(player, platform);
         }
 
+        Enemy enemyToRemove = null;
         // Check collisions for each enemy
         for (Enemy enemy : enemies) {
             for (Platform platform : platforms) {
                 collisionManager.analyzeEntityCollisions(enemy, platform);
             }
+            if (!player.isInvincible()) {
+                if (collisionManager.areEntitiesColliding(player, enemy)) {
+                    player.enemyCollision();
+                    enemyToRemove = enemy;
+                    // delete the enemy
+                    gameRoot.getChildren().remove(enemy.getView());
+                    buffSidebar.enemyCollision(player);
+                }
+            }
         }
+        enemies.remove(enemyToRemove);
 
         Iterator<Buff> iterator = buffs.iterator();
         while (iterator.hasNext()) {
@@ -133,7 +144,6 @@ public class GameController extends GameLoop {
 
         }
 
-
         if (collisionManager.isEntityCollidingWalls(player)) {
             player.handleWallCollision();
         }
@@ -146,7 +156,7 @@ public class GameController extends GameLoop {
     // Handle keyboard input for player movement and jumping
     private void setupInputHandling(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            if (!player.hasCollisionCooldown()) {
+            if (player.hasCollisionCooldown()) {
                 if (event.getCode() == KeyCode.LEFT) {
                     player.moveLeft();  // Move player left
                 } else if (event.getCode() == KeyCode.RIGHT) {

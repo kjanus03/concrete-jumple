@@ -14,18 +14,20 @@ public class Buff extends Entity {
     private Runnable onBuffEnd; // action to perform when buff ends
     private BuffType type;
 
-    public Buff(double x, double y, int buffAmount, int duration, BuffType type) {
+    public Buff(double x, double y, int buffAmount, BuffType type) {
         super(x, y, 30, 30);
         this.buffAmount = buffAmount;
-        this.duration = duration;
         this.type = type;
-        // color depnding on type
+        // color and duration depnding on type
         if (type == BuffType.JUMP) {
             this.entityView.setFill(Paint.valueOf("green"));
+            this.duration = 2;
         } else if (type == BuffType.SPEED) {
             this.entityView.setFill(Paint.valueOf("purple"));
+            this.duration = 4;
         }
         else if (type == BuffType.INVINCIBILITY) {
+            this.duration = 6;
             this.entityView.setFill(Paint.valueOf("orange"));
         }
     }
@@ -47,12 +49,6 @@ public class Buff extends Entity {
         }));
         timer.setCycleCount(1);
         timer.play();
-    }
-
-    public void stopTimer() {
-        if (timer != null) {
-            timer.stop();
-        }
     }
 
     public double getRemainingTime() {

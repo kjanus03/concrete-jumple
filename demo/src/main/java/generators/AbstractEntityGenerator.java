@@ -5,10 +5,14 @@ import com.example.platformer.Map;
 import com.example.platformer.Platform;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class AbstractEntityGenerator<T extends Entity> {
     protected Map map;
     protected double entityDensity;
+
+    // Tracks the x-offset for entities generated on each platform
+    private final java.util.Map<Platform, Double> platformOffsets = new HashMap<>();
 
     public AbstractEntityGenerator(Map map, double entityDensity) {
         this.map = map;
@@ -21,14 +25,19 @@ public abstract class AbstractEntityGenerator<T extends Entity> {
         ArrayList<T> entities = new ArrayList<>();
         for (Platform platform : map.getPlatforms()) {
             if (Math.random() < entityDensity) {
-                T entity = createEntity(
-                        platform.getView().getTranslateX(),
-                        platform.getView().getTranslateY() - 50,
-                        platform
-                );
+                double baseX = platform.getView().getTranslateX();
+                double baseY = platform.getView().getTranslateY() - 50;
+
+                // Adjust x-position to avoid overlap
+                double xOffset = platformOffsets.getOrDefault(platform, 0.0);
+                double newX = baseX + xOffset;
+                platformOffsets.put(platform, xOffset + 40); // Increment offset by 40px
+
+                T entity = createEntity(newX, baseY, platform);
                 entities.add(entity);
             }
         }
         return entities;
     }
+
 }

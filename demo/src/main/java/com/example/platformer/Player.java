@@ -7,17 +7,18 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class Player extends Entity {
+    private final int defaultSpeed;
+    private final double defaultJumpForce;
     private boolean canJump = false;
     private int speed;
-    private final int defaultSpeed;
     private boolean isInvincible;
     private double jumpForce;
-    private final double defaultJumpForce;
     private boolean isTouchingWall = false;
     private boolean collisionCooldown = false; // Cooldown to temporarily disable movement
-    private Timeline cooldownTimer;
+    private boolean wallCollisionCooldown = false; // Cooldown to temporarily disable movement
+    private Timeline hitTimer;
 
-    private ArrayList<Buff> activeBuffs;
+    private final ArrayList<Buff> activeBuffs;
 
     public Player(double x, double y) {
         super(x, y, 30, 30);  // Initialize a 30x30 rectangle for the player
@@ -47,7 +48,9 @@ public class Player extends Entity {
         }
     }
 
-    public void moveLeft() { velocityX = -this.speed; }
+    public void moveLeft() {
+        velocityX = -this.speed;
+    }
 
     public void moveRight() {
         velocityX = this.speed;
@@ -100,17 +103,13 @@ public class Player extends Entity {
             velocityY -= 200;
 
             // Start a brief cooldown to disable input
-            collisionCooldown = true;
-            if (cooldownTimer != null) {
-                cooldownTimer.stop();
-            }
-            cooldownTimer = new Timeline(new KeyFrame(
-                    Duration.seconds(0.3), // Set the cooldown duration
+            wallCollisionCooldown = true;
+
+            Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(0.3), // Set the cooldown duration
                     event -> {
-                        collisionCooldown = false; // Re-enable input after cooldown
+                        wallCollisionCooldown = false; // Re-enable input after cooldown
                         resetWallCollision();
-                    }
-            ));
+                    }));
             cooldownTimer.setCycleCount(1);
             cooldownTimer.play();
         }
@@ -126,8 +125,21 @@ public class Player extends Entity {
         entityView.setTranslateY(y);
     }
 
+    public void enemyCollision() {
+        System.out.println("Player hit by enemy");
+        // player stopped for 2 seconds and the enemy gets deleted
+        velocityX = 0;
+        velocityY = 0;
+        collisionCooldown = true;
+        this.hitTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+            collisionCooldown = false;
+        }));
+        hitTimer.setCycleCount(1);
+        hitTimer.play();
+    }
+
     public boolean hasCollisionCooldown() {
-        return collisionCooldown;
+        return !collisionCooldown && !wallCollisionCooldown;
     }
 
     public void resetWallCollision() {
@@ -136,5 +148,20 @@ public class Player extends Entity {
 
     public ArrayList<Buff> getActiveBuffs() {
         return activeBuffs;
+    }
+
+    public double getRemainingCooldownTime() {
+        if (hitTimer != null) {
+            return Math.max(0, 2 - hitTimer.getCurrentTime().toSeconds());
+        }
+        return 0;
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
+    public Player getInstance() {
+        return this;
     }
 }

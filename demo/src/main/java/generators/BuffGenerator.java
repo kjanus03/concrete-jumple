@@ -15,6 +15,6 @@ public class BuffGenerator extends AbstractEntityGenerator<Buff> {
     protected Buff createEntity(double x, double y, Platform platform) {
         BuffType type = BuffType.values()[(int) (Math.random() * BuffType.values().length)];
         int buffAmount = (int) (Math.random() * 500);
-        return new Buff(x, y, buffAmount, 2, type);
+        return new Buff(x, y, buffAmount, type);
     }
 }
