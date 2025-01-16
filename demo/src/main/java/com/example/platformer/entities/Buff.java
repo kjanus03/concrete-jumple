@@ -1,4 +1,4 @@
-package com.example.platformer;
+package entities;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

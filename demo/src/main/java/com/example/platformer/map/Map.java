@@ -1,4 +1,4 @@
-package com.example.platformer;
+package map;
 
 import generators.PlatformGenerator;
 import javafx.scene.layout.Pane;

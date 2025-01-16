@@ -1,4 +1,4 @@
-package com.example.platformer;
+package ui;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 

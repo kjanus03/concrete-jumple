@@ -1,5 +1,5 @@
 package generators;
-import com.example.platformer.Platform;
+import map.Platform;
 
 import java.util.ArrayList;
 import java.util.List;

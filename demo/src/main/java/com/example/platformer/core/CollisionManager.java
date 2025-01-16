@@ -1,6 +1,9 @@
-package com.example.platformer;
+package com.example.platformer.core;
 
+import com.example.platformer.entities.Entity;
+import com.example.platformer.entities.Player;
 import javafx.scene.shape.Rectangle;
+import com.example.platformer.map.Platform;
 
 public class CollisionManager {
 

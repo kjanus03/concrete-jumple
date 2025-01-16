@@ -1,8 +1,8 @@
 package generators;
 
-import com.example.platformer.Entity;
-import com.example.platformer.Map;
-import com.example.platformer.Platform;
+import entities.Entity;
+import map.Map;
+import map.Platform;
 
 import java.util.ArrayList;
 import java.util.HashMap;

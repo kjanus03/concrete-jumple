@@ -1,4 +1,4 @@
-package com.example.platformer;
+package entities;
 
 public class Enemy extends Entity {
     private Player target;

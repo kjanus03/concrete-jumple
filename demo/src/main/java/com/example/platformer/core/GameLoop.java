@@ -1,4 +1,4 @@
-package com.example.platformer;
+package com.example.platformer.core;
 
 import javafx.animation.AnimationTimer;
 

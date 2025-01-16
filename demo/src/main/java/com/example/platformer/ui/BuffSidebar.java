@@ -1,5 +1,7 @@
-package com.example.platformer;
+package ui;
 
+import entities.Buff;
+import entities.Player;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;

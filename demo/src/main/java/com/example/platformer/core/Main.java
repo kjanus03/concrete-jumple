@@ -1,7 +1,9 @@
-package com.example.platformer;
+package com.example.platformer.core;
 
-import highscores.DatabaseManager;
-import highscores.HighScore;
+import com.example.platformer.ui.BuffSidebar;
+import com.example.platformer.ui.MusicPlayer;
+import com.example.platformer.highscores.DatabaseManager;
+import com.example.platformer.highscores.HighScore;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;

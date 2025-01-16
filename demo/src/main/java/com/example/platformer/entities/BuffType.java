@@ -1,4 +1,4 @@
-package com.example.platformer;
+package entities;
 
 public enum BuffType {
     JUMP, SPEED, INVINCIBILITY

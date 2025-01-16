@@ -1,5 +1,6 @@
-package com.example.platformer;
+package entities;
 
+import map.Platform;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -159,9 +160,5 @@ public class Player extends Entity {
 
     public boolean isInvincible() {
         return isInvincible;
-    }
-
-    public Player getInstance() {
-        return this;
     }
 }

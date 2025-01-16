@@ -1,4 +1,4 @@
-package com.example.platformer;
+package map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

@@ -1,11 +1,18 @@
-package com.example.platformer;
+package com.example.platformer.core;
 
-import generators.BuffGenerator;
-import generators.EnemyGenerator;
-import highscores.HighScore;
+import com.example.platformer.entities.Buff;
+import com.example.platformer.entities.Enemy;
+import com.example.platformer.entities.Goal;
+import com.example.platformer.entities.Player;
+import com.example.platformer.generators.BuffGenerator;
+import com.example.platformer.generators.EnemyGenerator;
+import com.example.platformer.highscores.HighScore;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
+import com.example.platformer.map.Map;
+import com.example.platformer.map.Platform;
+import com.example.platformer.ui.BuffSidebar;
 
 import java.util.*;
 
@@ -13,7 +20,7 @@ public class GameController extends GameLoop {
     private Player player;
     private ArrayList<Enemy> enemies;
     private ArrayList<Buff> buffs;
-    private Map map;  // The Map that holds all platforms
+    private com.example.platformer.map.Map map;  // The Map that holds all platforms
     private Pane gameRoot;
     private Goal goal;
     private CollisionManager collisionManager;  // Use CollisionManager for all collision analysis
@@ -39,7 +46,7 @@ public class GameController extends GameLoop {
         player = new Player(50, 550);  // Start player slightly above the ground platform
         gameRoot.getChildren().add(player.getView());
 
-        // Initialize the map, which will create and add platforms to the game root
+        // Initialize the com.example.platformer.map, which will create and add platforms to the game root
         map = new Map(gameRoot);
 
         // Generate enemies
@@ -103,7 +110,7 @@ public class GameController extends GameLoop {
     }
 
     private void handleCollisions() {
-        // Get platforms from the map and check for collisions
+        // Get platforms from the com.example.platformer.map and check for collisions
         List<Platform> platforms = map.getPlatforms();
 
         // Check collisions for player

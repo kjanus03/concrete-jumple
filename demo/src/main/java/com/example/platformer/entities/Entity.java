@@ -1,6 +1,6 @@
-package com.example.platformer;
+package entities;
 
-import javafx.scene.paint.Color;
+import map.Platform;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Entity {

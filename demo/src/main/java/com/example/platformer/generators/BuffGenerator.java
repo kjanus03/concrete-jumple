@@ -1,9 +1,9 @@
 package generators;
 
-import com.example.platformer.Buff;
-import com.example.platformer.BuffType;
-import com.example.platformer.Map;
-import com.example.platformer.Platform;
+import entities.Buff;
+import entities.BuffType;
+import map.Map;
+import map.Platform;
 
 public class BuffGenerator extends AbstractEntityGenerator<Buff> {
 
