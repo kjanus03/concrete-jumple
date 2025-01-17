@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import org.bson.internal.BsonUtil;
 
 import java.util.ArrayList;
 
@@ -35,9 +36,8 @@ public class Player extends Entity {
     private Image[] walkLeftSprites;
     private Image[] jumpRightSprites;
     private Image[] jumpLeftSprites;
-    private boolean isIdle = true; // Track if the player is idle
+    private Image[] stunSprites;
     private boolean isInAir = false;
-    private boolean onPlatform = true;
     private String direction; // "right" or "left"
 
     private Timeline currentAnimation;
@@ -120,6 +120,10 @@ public class Player extends Entity {
                 new Image(getClass().getResource("/sprites/characters/main/fall_left.png").toExternalForm()),
                 new Image(getClass().getResource("/sprites/characters/main/fall_straight.png").toExternalForm())
         };
+        stunSprites = new Image[]{
+                new Image(getClass().getResource("/sprites/characters/main/stun_0.png").toExternalForm()),
+                new Image(getClass().getResource("/sprites/characters/main/stun_1.png").toExternalForm())
+        };
     }
 
 
@@ -170,7 +174,8 @@ public class Player extends Entity {
                 spriteView.setImage(jumpRightSprites[4]); // Static image for falling straight (use the same sprite for both directions if needed)
                 break;
             case FREEZE:
-                return;
+                setupStunAnimation();
+                break;
         }
 
         if (currentAnimation != null) {
@@ -190,6 +195,23 @@ public class Player extends Entity {
                     }
                 })
         );
+        currentAnimation.setCycleCount(Timeline.INDEFINITE);
+    }
+    private void setupStunAnimation() {
+        spriteView.setImage(stunSprites[0]);
+        currentAnimation = new Timeline(
+                new KeyFrame(Duration.seconds(0.125), event -> {
+                    if (spriteView.getImage() == stunSprites[0]) {
+                        spriteView.setImage(stunSprites[1]);
+                        System.out.println("Stun animation 1");
+                    } else {
+                        spriteView.setImage(stunSprites[0]);
+                        System.out.println("Stun animation 0");
+                    }
+                })
+        );
+        System.out.println("Stun animation");
+        System.out.println(currentAnimation);
         currentAnimation.setCycleCount(Timeline.INDEFINITE);
     }
     private void setupWalkingRightAnimation() {
@@ -219,13 +241,6 @@ public class Player extends Entity {
         );
         currentAnimation.setCycleCount(Timeline.INDEFINITE);
     }
-
-
-
-
-
-
-
 
 
     @Override
@@ -265,10 +280,13 @@ public class Player extends Entity {
                 setState(PlayerState.FALLING_STRAIGHT);
             }
         }
-        if (abs(velocityX) >= 0.05 && isInAir == false) { // Walking
-            setState(PlayerState.WALKING);
-        } else {
-            setState(PlayerState.IDLE);
+
+        if (!collisionCooldown) {
+            if (abs(velocityX) >= 0.05 && isInAir == false) { // Walking
+                setState(PlayerState.WALKING);
+            } else {
+                setState(PlayerState.IDLE);
+            }
         }
 
         // Apply gravity if the player is in the air
@@ -310,7 +328,6 @@ public class Player extends Entity {
     public void landOnPlatform(Platform platform) {
         super.landOnPlatform(platform);
         canJump = true;  // Allow jumping after landing on the platform
-        onPlatform = true;
         isInAir = false;
     }
 

@@ -51,7 +51,7 @@ public class GameController extends GameLoop {
         map = new Map(gameRoot);
 
         // Generate enemies
-        enemyGenerator = new EnemyGenerator(map, 0.35, player);
+        enemyGenerator = new EnemyGenerator(map, 0.24, player);
         enemies = enemyGenerator.generateEntities();
         for (Enemy enemy : enemies) {
             gameRoot.getChildren().add(enemy.getView());
@@ -199,12 +199,11 @@ public class GameController extends GameLoop {
 
     private void endGame() {
         System.out.println("You win with time " + gameTimer.getElapsedTime());
-        gameTimer.stop();
-        stop();
-
         if (gameEndListener != null) {
             gameEndListener.onGameEnd(new HighScore("Player", new Date(), gameTimer.getElapsedTime()));
         }
+        gameTimer.stop();
+        stop();
     }
 
 }

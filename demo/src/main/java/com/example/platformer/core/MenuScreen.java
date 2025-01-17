@@ -1,5 +1,7 @@
 package com.example.platformer.core;
 
+import com.example.platformer.highscores.DatabaseManager;
+import com.example.platformer.highscores.HighScore;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
+
+import java.util.List;
 
 public class MenuScreen extends Application {
 
@@ -41,10 +45,7 @@ public class MenuScreen extends Application {
         // Add event handlers for the buttons
         startButton.setOnAction(event -> {
             System.out.println("Start Game pressed");
-            Pane gamePane = new Pane();
-            Scene gameScene = new Scene(gamePane, screenWidth, screenHeight);
-            GameController gameController = new GameController(gamePane, gameScene);
-            gameController.startGame();
+            // start game code here
         });
 
         highScoresButton.setOnAction(event -> {
@@ -81,8 +82,27 @@ public class MenuScreen extends Application {
     }
 
     private void showHighScores() {
-        // Logic for displaying high scores can go here
-        System.out.println("Showing high scores...");
+        DatabaseManager databaseManager = new DatabaseManager();
+        // create a new window to display high scores
+        Stage highScoresStage = new Stage();
+        highScoresStage.setTitle("High Scores");
+        List<HighScore> highScores = databaseManager.getHighScores();
+
+        // Create a VBox to hold the high scores
+        VBox highScoresLayout = new VBox(20);
+        highScoresLayout.setAlignment(Pos.CENTER);
+
+        // Add the high scores to the layout
+        for (HighScore highScore : highScores) {
+            Label scoreLabel = new Label(highScore.getUsername() + ": " + highScore.getScore());
+            highScoresLayout.getChildren().add(scoreLabel);
+        }
+
+        // Add the layout to the scene
+        Scene highScoresScene = new Scene(highScoresLayout, 300, 400);
+        highScoresStage.setScene(highScoresScene);
+        highScoresStage.show();
+
     }
 
     public static void main(String[] args) {

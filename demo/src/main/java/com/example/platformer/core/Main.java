@@ -6,6 +6,8 @@ import com.example.platformer.highscores.DatabaseManager;
 import com.example.platformer.highscores.HighScore;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -45,6 +47,8 @@ public class Main extends Application implements GameEndListener {
 
         stage.setTitle("Platformer Game");
         stage.setScene(scene);
+//        stage.setFullScreen(true);
+//        stage.setResizable(false);
         stage.show();
     }
 

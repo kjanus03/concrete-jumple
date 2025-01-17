@@ -30,6 +30,7 @@ public class DatabaseManager {
         Document doc = new Document("username", highScore.getUsername())
                 .append("date", highScore.getDate())
                 .append("score", highScore.getScore());
+        System.out.println("Score: " + highScore.getScore());
         highScoresCollection.insertOne(doc);
     }
 
@@ -42,7 +43,7 @@ public class DatabaseManager {
         for (Document doc : docs) {
             String username = doc.getString("username");
             Date date = doc.getDate("date");
-            int score = doc.getInteger("score");
+            double score = doc.getDouble("score");
 
             highScores.add(new HighScore(username, date, score));
         }
