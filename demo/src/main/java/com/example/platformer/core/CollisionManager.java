@@ -2,6 +2,7 @@ package com.example.platformer.core;
 
 import com.example.platformer.entities.Entity;
 import com.example.platformer.entities.Player;
+import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 import com.example.platformer.map.Platform;
 
@@ -10,7 +11,7 @@ public class CollisionManager {
     // Method to check if an entity is standing on top of a platform
     public boolean isEntityOnPlatform(Entity entity, Platform platform) {
         Rectangle entityBounds = entity.getView();
-        Rectangle platformBounds = platform.getView();
+        Group platformBounds = platform.getView();
 
         return entityBounds.getBoundsInParent().intersects(platformBounds.getBoundsInParent()) &&
                 entityBounds.getTranslateY() + entityBounds.getHeight() >= platformBounds.getTranslateY();
@@ -19,7 +20,7 @@ public class CollisionManager {
     // Method to check if an entity is colliding with the side of a platform
     public boolean isEntityCollidingSide(Entity entity, Platform platform) {
         Rectangle entityBounds = entity.getView();
-        Rectangle platformBounds = platform.getView();
+        Group platformBounds = platform.getView();
 
         // Check if the entity is intersecting the platform on the sides
         return entityBounds.getBoundsInParent().intersects(platformBounds.getBoundsInParent()) &&
