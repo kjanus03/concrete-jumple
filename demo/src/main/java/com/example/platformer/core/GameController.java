@@ -58,6 +58,22 @@ public class GameController extends GameLoop {
         System.out.println("screenWidth: " + screenWidth + " screenHeight: " + screenHeight);
         map = new Map(gameRoot, screenWidth, screenHeight, buffSidebar.getSideBarWidth());
 
+        // Generate buffs
+        BuffGenerator buffGenerator = new BuffGenerator(map, 0.4);
+        buffs = buffGenerator.generateEntities();
+        for (Buff buff : buffs) {
+            gameRoot.getChildren().add(buff.getView());
+            gameRoot.getChildren().add(buff.getSpriteView());
+        }
+
+        //generate goal on the last platform
+        this.goal.generateGoal(map.getPlatforms().get(map.getPlatforms().size() - 1));
+        gameRoot.getChildren().add(goal.getView());
+        gameRoot.getChildren().add(goal.getSpriteView());
+
+        this.gameTimer = new GameTimer(screenWidth, buffSidebar.getSideBarWidth());
+        gameRoot.getChildren().add(gameTimer.getTimerText());
+
         // initialize player lightly above the first platform
         try {
             Thread.sleep(500);
@@ -77,23 +93,6 @@ public class GameController extends GameLoop {
         for (Enemy enemy : enemies) {
             gameRoot.getChildren().add(enemy.getView());
         }
-
-        // Generate buffs
-        BuffGenerator buffGenerator = new BuffGenerator(map, 0.4);
-        buffs = buffGenerator.generateEntities();
-        for (Buff buff : buffs) {
-            gameRoot.getChildren().add(buff.getView());
-            gameRoot.getChildren().add(buff.getSpriteView());
-        }
-
-        //generate goal on the last platform
-        this.goal.generateGoal(map.getPlatforms().get(map.getPlatforms().size() - 1));
-        gameRoot.getChildren().add(goal.getView());
-        gameRoot.getChildren().add(goal.getSpriteView());
-
-        this.gameTimer = new GameTimer(screenWidth, buffSidebar.getSideBarWidth());
-        gameRoot.getChildren().add(gameTimer.getTimerText());
-
 
         // Start the game loop
         start();

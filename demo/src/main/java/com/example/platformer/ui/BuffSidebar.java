@@ -3,11 +3,13 @@ package com.example.platformer.ui;
 import com.example.platformer.entities.Buff;
 import com.example.platformer.entities.Player;
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -25,7 +27,14 @@ public class BuffSidebar {
         sidebar = new VBox(10); // Vertical layout with spacing
         this.sideBarWidth = sideBarWidth;
         sidebar.setPrefWidth(sideBarWidth); // Set the preferred width of the sidebar
-        sidebar.setStyle("-fx-padding: 10; -fx-background-color: #cccccc;"); // Styling
+        URL stylesheetUrl = getClass().getResource("/css/sidebar.css");
+        if (stylesheetUrl != null) {
+            sidebar.getStylesheets().add(stylesheetUrl.toExternalForm());
+        } else {
+            System.err.println("Stylesheet not found: /css/sidebar.css");
+        }
+        sidebar.getStyleClass().add("buff-sidebar");
+
         buffLabels = new HashMap<>();
 
         // Initialize an animation timer to regularly update sidebar
@@ -43,21 +52,34 @@ public class BuffSidebar {
     }
 
     public void addBuff(Buff buff) {
+        // Create label for the buff
         Label label = new Label();
-        label.setFont(new Font(14));
+        label.getStyleClass().add("buff-label");
         buffLabels.put(buff, label);
+
+        // Create sprite for the buff
         ImageView spriteView = buff.getSpriteView();
         spriteView.setFitWidth(28); // Match entity size
         spriteView.setFitHeight(25);
-
-
-        sidebar.getChildren().add(label);
         spriteView.setTranslateX(label.getTranslateX());
         spriteView.setTranslateY(label.getTranslateY());
-        sidebar.getChildren().add(spriteView);
 
+
+        // Create a container for both the label and sprite
+        VBox buffContainer = new VBox(5); // Vertical layout with spacing
+        buffContainer.getStyleClass().add("buff-container");
+        buffContainer.setAlignment(Pos.CENTER); // Center align the contents
+
+        // Add the sprite and label to the container
+        buffContainer.getChildren().addAll(spriteView, label);
+
+        // Add the container to the sidebar
+        sidebar.getChildren().add(buffContainer);
+
+        // Update the label text to show the buff details
         updateBuff(buff);
     }
+
 
     public void updateBuff(Buff buff) {
         if (buffLabels.containsKey(buff)) {
@@ -67,24 +89,36 @@ public class BuffSidebar {
     }
 
     public void removeBuffs(HashSet<Buff> activeBuffs) {
-        // Iterate over the current buffs in the sidebar
-        buffLabels.keySet().removeIf(buff -> {
+        // Create a list to store buffs to be removed
+        HashSet<Buff> buffsToRemove = new HashSet<>();
+
+        // Identify buffs to remove
+        for (Buff buff : buffLabels.keySet()) {
             if (!activeBuffs.contains(buff)) {
-                // Remove the corresponding label from the sidebar
-                Label label = buffLabels.get(buff);
-                ImageView spriteView = buff.getSpriteView();
-                sidebar.getChildren().remove(label);
-                sidebar.getChildren().remove(spriteView);
-                return true; // Remove the buff from the com.example.platformer.map
+                buffsToRemove.add(buff);
             }
-            return false; // Keep the buff in the com.example.platformer.map
-        });
+        }
+
+        // Remove identified buffs
+        for (Buff buff : buffsToRemove) {
+            Label label = buffLabels.get(buff);
+            buffLabels.remove(buff);
+
+            // Find and remove the container holding this buff
+            sidebar.getChildren().removeIf(node -> {
+                if (node instanceof VBox container && container.getChildren().contains(label)) {
+                    return true; // Remove the container
+                }
+                return false; // Keep the container
+            });
+        }
     }
+
 
     public void enemyCollision(Player player) {
         if (stunLabel == null) { // Only add one stun label
             stunLabel = new Label();
-            stunLabel.setFont(new Font(14));
+            stunLabel.getStyleClass().add("stun-label");
             sidebar.getChildren().add(stunLabel);
         }
 

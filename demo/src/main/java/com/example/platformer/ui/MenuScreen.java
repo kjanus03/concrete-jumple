@@ -126,7 +126,7 @@ public class MenuScreen extends Application {
         highScoresLayout.setAlignment(Pos.CENTER);
 
         // Add a title
-        Label title = new Label("Top 10 Quickest Times");
+        Label title = new Label("High Scores");
         title.getStyleClass().add("high-score-title");
 
         // Add title and table to the layout

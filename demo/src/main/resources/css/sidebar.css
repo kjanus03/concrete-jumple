@@ -1,0 +1,47 @@
+/* Buff Sidebar */
+.buff-sidebar {
+    -fx-background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+    -fx-border-color: #a58c05; /* Golden border for steampunk style */
+    -fx-border-width: 5px;
+    -fx-border-radius: 10px;
+    -fx-padding: 15; /* Space around content */
+    -fx-spacing: 20; /* Space between rows */
+    -fx-alignment: top-center;
+}
+
+/* Buff container */
+.buff-container {
+    -fx-background-color: rgba(255, 255, 255, 0.1); /* Light semi-transparent row background */
+    -fx-border-radius: 8px;
+    -fx-padding: 5;
+    -fx-spacing: 4;
+    -fx-alignment: center;
+}
+
+/* Buff Label */
+.buff-label {
+    -fx-font-family: 'Press Start 2P';
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 2, 0, 1, 1); /* Text shadow for readability */
+    -fx-background-color: rgba(0, 0, 0, 0.5); /* Label background */
+    -fx-padding: 5;
+    -fx-border-radius: 5px;
+}
+
+/* Hover effect for Buff container */
+.buff-container:hover {
+    -fx-background-color: rgba(255, 215, 0, 0.3); /* Highlight row on hover */
+}
+
+/* Stun Label */
+.stun-label {
+    -fx-font-family: 'Press Start 2P';
+    -fx-font-size: 14px;
+    -fx-text-fill: red; /* Red for urgency */
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-padding: 5;
+    -fx-border-radius: 5px;
+    -fx-alignment: center;
+}

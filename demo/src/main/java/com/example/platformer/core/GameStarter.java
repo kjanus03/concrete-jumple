@@ -29,7 +29,7 @@ public class GameStarter implements GameEndListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
-        int sidebarWidth = 140;
+        int sidebarWidth = 180;
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();

@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 
 public class Player extends Entity {
-    private final int defaultSpeed;
-    private final double defaultJumpForce;
     private boolean canJump = false;
     private int speed;
     private boolean isInvincible;
@@ -76,8 +74,6 @@ public class Player extends Entity {
 
         jumpForce = 750;  // Set the initial jump force
         this.speed = speed;  // Set the initial speed
-        defaultSpeed = speed;  // Store the default speed
-        defaultJumpForce = jumpForce;  // Store the default jump force
         activeBuffs = new ArrayList<>();
         isInvincible = false;
     }
