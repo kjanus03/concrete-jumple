@@ -291,6 +291,7 @@ public class Player extends Entity {
         if (!canJump) {
             velocityY += GRAVITY * deltaTime;
         }
+
         // Update sprite position
         spriteView.setTranslateX(x);
         spriteView.setTranslateY(y);
@@ -345,9 +346,16 @@ public class Player extends Entity {
 
     private void removeBuff(Buff buff) {
         switch (buff.getType()) {
-            case JUMP -> this.jumpForce = defaultJumpForce;
-            case SPEED -> this.speed = defaultSpeed;
-            case INVINCIBILITY -> this.isInvincible = false;
+            case JUMP -> this.jumpForce -= buff.getBuffAmount();
+            case SPEED -> this.speed -= buff.getBuffAmount();
+            case INVINCIBILITY -> {
+                long invincibilityCount = activeBuffs.stream()
+                        .filter(b -> b.getType() == BuffType.INVINCIBILITY)
+                        .count();
+                if (invincibilityCount == 1) {
+                    this.isInvincible = false;
+                }
+            }
         }
         this.activeBuffs.remove(buff);
     }
@@ -397,7 +405,7 @@ public class Player extends Entity {
 
     public void enemyCollision() {
         System.out.println("Player hit by enemy");
-        // player stopped for 2 seconds and the enemy gets deleted
+        System.out.println(isInvincible);
         velocityX = 0;
         velocityY = 0;
         collisionCooldown = true;

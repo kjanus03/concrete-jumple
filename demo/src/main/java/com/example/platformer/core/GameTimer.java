@@ -11,8 +11,12 @@ public class GameTimer {
     public GameTimer() {
         // Create a Text node to display the timer
         timerText = new Text();
-        timerText.setFont(Font.font(20));  // Set font size for the timer text
-        timerText.setFill(Color.BLACK);  // Set text color to white
+        timerText.setFont(Font.font(26));  // Set font size for the timer text
+        timerText.setFill(Color.WHITE);  // Set text color to white
+        // ad border to text
+        timerText.setStroke(Color.BLACK);
+        timerText.setStrokeWidth(1);
+
         timerText.setX(680);  // Position the timer text near the top-right corner
         timerText.setY(30);
     }

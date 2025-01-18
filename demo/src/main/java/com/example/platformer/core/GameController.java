@@ -8,6 +8,7 @@ import com.example.platformer.generators.BuffGenerator;
 import com.example.platformer.generators.EnemyGenerator;
 import com.example.platformer.highscores.HighScore;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.input.KeyCode;
 import com.example.platformer.map.Map;
@@ -30,9 +31,11 @@ public class GameController extends GameLoop {
     private BuffSidebar buffSidebar;
 
     private GameEndListener gameEndListener;
+    private ImageView backgroundView;
 
-    public GameController(Pane root, Scene scene) {
+    public GameController(Pane root, Scene scene, ImageView backgroundImage) {
         this.gameRoot = root;
+        this.backgroundView = backgroundImage;
         this.collisionManager = new CollisionManager();
         this.enemies = new ArrayList<>();
         this.buffs = new ArrayList<>();
@@ -106,6 +109,8 @@ public class GameController extends GameLoop {
        // keeping the timer in the top right corner
         double timerY = -gameRoot.getTranslateY() + 30;
         gameTimer.update(deltaTime, timerY);
+        backgroundView.setTranslateY(-gameRoot.getTranslateY());
+
 
 
 

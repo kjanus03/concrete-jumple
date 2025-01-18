@@ -25,6 +25,15 @@ public class Main extends Application implements GameEndListener {
 
         // Gameplay Pane
         Pane gamePane = new Pane();
+
+        // Add background image
+        Image backgroundImage = new Image(getClass().getResource("/sprites/background/Steampunk/darkblue1.png").toExternalForm());
+        ImageView backgroundView = new ImageView(backgroundImage);
+        backgroundView.setFitWidth(800); // Set width to match your scene or window
+        backgroundView.setFitHeight(600); // Set height to match your scene or window
+        backgroundView.setPreserveRatio(false); // Stretch to fill, or true to maintain aspect ratio
+        gamePane.getChildren().add(backgroundView);
+
         root.setCenter(gamePane);
 
         // Sidebar
@@ -35,7 +44,7 @@ public class Main extends Application implements GameEndListener {
         Scene scene = new Scene(root, 940, 600); // Adjusted width for the sidebar
 
         // GameController
-        GameController gameController = new GameController(gamePane, scene);
+        GameController gameController = new GameController(gamePane, scene, backgroundView);
         gameController.setBuffSidebar(buffSidebar); // Pass the sidebar to GameController
         gameController.setGameEndListener(this);
         gameController.startGame();
