@@ -23,6 +23,7 @@ public class GameController extends GameLoop {
     private ArrayList<Buff> buffs;
     private com.example.platformer.map.Map map;  // The Map that holds all platforms
     private Pane gameRoot;
+    private Scene scene;
     private Goal goal;
     private CollisionManager collisionManager;  // Use CollisionManager for all collision analysis
 
@@ -33,10 +34,12 @@ public class GameController extends GameLoop {
     private GameEndListener gameEndListener;
     private ImageView backgroundView;
 
-    public GameController(Pane root, Scene scene, ImageView backgroundImage) {
+    public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar) {
         this.gameRoot = root;
+        this.scene = scene;
         this.backgroundView = backgroundImage;
-        this.collisionManager = new CollisionManager();
+        this.buffSidebar = buffSidebar;
+        this.collisionManager = new CollisionManager(buffSidebar.getSideBarWidth(), scene.getWidth());
         this.enemies = new ArrayList<>();
         this.buffs = new ArrayList<>();
         this.goal = new Goal(100, 100);
@@ -45,13 +48,25 @@ public class GameController extends GameLoop {
     }
 
     public void startGame() {
-        // Initialize player
-        player = new Player(50, 550);  // Start player slightly above the ground platform
+
+        // get screen width and height fromt the game root
+        int screenWidth = (int) scene.getWidth();
+        int screenHeight = (int) scene.getHeight();
+        System.out.println("screenWidth: " + screenWidth + " screenHeight: " + screenHeight);
+        map = new Map(gameRoot, screenWidth, screenHeight, buffSidebar.getSideBarWidth());
+
+        // initialize player lightly above the first platform
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Platform groundPlatform = map.getGroundPlatform();
+        player = new Player(groundPlatform.getX() + groundPlatform.getWidth() / 2, groundPlatform.getY() - 200, (int) (screenWidth/4.7));
         gameRoot.getChildren().add(player.getView());
         gameRoot.getChildren().add(player.getSpriteView());
 
-        // Initialize the com.example.platformer.map, which will create and add platforms to the game root
-        map = new Map(gameRoot);
+
 
         // Generate enemies
         enemyGenerator = new EnemyGenerator(map, 0.24, player);
@@ -73,6 +88,7 @@ public class GameController extends GameLoop {
         gameRoot.getChildren().add(goal.getView());
 
         gameRoot.getChildren().add(gameTimer.getTimerText());
+
 
         // Start the game loop
         start();

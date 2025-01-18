@@ -1,17 +1,22 @@
-package com.example.platformer.core;
+package com.example.platformer.ui;
 
 import com.example.platformer.highscores.DatabaseManager;
 import com.example.platformer.highscores.HighScore;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class MenuScreen extends Application {
@@ -83,27 +88,53 @@ public class MenuScreen extends Application {
 
     private void showHighScores() {
         DatabaseManager databaseManager = new DatabaseManager();
-        // create a new window to display high scores
         Stage highScoresStage = new Stage();
         highScoresStage.setTitle("High Scores");
-        List<HighScore> highScores = databaseManager.getHighScores();
 
-        // Create a VBox to hold the high scores
+        List<HighScore> highScores = databaseManager.getHighScores();
+        highScores.sort(Comparator.comparingDouble(HighScore::getScore)); // Sort by score (lowest to highest)
+
+        // Create a TableView for the high scores
+        TableView<HighScore> highScoresTable = new TableView<>();
+
+        // Create columns for player's name, score, and date
+        TableColumn<HighScore, String> nameColumn = new TableColumn<>("Player");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        nameColumn.setMinWidth(150);
+
+        TableColumn<HighScore, Integer> scoreColumn = new TableColumn<>("Score");
+        scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
+        scoreColumn.setMinWidth(100);
+
+        TableColumn<HighScore, String> dateColumn = new TableColumn<>("Date");
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date")); // Assuming HighScore has a `date` property
+        dateColumn.setMinWidth(150);
+
+        // Add columns to the table
+        highScoresTable.getColumns().addAll(nameColumn, scoreColumn, dateColumn);
+        highScoresTable.setItems(FXCollections.observableArrayList(highScores.subList(0, Math.min(10, highScores.size()))));
+        highScoresTable.getStyleClass().add("high-scores-table");
+
+        // Create a VBox layout
         VBox highScoresLayout = new VBox(20);
         highScoresLayout.setAlignment(Pos.CENTER);
 
-        // Add the high scores to the layout
-        for (HighScore highScore : highScores) {
-            Label scoreLabel = new Label(highScore.getUsername() + ": " + highScore.getScore());
-            highScoresLayout.getChildren().add(scoreLabel);
-        }
+        // Add a title
+        Label title = new Label("High Scores");
+        title.getStyleClass().add("high-score-title");
 
-        // Add the layout to the scene
-        Scene highScoresScene = new Scene(highScoresLayout, 300, 400);
+        // Add title and table to the layout
+        highScoresLayout.getChildren().addAll(title, highScoresTable);
+
+        // Create a scene and apply the CSS
+        Scene highScoresScene = new Scene(highScoresLayout, 500, 600);
+        Rectangle darkOverlay = new Rectangle(500, 600);
+        darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));  // Black with 70% opacity
+        highScoresScene.getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());
         highScoresStage.setScene(highScoresScene);
         highScoresStage.show();
-
     }
+
 
     public static void main(String[] args) {
         launch(args);

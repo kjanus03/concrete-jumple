@@ -7,23 +7,31 @@ import java.util.Random;
 
 public class PlatformGenerator {
     private Random random;
-    private double screenWidth = 800;  // Width of the game window
-    private double screenHeight = 600;  // Height of the game window
-    private double platformWidthMin = 130;  // Minimum width for platforms
-    private double platformWidthMax = 320;  // Maximum width for platforms
+    private double platformWidthMin; // Minimum width for platforms
+    private double platformWidthMax; // Maximum width for platforms
     private double platformHeight = 32;  // Height of platforms
     private double maxVerticalGap = 140;  // Maximum vertical gap between platforms
     private double minVerticalGap = 50;  // Minimum vertical gap between platforms
     private int platformCount = 100;  // Number of platforms to generate
 
-    private int lastGeneratedX = 0;  // X position of the last generated platform
+    private int lastGeneratedX = 0;  // X position of the last generated platform\
+    private int screenWidth;
+    private int screenHeight;
 
-    public PlatformGenerator() {
+    public PlatformGenerator(int screenWidth, int screenHeight) {
         this.random = new Random();
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+        platformWidthMin = screenWidth / 7.2;
+        platformWidthMax = screenWidth / 2.9;
+
+
     }
 
-    public List<Platform> generatePlatforms() {
+    public List<Platform> generatePlatforms(int sideBarWidth) {
+
         List<Platform> platforms = new ArrayList<>();
+        screenWidth -= sideBarWidth;  // Adjust screen width to account for the sidebar
 
         Platform groundPlatform = new Platform(0, screenHeight - platformHeight, screenWidth, platformHeight);
         platforms.add(groundPlatform);

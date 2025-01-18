@@ -19,10 +19,12 @@ public class BuffSidebar {
     private Label stunLabel; // Label for the stun timer
     private AnimationTimer sidebarUpdater; // Timer to update sidebar elements
     private Player player; // Reference to the player instance
+    private int sideBarWidth = 140;
 
-    public BuffSidebar() {
+    public BuffSidebar(int sideBarWidth) {
         sidebar = new VBox(10); // Vertical layout with spacing
-        sidebar.setPrefWidth(140); // Set the preferred width of the sidebar
+        this.sideBarWidth = sideBarWidth;
+        sidebar.setPrefWidth(sideBarWidth); // Set the preferred width of the sidebar
         sidebar.setStyle("-fx-padding: 10; -fx-background-color: #cccccc;"); // Styling
         buffLabels = new HashMap<>();
 
@@ -112,5 +114,9 @@ public class BuffSidebar {
         if (stunLabel != null) {
             updateStunTimer(this.player); // Ensure you pass the current player instance
         }
+    }
+
+    public int getSideBarWidth() {
+        return sideBarWidth;
     }
 }

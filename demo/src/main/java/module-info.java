@@ -8,6 +8,12 @@ module com.example.demo {
     requires org.mongodb.driver.core;
     requires com.fasterxml.jackson.databind;
     requires javafx.media;
+    requires javafx.base;
+    requires java.sql;
+    requires java.desktop;
+
+    // Open the package containing HighScore for reflection
+    opens com.example.platformer.highscores to javafx.base;
 
 //    opens com.example.platformer to javafx.fxml, com.fasterxml.jackson.databind;
 //    exports com.example.platformer;

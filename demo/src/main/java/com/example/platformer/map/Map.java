@@ -11,13 +11,13 @@ public class Map {
     private Pane gameRoot;
     private PlatformGenerator platformGenerator;
 
-    public Map(Pane root) {
+
+    public Map(Pane root, int screenWidth, int screenHeight, int sideBarWidth) {
         this.gameRoot = root;
-        this.platformGenerator = new PlatformGenerator();
-        this.platforms = platformGenerator.generatePlatforms();
+        this.platformGenerator = new PlatformGenerator(screenWidth, screenHeight);
+        this.platforms = platformGenerator.generatePlatforms(sideBarWidth);
         addPlatformsToGameRoot();
     }
-
 
     private void addPlatformsToGameRoot() {
         for (int i = 0; i < platforms.size(); i++) {
@@ -39,6 +39,10 @@ public class Map {
 
     public List<Platform> getPlatforms() {
         return platforms;
+    }
+
+    public Platform getGroundPlatform() {
+        return platforms.get(0);
     }
 
 

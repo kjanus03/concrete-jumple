@@ -60,7 +60,7 @@ public class Player extends Entity {
     private PlayerState currentState = null;
 
 
-    public Player(double x, double y) {
+    public Player(double x, double y, int speed) {
         super(x, y, 32, 64);  // Initialize a rectangle for the
         loadAnimations();
         // Load idle sprites
@@ -75,7 +75,7 @@ public class Player extends Entity {
 
 
         jumpForce = 750;  // Set the initial jump force
-        speed = 200;  // Set the initial speed
+        this.speed = speed;  // Set the initial speed
         defaultSpeed = speed;  // Store the default speed
         defaultJumpForce = jumpForce;  // Store the default jump force
         activeBuffs = new ArrayList<>();

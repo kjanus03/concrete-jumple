@@ -7,6 +7,12 @@ import javafx.scene.shape.Rectangle;
 import com.example.platformer.map.Platform;
 
 public class CollisionManager {
+    private double sideBarWidth;
+    private double screenWidth;
+    public CollisionManager(double sideBarWidth, double screenWidth) {
+        this.sideBarWidth = sideBarWidth;
+        this.screenWidth = screenWidth;
+    }
 
     // Method to check if an entity is standing on top of a platform
     public boolean isEntityOnPlatform(Entity entity, Platform platform) {
@@ -30,7 +36,7 @@ public class CollisionManager {
     public boolean isEntityCollidingWalls(Entity entity) {
         Rectangle entityBounds = entity.getView();
         boolean colliding = entityBounds.getTranslateX() <= 0 ||
-                entityBounds.getTranslateX() + entityBounds.getWidth() >= 800;
+                entityBounds.getTranslateX() + entityBounds.getWidth() >= screenWidth - sideBarWidth;
 
         if (!colliding && entity instanceof Player) {
             ((Player) entity).resetWallCollision(); // Reset collision state if not colliding
