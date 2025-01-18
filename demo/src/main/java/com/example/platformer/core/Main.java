@@ -59,7 +59,7 @@ public class Main extends Application implements GameEndListener {
         System.out.println("Score saved to the database: " + score);
     }
 
-    public static void main(String[] args) {
+         public static void main(String[] args) {
         launch(args);
     }
 }

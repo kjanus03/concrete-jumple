@@ -203,11 +203,9 @@ public class Player extends Entity {
                 new KeyFrame(Duration.seconds(0.125), event -> {
                     if (spriteView.getImage() == stunSprites[0]) {
                         spriteView.setImage(stunSprites[1]);
-                        System.out.println("Stun animation 1");
                     } else {
                         spriteView.setImage(stunSprites[0]);
-                        System.out.println("Stun animation 0");
-                    }
+                         }
                 })
         );
         System.out.println("Stun animation");

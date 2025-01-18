@@ -62,6 +62,7 @@ public class GameController extends GameLoop {
         buffs = buffGenerator.generateEntities();
         for (Buff buff : buffs) {
             gameRoot.getChildren().add(buff.getView());
+            gameRoot.getChildren().add(buff.getSpriteView());
         }
 
         //generate goal on the last platform
@@ -145,7 +146,7 @@ public class GameController extends GameLoop {
             }
             if (collisionManager.areEntitiesColliding(player, buff)) {
                 player.applyBuff(buff);
-                gameRoot.getChildren().remove(buff.getView());
+                gameRoot.getChildren().remove(buff.getSpriteView());
                 iterator.remove();
                 buffSidebar.addBuff(buff);
             }

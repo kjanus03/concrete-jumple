@@ -4,6 +4,7 @@ import com.example.platformer.entities.Buff;
 import com.example.platformer.entities.Player;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -43,7 +44,16 @@ public class BuffSidebar {
         Label label = new Label();
         label.setFont(new Font(14));
         buffLabels.put(buff, label);
+        ImageView spriteView = buff.getSpriteView();
+        spriteView.setFitWidth(28); // Match entity size
+        spriteView.setFitHeight(25);
+
+
         sidebar.getChildren().add(label);
+        spriteView.setTranslateX(label.getTranslateX());
+        spriteView.setTranslateY(label.getTranslateY());
+        sidebar.getChildren().add(spriteView);
+
         updateBuff(buff);
     }
 
@@ -60,7 +70,9 @@ public class BuffSidebar {
             if (!activeBuffs.contains(buff)) {
                 // Remove the corresponding label from the sidebar
                 Label label = buffLabels.get(buff);
+                ImageView spriteView = buff.getSpriteView();
                 sidebar.getChildren().remove(label);
+                sidebar.getChildren().remove(spriteView);
                 return true; // Remove the buff from the com.example.platformer.map
             }
             return false; // Keep the buff in the com.example.platformer.map
