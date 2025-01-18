@@ -7,6 +7,7 @@ import com.example.platformer.entities.Player;
 import com.example.platformer.generators.BuffGenerator;
 import com.example.platformer.generators.EnemyGenerator;
 import com.example.platformer.highscores.HighScore;
+import com.example.platformer.ui.EndScreen;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -14,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import com.example.platformer.map.Map;
 import com.example.platformer.map.Platform;
 import com.example.platformer.ui.BuffSidebar;
+import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -33,6 +35,8 @@ public class GameController extends GameLoop {
 
     private GameEndListener gameEndListener;
     private ImageView backgroundView;
+
+    private Scene endScreen;
 
     public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar) {
         this.gameRoot = root;
@@ -213,20 +217,43 @@ public class GameController extends GameLoop {
         gameRoot.setTranslateY(-offset);
     }
 
-    public void setBuffSidebar(BuffSidebar buffSidebar) {
-        this.buffSidebar = buffSidebar;
-    }
     public void setGameEndListener(GameEndListener listener) {
         this.gameEndListener = listener;
     }
 
     private void endGame() {
-        System.out.println("You win with time " + gameTimer.getElapsedTime());
-        if (gameEndListener != null) {
-            gameEndListener.onGameEnd(new HighScore("Player", new Date(), gameTimer.getElapsedTime()));
-        }
+        double time = gameTimer.getElapsedTime();
+        System.out.println("You win with time " + time);
+
+        // Create the EndScreen and show it
+        EndScreen endScreen = new EndScreen(time);
+        Scene endScene = endScreen.createEndScreenScene();
+
+        // Create a new stage for the end screen
+        Stage endStage = new Stage();
+        endStage.setTitle("Game Over");
+        endStage.setScene(endScene);
+        endStage.show();
+
+        // Wait for the end screen to be submitted
+        endStage.setOnHiding(event -> {
+            // Once the window is closed (after the user clicked submit), fetch the username
+            String username = endScreen.getUsername(); // Get the username entered by the player
+
+            // Now you can pass this username to the HighScore listener
+            if (gameEndListener != null) {
+                // Pass the username and time to the gameEndListener
+                gameEndListener.onGameEnd(new HighScore(username, new Date(), time));
+            }
+            // turn off the game
+
+        });
+
+        // Stop the timer and the game loop
         gameTimer.stop();
         stop();
     }
+
+
 
 }

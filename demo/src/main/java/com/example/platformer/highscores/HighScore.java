@@ -21,4 +21,13 @@ public class HighScore {
 
     public double getScore() { return score; }
     public void setScore(int score) { this.score = score; }
+
+    @Override
+    public String toString() {
+        return "HighScore{" +
+                "username='" + username + '\'' +
+                ", date=" + date +
+                ", score=" + score +
+                '}';
+    }
 }

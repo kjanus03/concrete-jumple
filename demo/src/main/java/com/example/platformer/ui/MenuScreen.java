@@ -1,5 +1,6 @@
 package com.example.platformer.ui;
 
+import com.example.platformer.core.GameEndListener;
 import com.example.platformer.core.GameStarter;
 import com.example.platformer.highscores.DatabaseManager;
 import com.example.platformer.highscores.HighScore;
@@ -25,7 +26,6 @@ public class MenuScreen extends Application {
     private GameStarter gameStarter;
 
     public MenuScreen() {
-        this.gameStarter = new GameStarter();
     }
 
     @Override
@@ -63,7 +63,10 @@ public class MenuScreen extends Application {
         gameTitle.setTranslateY(-100);  // Adjust position as needed
 
 
-        Button startButton = createMenuButton("Start Game", event -> gameStarter.startGame());
+        Button startButton = createMenuButton("Start Game", event -> {
+            this.gameStarter = new GameStarter();
+            this.gameStarter.startGame();
+        });
         Button highScoresButton = createMenuButton("High Scores", event -> showHighScores());
         Button exitButton = createMenuButton("Exit", event -> System.exit(0));
 
@@ -85,28 +88,37 @@ public class MenuScreen extends Application {
         Stage highScoresStage = new Stage();
         highScoresStage.setTitle("High Scores");
 
+        // Get all high scores from the database
         List<HighScore> highScores = databaseManager.getHighScores();
-        highScores.sort(Comparator.comparingDouble(HighScore::getScore)); // Sort by score (lowest to highest)
+        System.out.println("High Scores: " + highScores);
+
+        // Sort by score (ascending, so the quickest times come first)
+        highScores.sort(Comparator.comparingDouble(HighScore::getScore));
+
+        // Get only the top 10 quickest times (lowest scores)
+        List<HighScore> top10HighScores = highScores.subList(0, Math.min(10, highScores.size()));
 
         // Create a TableView for the high scores
         TableView<HighScore> highScoresTable = new TableView<>();
 
-        // Create columns for player's name, score, and date
+        // Create columns for player's name, score (time), and date
         TableColumn<HighScore, String> nameColumn = new TableColumn<>("Player");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         nameColumn.setMinWidth(150);
 
-        TableColumn<HighScore, Integer> scoreColumn = new TableColumn<>("Score");
+        TableColumn<HighScore, Double> scoreColumn = new TableColumn<>("Time (Score)");
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
         scoreColumn.setMinWidth(100);
 
         TableColumn<HighScore, String> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date")); // Assuming HighScore has a date property
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateColumn.setMinWidth(150);
 
         // Add columns to the table
         highScoresTable.getColumns().addAll(nameColumn, scoreColumn, dateColumn);
-        highScoresTable.setItems(FXCollections.observableArrayList(highScores.subList(0, Math.min(10, highScores.size()))));
+
+        // Set the top 10 high scores in the table
+        highScoresTable.setItems(FXCollections.observableArrayList(top10HighScores));
         highScoresTable.getStyleClass().add("high-scores-table");
 
         // Create a VBox layout
@@ -114,7 +126,7 @@ public class MenuScreen extends Application {
         highScoresLayout.setAlignment(Pos.CENTER);
 
         // Add a title
-        Label title = new Label("High Scores");
+        Label title = new Label("Top 10 Quickest Times");
         title.getStyleClass().add("high-score-title");
 
         // Add title and table to the layout
@@ -128,6 +140,7 @@ public class MenuScreen extends Application {
         highScoresStage.setScene(highScoresScene);
         highScoresStage.show();
     }
+
 
     public void show(Stage primaryStage) {
         start(primaryStage);

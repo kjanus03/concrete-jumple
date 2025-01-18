@@ -20,4 +20,8 @@ public class MusicPlayer {
         mediaPlayer.play();
     }
 
+    public void stop() {
+        mediaPlayer.stop();
+    }
+
 }

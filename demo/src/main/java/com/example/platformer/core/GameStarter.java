@@ -14,10 +14,11 @@ import javafx.stage.Stage;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-public class GameStarter {
+public class GameStarter implements GameEndListener {
 
     private MusicPlayer musicPlayer;
     private DatabaseManager databaseManager;
+    private Scene scene;
 
     public GameStarter() {
         this.musicPlayer = new MusicPlayer("src/main/resources/audio/soundtrack.mp3");
@@ -51,11 +52,12 @@ public class GameStarter {
         root.setRight(buffSidebar.getSidebar());
 
         // Scene
-        Scene scene = new Scene(root, screenWidth, screenHeight); // Adjusted width for the sidebar
+        this.scene = new Scene(root, screenWidth, screenHeight); // Adjusted width for the sidebar
 
         // GameController
         GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar);
         gameController.startGame();
+        gameController.setGameEndListener(this);
 
         // Music and Database
         musicPlayer.play();
@@ -66,4 +68,23 @@ public class GameStarter {
         stage.setFullScreen(true);
         stage.show();
     }
+    @Override
+    public void onGameEnd(HighScore score) {
+        // Stop the background music
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer = null;
+        }
+
+        // Save the score to the database
+        databaseManager.insertHighScore(score);
+        System.out.println("Score saved to the database: " + score);
+
+        // Close the current game stage
+        Stage currentStage = (Stage) ((Pane) scene.getRoot()).getScene().getWindow();
+        currentStage.close();
+
+    }
+
+
 }

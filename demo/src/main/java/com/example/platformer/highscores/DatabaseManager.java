@@ -37,8 +37,8 @@ public class DatabaseManager {
     public List<HighScore> getHighScores() {
         List<HighScore> highScores = new ArrayList<>();
 
-        // Retrieve documents sorted by score in descending order
-        FindIterable<Document> docs = highScoresCollection.find().sort(Sorts.descending("score")).limit(10);
+        // Retrieve documents all of them without sorting
+        FindIterable<Document> docs = highScoresCollection.find();
 
         for (Document doc : docs) {
             String username = doc.getString("username");
