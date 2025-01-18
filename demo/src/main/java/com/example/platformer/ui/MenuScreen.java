@@ -1,9 +1,11 @@
 package com.example.platformer.ui;
 
+import com.example.platformer.core.GameStarter;
 import com.example.platformer.highscores.DatabaseManager;
 import com.example.platformer.highscores.HighScore;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,76 +16,68 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.geometry.Pos;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class MenuScreen extends Application {
 
+    private GameStarter gameStarter;
+
+    public MenuScreen() {
+        this.gameStarter = new GameStarter();
+    }
+
     @Override
     public void start(Stage primaryStage) {
-        // Create the root layout
         StackPane root = new StackPane();
-
         int screenWidth = 1920;
         int screenHeight = 1080;
 
-        // Add a semi-transparent black rectangle for the darkening effect
-        Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
-        darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));  // Black with 70% opacity
+        // Dark overlay for the menu background
+        Rectangle darkOverlay = createDarkOverlay(screenWidth, screenHeight);
 
-        // Bind the rectangle to the root pane's size to fill the entire screen
-        darkOverlay.widthProperty().bind(root.widthProperty());
-        darkOverlay.heightProperty().bind(root.heightProperty());
 
-        // Create a title label for the game
-        Label gameTitle = new Label("CONCRETE JUMPLE");
-        gameTitle.getStyleClass().add("game-title");  // Style class for CSS
-        gameTitle.setTranslateY(-200);  // Adjust position as needed
+        // Title label and buttons
+        VBox menuLayout = createMenuLayout();
 
-        // Create buttons for the menu
-        Button startButton = new Button("Start Game");
-        Button highScoresButton = new Button("High Scores");
-        Button exitButton = new Button("Exit");
+        root.getChildren().addAll(darkOverlay, menuLayout);
 
-        // Add event handlers for the buttons
-        startButton.setOnAction(event -> {
-            System.out.println("Start Game pressed");
-            // start game code here
-        });
-
-        highScoresButton.setOnAction(event -> {
-            System.out.println("High Scores pressed");
-            showHighScores();
-        });
-
-        exitButton.setOnAction(event -> {
-            System.out.println("Exit pressed");
-            primaryStage.close();
-        });
-
-        // Style the buttons
-        startButton.getStyleClass().add("menu-button");
-        highScoresButton.getStyleClass().add("menu-button");
-        exitButton.getStyleClass().add("menu-button");
-
-        // Arrange buttons in a vertical layout
-        VBox menuLayout = new VBox(20, startButton, highScoresButton, exitButton);
-        menuLayout.setTranslateY(100);
-        menuLayout.getStyleClass().add("menu-layout");
-
-        // Add the components to the root
-        root.getChildren().addAll(darkOverlay, gameTitle, menuLayout);
-
-        // Create the scene and apply the CSS
         Scene scene = new Scene(root, screenWidth, screenHeight);
         scene.getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());
 
-        // Set up the primary stage
         primaryStage.setTitle("Platformer Game");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private Rectangle createDarkOverlay(int screenWidth, int screenHeight) {
+        Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
+        darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));  // Black with 80% opacity
+        return darkOverlay;
+    }
+
+    private VBox createMenuLayout() {
+        Label gameTitle = new Label("CONCRETE JUMPLE");
+        gameTitle.getStyleClass().add("game-title");  // Style class for CSS
+        gameTitle.setTranslateY(-100);  // Adjust position as needed
+
+
+        Button startButton = createMenuButton("Start Game", event -> gameStarter.startGame());
+        Button highScoresButton = createMenuButton("High Scores", event -> showHighScores());
+        Button exitButton = createMenuButton("Exit", event -> System.exit(0));
+
+        VBox menuLayout = new VBox(20, gameTitle, startButton, highScoresButton, exitButton);
+//        menuLayout.setTranslateY(100);
+        menuLayout.getStyleClass().add("menu-layout");
+        return menuLayout;
+    }
+
+    private Button createMenuButton(String text, javafx.event.EventHandler<javafx.event.ActionEvent> action) {
+        Button button = new Button(text);
+        button.setOnAction(action);
+        button.getStyleClass().add("menu-button");
+        return button;
     }
 
     private void showHighScores() {
@@ -107,7 +101,7 @@ public class MenuScreen extends Application {
         scoreColumn.setMinWidth(100);
 
         TableColumn<HighScore, String> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date")); // Assuming HighScore has a `date` property
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date")); // Assuming HighScore has a date property
         dateColumn.setMinWidth(150);
 
         // Add columns to the table
@@ -135,8 +129,8 @@ public class MenuScreen extends Application {
         highScoresStage.show();
     }
 
-
-    public static void main(String[] args) {
-        launch(args);
+    public void show(Stage primaryStage) {
+        start(primaryStage);
     }
+
 }

@@ -43,7 +43,6 @@ public class GameController extends GameLoop {
         this.enemies = new ArrayList<>();
         this.buffs = new ArrayList<>();
         this.goal = new Goal(100, 100);
-        this.gameTimer = new GameTimer();
         setupInputHandling(scene);  // Setup keyboard input handling
     }
 
@@ -86,7 +85,9 @@ public class GameController extends GameLoop {
         //generate goal on the last platform
         this.goal.generateGoal(map.getPlatforms().get(map.getPlatforms().size() - 1));
         gameRoot.getChildren().add(goal.getView());
+        gameRoot.getChildren().add(goal.getSpriteView());
 
+        this.gameTimer = new GameTimer(screenWidth, buffSidebar.getSideBarWidth());
         gameRoot.getChildren().add(gameTimer.getTimerText());
 
 

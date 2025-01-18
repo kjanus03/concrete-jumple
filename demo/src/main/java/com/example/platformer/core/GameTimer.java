@@ -8,7 +8,7 @@ public class GameTimer {
     private double elapsedTime = 0;  // Elapsed time in seconds
     private Text timerText;  // Text node to display the timer
 
-    public GameTimer() {
+    public GameTimer(int screenWidth, int sideBarWidth) {
         // Create a Text node to display the timer
         timerText = new Text();
         timerText.setFont(Font.font(26));  // Set font size for the timer text
@@ -17,7 +17,7 @@ public class GameTimer {
         timerText.setStroke(Color.BLACK);
         timerText.setStrokeWidth(1);
 
-        timerText.setX(680);  // Position the timer text near the top-right corner
+        timerText.setX(screenWidth - sideBarWidth - 120);  // Position the timer text near the top-right corner
         timerText.setY(30);
     }
 
