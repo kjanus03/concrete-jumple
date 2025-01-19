@@ -1,5 +1,7 @@
 package com.example.platformer.ui;
 
+import com.example.platformer.core.GameStarter;
+import com.example.platformer.ui.MusicPlayer;
 import com.example.platformer.core.UserSettings;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,13 +46,13 @@ public class MenuScreen {
 
         Button startButton = createMenuButton("Start Game", event -> {
             // Logic for starting the game
+            startGame(stage);  // Call the method to start the game
         });
 
         Button highScoresButton = createMenuButton("High Scores", event -> {
             HighScoresScreen highScoresScreen = new HighScoresScreen(root, userSettings, stage);  // Pass stage
             highScoresScreen.setRoot();  // Switch to HighScoresScreen
         });
-
 
         Button settingsButton = createMenuButton("Settings", event -> {
             SettingsScreen settingsScreen = new SettingsScreen(root, stage, userSettings, new MusicPlayer());
@@ -69,5 +71,17 @@ public class MenuScreen {
         button.setOnAction(action);
         button.getStyleClass().add("menu-button");
         return button;
+    }
+
+    private void startGame(Stage stage) {
+        // Initialize MusicPlayer for the game
+        MusicPlayer gameMusicPlayer = new MusicPlayer();
+        gameMusicPlayer.setGameMusic("src/main/resources/audio/gameMusic.mp3");  // Example game music
+
+        // Create GameStarter to launch the game
+        GameStarter gameStarter = new GameStarter(gameMusicPlayer);
+
+        // Start the game (this switches the scene or stage)
+        gameStarter.startGame(); // Pass the stage to GameStarter to manage the transition
     }
 }

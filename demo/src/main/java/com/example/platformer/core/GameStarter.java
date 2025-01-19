@@ -1,19 +1,16 @@
 package com.example.platformer.core;
 
-import com.example.platformer.ui.BuffSidebar;
-import com.example.platformer.ui.MusicPlayer;
 import com.example.platformer.highscores.DatabaseManager;
 import com.example.platformer.highscores.HighScore;
+import com.example.platformer.ui.BuffSidebar;
+import com.example.platformer.ui.MusicPlayer;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 public class GameStarter implements GameEndListener {
 
@@ -30,14 +27,12 @@ public class GameStarter implements GameEndListener {
     }
 
     public void startGame() {
+        UserSettings userSettings = new UserSettings();
+        int scalingFactor = userSettings.getScalingFactor();
 
-        UserSettings userSettings = new UserSettings(); // Instantiate UserSettings
-        int scalingFactor = userSettings.getScalingFactor(); // Get scaling factor
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) (screenSize.getWidth());
-        int screenHeight = (int) (screenSize.getHeight());
-        int sidebarWidth = (int) screenWidth/4;
+        int screenWidth = userSettings.getWidth();
+        int screenHeight = userSettings.getHeight();
+        int sidebarWidth = (int) screenHeight/4;
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();
@@ -48,8 +43,8 @@ public class GameStarter implements GameEndListener {
         // Add background image
         Image backgroundImage = new Image(getClass().getResource("/sprites/background/Steampunk/darkblue1.png").toExternalForm());
         ImageView backgroundView = new ImageView(backgroundImage);
-        backgroundView.setFitWidth(screenWidth); // Set width to match your scene or window
-        backgroundView.setFitHeight(screenHeight); // Set height to match your scene or window
+        backgroundView.setFitWidth(screenWidth);
+        backgroundView.setFitHeight(screenHeight);
         backgroundView.setPreserveRatio(false);
         gamePane.getChildren().add(backgroundView);
 
@@ -60,7 +55,7 @@ public class GameStarter implements GameEndListener {
         root.setRight(buffSidebar.getSidebar());
 
         // Scene
-        this.scene = new Scene(root, screenWidth, screenHeight); // Adjusted width for the sidebar
+        this.scene = new Scene(root, screenWidth, screenHeight);
 
         // GameController
         GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar, scalingFactor);
@@ -74,14 +69,15 @@ public class GameStarter implements GameEndListener {
         stage.setTitle("ConcreteJumple");
         stage.setResizable(false);
         stage.setFullScreen(userSettings.isFullscreen());
-        stage.setFullScreenExitHint(""); // Removes the fullscreen exit hint
+        stage.setFullScreenExitHint("");
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
         stage.show();
     }
+
     @Override
     public void onGameEnd(HighScore score) {
-        // Stop the background music
+        // Handle game end logic, such as stopping music and closing the stage
         if (gamePlayer != null) {
             gamePlayer.stop();
             gamePlayer = null;
@@ -95,8 +91,5 @@ public class GameStarter implements GameEndListener {
         // Close the current game stage
         Stage currentStage = (Stage) ((Pane) scene.getRoot()).getScene().getWindow();
         currentStage.close();
-
     }
-
-
 }

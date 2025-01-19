@@ -37,7 +37,7 @@ public class MusicPlayer {
     }
 
     public void playMenu() {
-        menuPlayer.play();
+//        menuPlayer.play();
     }
 
     public void stop() {
