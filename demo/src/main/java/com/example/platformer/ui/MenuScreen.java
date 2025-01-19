@@ -15,12 +15,15 @@ import javafx.stage.Stage;
 public class MenuScreen {
 
     private final UserSettings userSettings;
+    private Stage primaryStage;
 
     public MenuScreen(UserSettings userSettings) {
         this.userSettings = userSettings;
     }
 
     public void setRoot(StackPane root, Stage stage) {
+        this.primaryStage = stage; // Store the reference to the primary stage
+
         root.getChildren().clear();  // Clear the current root contents
 
         int screenWidth = userSettings.getWidth();
@@ -35,18 +38,11 @@ public class MenuScreen {
         root.getChildren().addAll(darkOverlay, menuLayout);
     }
 
-    private Rectangle createDarkOverlay(int screenWidth, int screenHeight) {
-        Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
-        darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));  // Black with 80% opacity
-        return darkOverlay;
-    }
-
     private VBox createMenuLayout(StackPane root, Stage stage) {
         Label gameTitle = new Label("CONCRETE JUMPLE");
         gameTitle.getStyleClass().add("game-title");
 
         Button startButton = createMenuButton("Start Game", event -> {
-            // Logic for starting the game
             startGame(stage);  // Call the method to start the game
         });
 
@@ -67,6 +63,12 @@ public class MenuScreen {
         return menuLayout;
     }
 
+    private Rectangle createDarkOverlay(int screenWidth, int screenHeight) {
+        Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
+        darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));  // Black with 80% opacity
+        return darkOverlay;
+    }
+
     private Button createMenuButton(String text, javafx.event.EventHandler<javafx.event.ActionEvent> action) {
         Button button = new Button(text);
         button.setOnAction(action);
@@ -79,10 +81,14 @@ public class MenuScreen {
         MusicPlayer gameMusicPlayer = new MusicPlayer();
         gameMusicPlayer.setGameMusic("src/main/resources/audio/gameMusic.mp3");  // Example game music
 
-        // Create GameStarter to launch the game
-        GameStarter gameStarter = new GameStarter(gameMusicPlayer);
+        // Stop the menu music
+        gameMusicPlayer.stop();
 
-        // Start the game (this switches the scene or stage)
+        // Create GameStarter to launch the game
+        GameStarter gameStarter = new GameStarter(gameMusicPlayer, userSettings, primaryStage);
+
+        // Hide the MenuScreen stage and start the game
+        primaryStage.hide(); // Hide the menu screen
         gameStarter.startGame(); // Pass the stage to GameStarter to manage the transition
     }
 }

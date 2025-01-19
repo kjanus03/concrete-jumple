@@ -18,12 +18,16 @@ public class GameStarter implements GameEndListener {
     private MusicPlayer menuPlayer;
     private DatabaseManager databaseManager;
     private Scene scene;
+    private Stage primaryStage;
+    private UserSettings userSettings;
 
-    public GameStarter(MusicPlayer menuPlayer) {
+    public GameStarter(MusicPlayer menuPlayer, UserSettings userSettings, Stage primaryStage) {
         this.menuPlayer = menuPlayer;
         this.gamePlayer = new MusicPlayer();
         this.gamePlayer.setGameMusic("src/main/resources/audio/soundtrack.mp3");
         this.databaseManager = new DatabaseManager();
+        this.userSettings = userSettings;
+        this.primaryStage = primaryStage;
     }
 
     public void startGame() {
@@ -94,5 +98,12 @@ public class GameStarter implements GameEndListener {
         // Close the current game stage
         Stage currentStage = (Stage) ((Pane) scene.getRoot()).getScene().getWindow();
         currentStage.close();
+
+        // Re-show the MenuScreen stage
+        primaryStage.show();
+        primaryStage.setFullScreen(userSettings.isFullscreen());
+        if (!userSettings.isFullscreen()) {
+            primaryStage.setMaximized(true);
+        }
     }
 }

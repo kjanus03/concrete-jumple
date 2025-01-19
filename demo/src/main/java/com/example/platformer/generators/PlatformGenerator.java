@@ -21,7 +21,7 @@ public class PlatformGenerator {
 
     public PlatformGenerator(int screenWidth, int screenHeight, int scalingFactor) {
         this.random = new Random();
-        this.screenWidth = screenWidth - screenHeight/4;
+        this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.scalingFactor = scalingFactor;
 
