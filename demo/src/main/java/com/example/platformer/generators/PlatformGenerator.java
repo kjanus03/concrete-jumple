@@ -11,8 +11,8 @@ public class PlatformGenerator {
     private double platformWidthMin; // Minimum width for platforms
     private double platformWidthMax; // Maximum width for platforms
     private int platformHeight = 10;  // Base height of platforms
-    private int maxVerticalGap = 140;  // Maximum vertical gap between platforms
-    private int minVerticalGap = 90;  // Minimum vertical gap between platforms
+    private int maxVerticalGap = 200;  // Maximum vertical gap between platforms
+    private int minVerticalGap = 100;  // Minimum vertical gap between platforms
     private int platformCount = 100;  // Number of platforms to generate
 
     private int screenWidth;
@@ -38,7 +38,7 @@ public class PlatformGenerator {
         screenWidth -= sideBarWidth;  // Adjust screen width to account for the sidebar
 
         // Create the ground platform
-        Platform groundPlatform = new Platform(0, screenHeight - platformHeight*scalingFactor, screenWidth, platformHeight*scalingFactor);
+        Platform groundPlatform = new Platform(0, screenHeight - platformHeight*scalingFactor, screenWidth*scalingFactor, platformHeight*scalingFactor);
         platforms.add(groundPlatform);
 
         // Generate random platforms

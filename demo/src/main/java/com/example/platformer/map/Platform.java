@@ -69,5 +69,9 @@ public class Platform {
     public int getWidth() {
         return (int) platformView.getBoundsInParent().getWidth();
     }
+
+    public int getHeight() {
+        return (int) platformView.getBoundsInParent().getHeight();
+    }
 }
 

@@ -84,7 +84,8 @@ public class GameController extends GameLoop {
             e.printStackTrace();
         }
         Platform groundPlatform = map.getGroundPlatform();
-        player = new Player(groundPlatform.getX() + groundPlatform.getWidth() / 2, groundPlatform.getY() - 200,
+        player = new Player(groundPlatform.getX() + screenWidth/2,
+                groundPlatform.getY() - groundPlatform.getHeight()*scalingFactor,
                 (int) (screenWidth/4.7), scalingFactor);
         gameRoot.getChildren().add(player.getView());
         gameRoot.getChildren().add(player.getSpriteView());

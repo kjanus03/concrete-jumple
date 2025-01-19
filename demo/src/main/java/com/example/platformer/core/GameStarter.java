@@ -33,7 +33,7 @@ public class GameStarter implements GameEndListener {
         // hardcoded resolution
         int screenWidth = userSettings.getWidth();
         int screenHeight = userSettings.getHeight();
-        int sidebarWidth = screenWidth / 4;
+        int sidebarWidth = screenHeight / 4;
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();
