@@ -19,15 +19,17 @@ public class Buff extends Entity {
     private final ImageView spriteView;
 
     public Buff(double x, double y, int buffAmount, BuffType type, int scalingFactor) {
-        super(x, y, 56, 50);
+        super(x, y, 28*scalingFactor,25*scalingFactor );
         this.buffAmount = buffAmount;
         this.type = type;
         this.buffSprites = new Image[2];
         loadAnimations();
 
         spriteView = new ImageView(buffSprites[0]);
-        spriteView.setFitWidth(56); // Match entity size
-        spriteView.setFitHeight(50);
+        spriteView.setFitWidth(28*scalingFactor); // Match entity size
+        spriteView.setFitHeight(25*scalingFactor);
+
+//        spriteView.setTranslateY(-32*scalingFactor);
 
         // make entity view transparent
         entityView.setOpacity(0);

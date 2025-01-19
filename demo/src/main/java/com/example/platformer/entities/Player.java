@@ -57,11 +57,13 @@ public class Player extends Entity {
 
     private PlayerState currentState = null;
 
+    private int scalingFactor;
 
     public Player(double x, double y, int speed, int scalingFactor) {
         super(x, y, 32, 64);  // Initialize a rectangle for the
         loadAnimations();
         // Load idle sprites
+        this.scalingFactor = scalingFactor;
 
         spriteView = new ImageView(idleSprites[0]); // Start with the first idle sprite
         spriteView.setFitWidth(32*scalingFactor); // Match entity size
@@ -70,6 +72,8 @@ public class Player extends Entity {
         // make entity view transparent
         entityView.setOpacity(0);
 
+        spriteView.setTranslateX(x);
+        spriteView.setTranslateY(y);
 
 
         jumpForce = 500*scalingFactor;  // Set the initial jump force
@@ -240,6 +244,10 @@ public class Player extends Entity {
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
+
+        // Update sprite position to match the entity's position (align with hitbox)
+        spriteView.setTranslateX(x); // Align sprite with the entity's x position
+        spriteView.setTranslateY(y - 55*scalingFactor); // Align sprite with the entity's y position (adjust vertical offset if needed)
 
         // Determine the current state
         if (collisionCooldown) {

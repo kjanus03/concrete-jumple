@@ -36,7 +36,8 @@ public class GameController extends GameLoop {
     private GameEndListener gameEndListener;
     private ImageView backgroundView;
 
-    private int scalingFactor;
+    private final int scalingFactor;
+    private int playerSpeed;
 
     private Scene endScreen;
 
@@ -60,6 +61,8 @@ public class GameController extends GameLoop {
         int screenHeight = (int) scene.getHeight();
         System.out.println("screenWidth: " + screenWidth + " screenHeight: " + screenHeight);
         map = new Map(gameRoot, screenWidth, screenHeight, buffSidebar.getSideBarWidth(), scalingFactor);
+
+        this.playerSpeed = (int) (screenWidth/4.7);
 
         // Generate buffs
         BuffGenerator buffGenerator = new BuffGenerator(map, 0.4, scalingFactor);
@@ -86,14 +89,14 @@ public class GameController extends GameLoop {
         Platform groundPlatform = map.getGroundPlatform();
         player = new Player(groundPlatform.getX() + screenWidth/2,
                 groundPlatform.getY() - groundPlatform.getHeight()*scalingFactor,
-                (int) (screenWidth/4.7), scalingFactor);
+                playerSpeed, scalingFactor);
         gameRoot.getChildren().add(player.getView());
         gameRoot.getChildren().add(player.getSpriteView());
 
 
 
         // Generate enemies
-        enemyGenerator = new EnemyGenerator(map, 0.24, player, scalingFactor);
+        enemyGenerator = new EnemyGenerator(map, 0.24, player, playerSpeed/2, scalingFactor);
         enemies = enemyGenerator.generateEntities();
         for (Enemy enemy : enemies) {
             gameRoot.getChildren().add(enemy.getView());

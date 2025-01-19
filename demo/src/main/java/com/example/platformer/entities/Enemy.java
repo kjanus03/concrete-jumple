@@ -16,10 +16,11 @@ public class Enemy extends Entity {
     private final ImageView spriteView;
     private String direction;
 
+    private int speed;
     private int scalingFactor;
 
-    public Enemy(double x, double y, Player target, int scalingFactor) {
-        super(x, y, 32, 64);  // Initialize a 30x30 rectangle for the enemy
+    public Enemy(double x, double y, Player target, int speed, int scalingFactor) {
+        super(x, y, 32, 64);
         this.target = target;
         this.isChasing = false;
         this.scalingFactor = scalingFactor;
@@ -119,7 +120,7 @@ public class Enemy extends Entity {
             setupWalkingRightAnimation();
             currentAnimation.play();
         }
-        velocityX = 50*scalingFactor;
+        velocityX = speed*scalingFactor;
         direction = "right";
     }
 
@@ -128,7 +129,7 @@ public class Enemy extends Entity {
             setupWalkingLeftAnimation();
             currentAnimation.play();
         }
-        velocityX = -50*scalingFactor;
+        velocityX = -speed*scalingFactor;
         direction = "left";
     }
 
@@ -144,5 +145,9 @@ public class Enemy extends Entity {
 
     public ImageView getSpriteView() {
         return spriteView;
+    }
+
+    public void setSpeed(int speed){
+        this.speed=speed;
     }
 }

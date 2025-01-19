@@ -73,14 +73,8 @@ public class UserSettings {
         return Integer.parseInt(getResolution().split("x")[1]);
     }
 
-    public int getScalingFactor(){
-        String resolution = properties.getProperty("resolution");
-        if (resolution.equals("1280x720")) {
-            return 2;
-        } else if (resolution.equals("1920x1080")) {
-            return 3;
-        }
-        return 1;
+    public int getScalingFactor() {
+        return 2;
     }
 
 }

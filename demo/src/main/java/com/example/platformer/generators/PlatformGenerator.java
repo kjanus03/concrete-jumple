@@ -10,7 +10,7 @@ public class PlatformGenerator {
     private Random random;
     private double platformWidthMin; // Minimum width for platforms
     private double platformWidthMax; // Maximum width for platforms
-    private int platformHeight = 10;  // Base height of platforms
+    private int platformHeight = 16;  // Base height of platforms
     private int maxVerticalGap = 200;  // Maximum vertical gap between platforms
     private int minVerticalGap = 100;  // Minimum vertical gap between platforms
     private int platformCount = 100;  // Number of platforms to generate

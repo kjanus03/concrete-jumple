@@ -17,7 +17,7 @@ public class Platform {
         Image platformImageRight = new Image(getClass().getResource("/sprites/platforms/platform_right.png").toExternalForm());
 
         // Calculate scaling factors for the sprites
-        double originalSpriteHeight = 16; // Assume original height of the sprite is 16px
+        double originalSpriteHeight = 32; // Assume original height of the sprite is 16px
         double scalingFactor = height / originalSpriteHeight; // Scaling factor for height
 
         // Scale the left part

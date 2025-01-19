@@ -23,6 +23,7 @@ public abstract class AbstractEntityGenerator<T extends Entity> {
 
     protected abstract T createEntity(double x, double y, Platform platform, int scalingFactor);
 
+
     public ArrayList<T> generateEntities() {
         ArrayList<T> entities = new ArrayList<>();
         for (Platform platform : map.getPlatforms()) {
