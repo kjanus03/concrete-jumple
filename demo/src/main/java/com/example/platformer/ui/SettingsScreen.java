@@ -2,40 +2,39 @@ package com.example.platformer.ui;
 
 import com.example.platformer.core.UserSettings;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class SettingsScreen {
 
-    private Stage stage;
-    private final Scene previousScene;
-    private final UserSettings userSettings;
+    private final Pane root;
+    private final Stage stage;
+    private UserSettings userSettings;
     private final MusicPlayer menuPlayer;
 
-    public SettingsScreen(Stage stage, Scene previousScene, UserSettings userSettings, MusicPlayer menuPlayer) {
-        this.stage = stage;
-        this.previousScene = previousScene;
-        this.userSettings = new UserSettings();
+    public SettingsScreen(Pane root, Stage stage, UserSettings userSettings, MusicPlayer menuPlayer) {
+        this.root = root;
+        this.stage = stage;  // Stage is now passed to handle fullscreen mode changes
+        this.userSettings = userSettings;
         this.menuPlayer = menuPlayer;
     }
 
-    public void show() {
-        // Create UI controls
+    public void setRoot() {
+        root.getChildren().clear();  // Clear the current root contents
+
         int screenWidth = userSettings.getWidth();
         int screenHeight = userSettings.getHeight();
-        System.out.println("Screen width: " + screenWidth);
-        System.out.println("Screen height: " + screenHeight);
 
+        // Create UI controls
         Label titleLabel = new Label("Settings");
         titleLabel.getStyleClass().add("settings-title");
 
@@ -49,25 +48,14 @@ public class SettingsScreen {
         volumeSlider.setMajorTickUnit(0.25);
         volumeSlider.setMinorTickCount(4);
         volumeSlider.setSnapToTicks(true);
-
-        // Set the slider to take up half the screen width
         volumeSlider.setPrefWidth(screenWidth / 2);
         volumeSlider.setMaxWidth(screenWidth / 2);
 
-        // Wrap the slider in an HBox to center it
         HBox volumeWrapper = new HBox(10, volumeSlider);
         volumeWrapper.setAlignment(Pos.CENTER);
 
-        // Combine the label and slider into a VBox
         VBox volumeSection = new VBox(10, volumeLabel, volumeWrapper);
         volumeSection.setAlignment(Pos.CENTER);
-
-        Label resolutionLabel = new Label("Resolution:");
-        resolutionLabel.getStyleClass().add("settings-label");
-
-        ComboBox<String> resolutionComboBox = new ComboBox<>();
-        resolutionComboBox.getItems().addAll("1280x720", "1920x1080");
-        resolutionComboBox.setValue(userSettings.getResolution());
 
         Label fullscreenLabel = new Label("Fullscreen:");
         fullscreenLabel.getStyleClass().add("settings-label");
@@ -75,52 +63,43 @@ public class SettingsScreen {
         fullscreenComboBox.getItems().addAll("Yes", "No");
         fullscreenComboBox.setValue(userSettings.isFullscreen() ? "Yes" : "No");
 
-        // Save button
         Button saveButton = new Button("Save Settings");
         saveButton.getStyleClass().add("menu-button");
         saveButton.setOnAction(event -> {
             userSettings.setVolume(volumeSlider.getValue());
-            userSettings.setResolution(resolutionComboBox.getValue());
-            userSettings.setFullscreen(fullscreenComboBox.getValue().equals("Yes"));
-            userSettings.saveSettings(); // Save settings to the properties file
-            reloadScreen();
+            boolean fullscreen = fullscreenComboBox.getValue().equals("Yes");
+            userSettings.setFullscreen(fullscreen);
+            userSettings.saveSettings();  // Save settings to the properties file
+
+            // Update the stage fullscreen mode based on the saved settings
+            stage.setFullScreen(fullscreen);
+            if (!fullscreen){
+                stage.setMaximized(true);
+            }
+
+            reloadScreen();  // Optionally reload settings or apply other changes
         });
 
-        // Back button to return to the previous screen
         Button backButton = new Button("Back to Menu");
         backButton.getStyleClass().add("menu-button");
-        backButton.setOnAction(event -> stage.setScene(previousScene));
+        backButton.setOnAction(event -> {
+            // Return to MenuScreen
+            MenuScreen menuScreen = new MenuScreen(userSettings);
+            menuScreen.setRoot(root, stage);  // Pass the root and the stage to MenuScreen to switch back to the menu
+        });
 
-        // Layout for settings controls
         VBox settingsLayout = new VBox(20);
         settingsLayout.setAlignment(Pos.CENTER);
-        settingsLayout.getChildren().addAll(titleLabel, volumeSection, resolutionLabel, resolutionComboBox, fullscreenLabel, fullscreenComboBox, saveButton, backButton);
+        settingsLayout.getChildren().addAll(titleLabel, volumeSection, fullscreenLabel, fullscreenComboBox, saveButton, backButton);
 
-        // Dark overlay for background
-        Rectangle darkOverlay = new Rectangle();
+        Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
         darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));
 
-        // Bind the overlay size to the screen size
-        darkOverlay.widthProperty().bind(stage.widthProperty());
-        darkOverlay.heightProperty().bind(stage.heightProperty());
-
-        // StackPane for overlay and content
-        StackPane root = new StackPane();
         root.getChildren().addAll(darkOverlay, settingsLayout);
-
-        // Create the scene and apply the stylesheet
-        Scene settingsScene = new Scene(root, screenWidth, screenHeight);
-        settingsScene.getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());
-
-        // Set the scene on the stage
-        stage.setScene(settingsScene);
-        stage.centerOnScreen();
     }
 
-
     private void reloadScreen() {
-        MenuScreen menuScreen = new MenuScreen(userSettings, menuPlayer);
-        menuScreen.show(stage);
-        stage.centerOnScreen();
+        userSettings = new UserSettings();  // Reload settings if necessary
+
     }
 }

@@ -3,6 +3,7 @@ package com.example.platformer.core;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.Properties;
 public class UserSettings {
     private static final String CONFIG_FILE = "src/main/resources/config/user_settings.properties";
     private Properties properties;
-
+    private int[] screenDimension;
 
     public UserSettings() {
         properties = new Properties();
@@ -23,6 +24,10 @@ public class UserSettings {
     private void loadSettings() {
         try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
             properties.load(input);
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            screenDimension = new int[2];
+            screenDimension[0] = screenSize.width;
+            screenDimension[1] = screenSize.height;
 
         } catch (IOException e) {
             System.out.println("Error loading user settings: " + e.getMessage());
@@ -43,7 +48,6 @@ public class UserSettings {
     // Set default settings if config file is missing
     private void setDefaults() {
         properties.setProperty("volume", "0.5");
-        properties.setProperty("resolution", "1280x720");
         properties.setProperty("fullscreen", "false");
         saveSettings();
     }
@@ -57,14 +61,6 @@ public class UserSettings {
         properties.setProperty("volume", String.valueOf(volume));
     }
 
-    public String getResolution() {
-        return properties.getProperty("resolution", "1280x720");
-    }
-
-    public void setResolution(String resolution) {
-        properties.setProperty("resolution", resolution);
-    }
-
     public boolean isFullscreen() {
         return Boolean.parseBoolean(properties.getProperty("fullscreen", "false"));
     }
@@ -74,12 +70,12 @@ public class UserSettings {
     }
 
     public int getWidth() {
-        return Integer.parseInt(getResolution().split("x")[0]);
+        return screenDimension[0];
     }
 
     // Get height from the resolution string (e.g., "1280x720")
     public int getHeight() {
-        return Integer.parseInt(getResolution().split("x")[1]);
+        return screenDimension[1];
     }
 
     public int getScalingFactor() {

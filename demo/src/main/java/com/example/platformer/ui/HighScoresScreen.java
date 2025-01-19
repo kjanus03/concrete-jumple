@@ -5,7 +5,6 @@ import com.example.platformer.highscores.DatabaseManager;
 import com.example.platformer.highscores.HighScore;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -15,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.util.Comparator;
@@ -22,18 +22,19 @@ import java.util.List;
 
 public class HighScoresScreen {
 
+    private final Pane root;
+    private final UserSettings userSettings;
     private final Stage stage;
-    private final Scene previousScene;
-    private UserSettings userSettings;
 
-    public HighScoresScreen(Stage stage, Scene previousScene, UserSettings userSettings) {
-        this.stage = stage;
-        this.previousScene = previousScene;
+    public HighScoresScreen(Pane root, UserSettings userSettings, Stage stage) {
+        this.root = root;
         this.userSettings = userSettings;
-
+        this.stage = stage;
     }
 
-    public void show() {
+    public void setRoot() {
+        root.getChildren().clear();  // Clear current root contents
+
         int screenWidth = userSettings.getWidth();
         int screenHeight = userSettings.getHeight();
         DatabaseManager databaseManager = new DatabaseManager();
@@ -66,7 +67,6 @@ public class HighScoresScreen {
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateColumn.setPrefWidth(tableWidth/2-10);
 
-
         nameColumn.setResizable(false);
         scoreColumn.setResizable(false);
         dateColumn.setResizable(false);
@@ -91,8 +91,11 @@ public class HighScoresScreen {
         // Back button to return to the main menu
         Button backButton = new Button("Back to Menu");
         backButton.getStyleClass().add("menu-button");  // Applying the CSS class for buttons
-        backButton.setOnAction(event -> stage.setScene(previousScene));
-
+        backButton.setOnAction(event -> {
+            // Return to MenuScreen
+            MenuScreen menuScreen = new MenuScreen(userSettings);
+            menuScreen.setRoot(root, this.stage);  // Use the class-level stage
+        });
         // Add title, table, and back button to the layout
         highScoresLayout.getChildren().addAll(title, highScoresTable, backButton);
 
@@ -101,15 +104,10 @@ public class HighScoresScreen {
         darkOverlay.setFill(Color.rgb(0, 0, 0, 0.7));  // Black with 80% opacity
 
         // Stack the dark rectangle and the content
-        StackPane root = new StackPane();
-        root.getChildren().addAll(darkOverlay, highScoresLayout);
+        StackPane highScoresRoot = new StackPane();
+        highScoresRoot.getChildren().addAll(darkOverlay, highScoresLayout);
 
-        // Create a scene and apply the CSS
-        Scene highScoresScene = new Scene(root, screenWidth, screenHeight);
-        highScoresScene.getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());  // Link CSS properly
-
-        // Set the scene on the stage
-        stage.setScene(highScoresScene);
-//        userSettings.applyFullScreen(stage);
+        // Set the highScoresRoot to the current root of the scene
+        root.getChildren().add(highScoresRoot);
     }
 }

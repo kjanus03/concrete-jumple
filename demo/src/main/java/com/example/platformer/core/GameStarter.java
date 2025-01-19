@@ -13,6 +13,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.awt.*;
+
 public class GameStarter implements GameEndListener {
 
     private MusicPlayer gamePlayer;
@@ -32,11 +34,10 @@ public class GameStarter implements GameEndListener {
         UserSettings userSettings = new UserSettings(); // Instantiate UserSettings
         int scalingFactor = userSettings.getScalingFactor(); // Get scaling factor
 
-        // hardcoded resolution
-        int screenHeight = userSettings.getHeight();
-        int sidebarWidth = 180;
-        int screenWidth = userSettings.getWidth();
-
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = (int) (screenSize.getWidth());
+        int screenHeight = (int) (screenSize.getHeight());
+        int sidebarWidth = (int) screenWidth/4;
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();
