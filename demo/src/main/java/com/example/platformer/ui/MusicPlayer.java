@@ -12,7 +12,8 @@ public class MusicPlayer {
 
     public void setGameMusic(String musicFile) {
         try {
-            Media sound = new Media(new java.io.File(musicFile).toURI().toString());
+            java.net.URI musicUri = getClass().getResource(musicFile).toURI();
+            Media sound = new Media(musicUri.toString());
             gamePlayer = new MediaPlayer(sound);
             gamePlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
@@ -23,7 +24,9 @@ public class MusicPlayer {
 
     public void setMenuMusic(String musicFile) {
         try {
-            Media sound = new Media(new java.io.File(musicFile).toURI().toString());
+            // Use getClass().getResource() to load resource from the JAR
+            java.net.URI musicUri = getClass().getResource(musicFile).toURI();
+            Media sound = new Media(musicUri.toString());
             menuPlayer = new MediaPlayer(sound);
             menuPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
@@ -31,6 +34,7 @@ public class MusicPlayer {
             System.out.println("Error: " + e);
         }
     }
+
 
     public void playGame() {
         gamePlayer.play();

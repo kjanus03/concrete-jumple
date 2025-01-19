@@ -47,13 +47,16 @@ public class MenuScreen extends Application {
 
         if (menuPlayer == null) {
             this.menuPlayer = new MusicPlayer();
-            this.menuPlayer.setMenuMusic("src/main/resources/audio/menu_music.mp3");
+            this.menuPlayer.setMenuMusic("/audio/menu_music.mp3"); // Notice the leading slash
             this.menuPlayer.playMenu();
         }
 
 
+
         primaryStage.setTitle("Platformer Game");
         primaryStage.setScene(scene);
+        primaryStage.setTitle("ConcreteJumple");
+        primaryStage.setFullScreen(true);
 //        userSettings.applyFullScreen(primaryStage);
         primaryStage.show();
     }

@@ -7,7 +7,6 @@ import com.example.platformer.highscores.HighScore;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -23,7 +22,7 @@ public class GameStarter implements GameEndListener {
     public GameStarter(MusicPlayer menuPlayer) {
         this.menuPlayer = menuPlayer;
         this.gamePlayer = new MusicPlayer();
-        this.gamePlayer.setGameMusic("src/main/resources/audio/soundtrack.mp3");
+        this.gamePlayer.setGameMusic("/audio/soundtrack.mp3");
         this.databaseManager = new DatabaseManager();
     }
 
@@ -35,7 +34,7 @@ public class GameStarter implements GameEndListener {
         // hardcoded resolution
         int screenWidth = userSettings.getWidth();
         int screenHeight = userSettings.getHeight();
-        int sidebarWidth = screenHeight / 4;
+        int sidebarWidth = screenWidth / 4;
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();
@@ -75,6 +74,14 @@ public class GameStarter implements GameEndListener {
         stage.setFullScreenExitHint(""); // Removes the fullscreen exit hint
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
+
+        stage.setOnCloseRequest(event -> {
+            if (gamePlayer != null) {
+                gamePlayer.stop(); // Stop the game music
+            }
+            System.exit(0); // Close the application
+        });
+
         stage.show();
     }
     @Override

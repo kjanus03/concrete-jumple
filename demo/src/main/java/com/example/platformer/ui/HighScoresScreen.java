@@ -108,6 +108,9 @@ public class HighScoresScreen {
         Scene highScoresScene = new Scene(root, screenWidth, screenHeight);
         highScoresScene.getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());  // Link CSS properly
 
+        // set full screen
+        stage.setFullScreen(true);
+
         // Set the scene on the stage
         stage.setScene(highScoresScene);
 //        userSettings.applyFullScreen(stage);

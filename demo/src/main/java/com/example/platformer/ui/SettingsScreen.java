@@ -107,6 +107,7 @@ public class SettingsScreen {
 
         // Set the scene on the stage
         stage.setScene(settingsScene);
+        stage.setFullScreen(true);
         stage.centerOnScreen();
     }
 
@@ -114,6 +115,7 @@ public class SettingsScreen {
     private void reloadScreen() {
         MenuScreen menuScreen = new MenuScreen(userSettings, menuPlayer);
         menuScreen.show(stage);
+        stage.setFullScreen(true);
         stage.centerOnScreen();
     }
 }
