@@ -46,6 +46,7 @@
     -fx-font-weight: bold;
     -fx-alignment: center;
     -fx-font-family: "Press Start 2P";
+    -fx-padding: 50;
 }
 
 /* Styles for the high scores table */
@@ -57,6 +58,7 @@
     -fx-font-size: 16px;
     -fx-text-fill: white;
 }
+
 
 /* Header row styles */
 .high-scores-table .column-header-background {
@@ -70,16 +72,16 @@
 
 /* Table row styles */
 .high-scores-table .table-row-cell {
-    -fx-background-color: rgba(255, 255, 255, 0.15); /* Subtle row background */
+    -fx-background-color: rgba(255, 255, 255, 0.20); /* Subtle row background */
     -fx-text-fill: white; /* White text */
 }
 
 .high-scores-table .table-row-cell:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.25); /* Slight highlight on hover */
+    -fx-background-color: rgba(255, 255, 255, 0.30); /* Slight highlight on hover */
 }
 
 /* Title styles */
-.high-score-title {
+.high-score-title, .settings-title {
     -fx-font-size: 64px; /* Larger font size for better readability */
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -87,6 +89,13 @@
     -fx-alignment: center;
     -fx-padding: 20 0;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 10, 0, 2, 2);
+}
+
+.settings-label {
+    -fx-font-size: 32px;
+    -fx-text-fill: white;
+    -fx-font-family: 'Press Start 2P';
+    -fx-alignment: center;
 }
 
 
