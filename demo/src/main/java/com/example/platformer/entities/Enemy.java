@@ -25,8 +25,8 @@ public class Enemy extends Entity {
         entityView.setOpacity(0);
 
         spriteView = new ImageView(idleSprites[0]);
-        spriteView.setFitWidth(64); // Match entity size
-        spriteView.setFitHeight(64);
+        spriteView.setFitWidth(128); // Match entity size
+        spriteView.setFitHeight(128);
 
         this.spriteView.setImage(idleSprites[0]);
 
@@ -51,7 +51,7 @@ public class Enemy extends Entity {
     public void update(double deltaTime) {
         super.update(deltaTime);
         this.spriteView.setTranslateX(x);
-        this.spriteView.setTranslateY(y);
+        this.spriteView.setTranslateY(y-55);
 
         if (isChasing) {
             chasePlayer();
