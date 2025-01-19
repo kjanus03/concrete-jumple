@@ -44,6 +44,7 @@ public class UserSettings {
     private void setDefaults() {
         properties.setProperty("volume", "0.5");
         properties.setProperty("resolution", "1280x720");
+        properties.setProperty("fullscreen", "false");
         saveSettings();
     }
 
@@ -62,6 +63,14 @@ public class UserSettings {
 
     public void setResolution(String resolution) {
         properties.setProperty("resolution", resolution);
+    }
+
+    public boolean isFullscreen() {
+        return Boolean.parseBoolean(properties.getProperty("fullscreen", "false"));
+    }
+
+    public void setFullscreen(boolean fullscreen) {
+        properties.setProperty("fullscreen", String.valueOf(fullscreen));
     }
 
     public int getWidth() {

@@ -33,9 +33,10 @@ public class GameStarter implements GameEndListener {
         int scalingFactor = userSettings.getScalingFactor(); // Get scaling factor
 
         // hardcoded resolution
-        int screenWidth = userSettings.getWidth();
         int screenHeight = userSettings.getHeight();
-        int sidebarWidth = screenHeight / 4;
+        int sidebarWidth = 180;
+        int screenWidth = userSettings.getWidth();
+
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();
@@ -71,7 +72,7 @@ public class GameStarter implements GameEndListener {
         Stage stage = new Stage();
         stage.setTitle("ConcreteJumple");
         stage.setResizable(false);
-        stage.setFullScreen(true);
+        stage.setFullScreen(userSettings.isFullscreen());
         stage.setFullScreenExitHint(""); // Removes the fullscreen exit hint
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);

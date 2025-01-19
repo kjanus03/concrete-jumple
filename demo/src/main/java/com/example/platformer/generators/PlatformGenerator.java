@@ -21,7 +21,7 @@ public class PlatformGenerator {
 
     public PlatformGenerator(int screenWidth, int screenHeight, int scalingFactor) {
         this.random = new Random();
-        this.screenWidth = screenWidth;
+        this.screenWidth = screenWidth - screenHeight/4;
         this.screenHeight = screenHeight;
         this.scalingFactor = scalingFactor;
 
@@ -38,7 +38,7 @@ public class PlatformGenerator {
         screenWidth -= sideBarWidth;  // Adjust screen width to account for the sidebar
 
         // Create the ground platform
-        Platform groundPlatform = new Platform(0, screenHeight - platformHeight*scalingFactor, screenWidth*scalingFactor, platformHeight*scalingFactor);
+        Platform groundPlatform = new Platform(0, screenHeight - platformHeight*scalingFactor, screenWidth, platformHeight*scalingFactor);
         platforms.add(groundPlatform);
 
         // Generate random platforms

@@ -69,12 +69,19 @@ public class SettingsScreen {
         resolutionComboBox.getItems().addAll("1280x720", "1920x1080");
         resolutionComboBox.setValue(userSettings.getResolution());
 
+        Label fullscreenLabel = new Label("Fullscreen:");
+        fullscreenLabel.getStyleClass().add("settings-label");
+        ComboBox<String> fullscreenComboBox = new ComboBox<>();
+        fullscreenComboBox.getItems().addAll("Yes", "No");
+        fullscreenComboBox.setValue(userSettings.isFullscreen() ? "Yes" : "No");
+
         // Save button
         Button saveButton = new Button("Save Settings");
         saveButton.getStyleClass().add("menu-button");
         saveButton.setOnAction(event -> {
             userSettings.setVolume(volumeSlider.getValue());
             userSettings.setResolution(resolutionComboBox.getValue());
+            userSettings.setFullscreen(fullscreenComboBox.getValue().equals("Yes"));
             userSettings.saveSettings(); // Save settings to the properties file
             reloadScreen();
         });
@@ -87,7 +94,7 @@ public class SettingsScreen {
         // Layout for settings controls
         VBox settingsLayout = new VBox(20);
         settingsLayout.setAlignment(Pos.CENTER);
-        settingsLayout.getChildren().addAll(titleLabel, volumeSection, resolutionLabel, resolutionComboBox, saveButton, backButton);
+        settingsLayout.getChildren().addAll(titleLabel, volumeSection, resolutionLabel, resolutionComboBox, fullscreenLabel, fullscreenComboBox, saveButton, backButton);
 
         // Dark overlay for background
         Rectangle darkOverlay = new Rectangle();

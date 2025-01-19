@@ -54,7 +54,6 @@ public class MenuScreen extends Application {
 
         primaryStage.setTitle("Platformer Game");
         primaryStage.setScene(scene);
-//        userSettings.applyFullScreen(primaryStage);
         primaryStage.show();
     }
 

@@ -39,7 +39,6 @@ public class GameController extends GameLoop {
 
     private final int scalingFactor;
     private int playerSpeed;
-    private int scalingFactor;
     private boolean paused;
     private PauseScreen pauseScreen;
 
@@ -72,7 +71,7 @@ public class GameController extends GameLoop {
         System.out.println("screenWidth: " + screenWidth + " screenHeight: " + screenHeight);
         map = new Map(gameRoot, screenWidth, screenHeight, buffSidebar.getSideBarWidth(), scalingFactor);
 
-        this.playerSpeed = (int) (screenWidth/4.7);
+        this.playerSpeed = (int) (screenWidth/3);
 
         // Generate buffs
         BuffGenerator buffGenerator = new BuffGenerator(map, 0.65, scalingFactor);
