@@ -35,10 +35,9 @@ public class GameController extends GameLoop {
 
     private GameEndListener gameEndListener;
     private ImageView backgroundView;
-
     private int scalingFactor;
 
-    private Scene endScreen;
+
 
     public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar, int scalingFactor) {
         this.gameRoot = root;
