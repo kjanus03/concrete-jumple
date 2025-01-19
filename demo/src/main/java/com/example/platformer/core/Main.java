@@ -9,7 +9,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.initStyle(StageStyle.DECORATED);
         MenuScreen menuScreen = new MenuScreen(new UserSettings());
         menuScreen.show(stage);
     }

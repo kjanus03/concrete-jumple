@@ -46,7 +46,7 @@ public class MenuScreen extends Application {
     }
 
     private Rectangle createDarkOverlay(int screenWidth, int screenHeight) {
-        Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
+        Rectangle darkOverlay = new Rectangle(1920, 1080);
         darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));  // Black with 80% opacity
         return darkOverlay;
     }

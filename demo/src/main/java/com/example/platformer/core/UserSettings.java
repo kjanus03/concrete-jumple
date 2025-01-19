@@ -43,7 +43,6 @@ public class UserSettings {
     // Set default settings if config file is missing
     private void setDefaults() {
         properties.setProperty("volume", "0.5");
-        properties.setProperty("fullscreen", "false");
         properties.setProperty("resolution", "1280x720");
         saveSettings();
     }
@@ -55,14 +54,6 @@ public class UserSettings {
 
     public void setVolume(double volume) {
         properties.setProperty("volume", String.valueOf(volume));
-    }
-
-    public boolean isFullscreen() {
-        return Boolean.parseBoolean(properties.getProperty("fullscreen", "false"));
-    }
-
-    public void setFullscreen(boolean fullscreen) {
-        properties.setProperty("fullscreen", String.valueOf(fullscreen));
     }
 
     public String getResolution() {
@@ -82,16 +73,14 @@ public class UserSettings {
         return Integer.parseInt(getResolution().split("x")[1]);
     }
 
-    public void applyFullScreen(Stage stage) {
-        boolean fullscreen = this.isFullscreen();
-        stage.setFullScreen(fullscreen);
-        stage.setWidth(getWidth());
-        stage.setHeight(getHeight());
-
-        if (!fullscreen) {
-            // Ensure window decorations reappear in windowed mode
-            stage.setResizable(false);
-
+    public int getScalingFactor(){
+        String resolution = properties.getProperty("resolution");
+        if (resolution.equals("1280x720")) {
+            return 2;
+        } else if (resolution.equals("1920x1080")) {
+            return 3;
         }
+        return 1;
     }
+
 }

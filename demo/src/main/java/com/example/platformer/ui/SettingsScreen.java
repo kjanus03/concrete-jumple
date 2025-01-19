@@ -33,6 +33,7 @@ public class SettingsScreen {
         int screenHeight = userSettings.getHeight();
         System.out.println("Screen width: " + screenWidth);
         System.out.println("Screen height: " + screenHeight);
+
         Label titleLabel = new Label("Settings");
         titleLabel.getStyleClass().add("settings-title");
 
@@ -47,27 +48,21 @@ public class SettingsScreen {
         volumeSlider.setMinorTickCount(4);
         volumeSlider.setSnapToTicks(true);
 
-// Set the slider to take up half the screen width
+        // Set the slider to take up half the screen width
         volumeSlider.setPrefWidth(screenWidth / 2);
         volumeSlider.setMaxWidth(screenWidth / 2);
 
-// Wrap the slider in an HBox to center it
+        // Wrap the slider in an HBox to center it
         HBox volumeWrapper = new HBox(10, volumeSlider);
         volumeWrapper.setAlignment(Pos.CENTER);
 
-// Combine the label and slider into a VBox
+        // Combine the label and slider into a VBox
         VBox volumeSection = new VBox(10, volumeLabel, volumeWrapper);
         volumeSection.setAlignment(Pos.CENTER);
 
-
-//        Label fullscreenLabel = new Label("Fullscreen:");
-//        fullscreenLabel.getStyleClass().add("settings-label");
-//        ComboBox<String> fullscreenComboBox = new ComboBox<>();
-//        fullscreenComboBox.getItems().addAll("Yes", "No");
-//        fullscreenComboBox.setValue(userSettings.isFullscreen() ? "Yes" : "No");
-
         Label resolutionLabel = new Label("Resolution:");
         resolutionLabel.getStyleClass().add("settings-label");
+
         ComboBox<String> resolutionComboBox = new ComboBox<>();
         resolutionComboBox.getItems().addAll("1280x720", "1920x1080");
         resolutionComboBox.setValue(userSettings.getResolution());
@@ -77,13 +72,9 @@ public class SettingsScreen {
         saveButton.getStyleClass().add("menu-button");
         saveButton.setOnAction(event -> {
             userSettings.setVolume(volumeSlider.getValue());
-//            userSettings.setFullscreen(fullscreenComboBox.getValue().equals("Yes"));
             userSettings.setResolution(resolutionComboBox.getValue());
             userSettings.saveSettings(); // Save settings to the properties file
-
-
             reloadScreen();
-
         });
 
         // Back button to return to the previous screen
@@ -94,11 +85,15 @@ public class SettingsScreen {
         // Layout for settings controls
         VBox settingsLayout = new VBox(20);
         settingsLayout.setAlignment(Pos.CENTER);
-        settingsLayout.getChildren().addAll(titleLabel, volumeLabel, volumeWrapper, resolutionLabel, resolutionComboBox, saveButton, backButton);
+        settingsLayout.getChildren().addAll(titleLabel, volumeSection, resolutionLabel, resolutionComboBox, saveButton, backButton);
 
         // Dark overlay for background
-        Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
+        Rectangle darkOverlay = new Rectangle();
         darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));
+
+        // Bind the overlay size to the screen size
+        darkOverlay.widthProperty().bind(stage.widthProperty());
+        darkOverlay.heightProperty().bind(stage.heightProperty());
 
         // StackPane for overlay and content
         StackPane root = new StackPane();
@@ -110,14 +105,13 @@ public class SettingsScreen {
 
         // Set the scene on the stage
         stage.setScene(settingsScene);
-//        userSettings.applyFullScreen(stage);
+        stage.centerOnScreen();
     }
 
 
     private void reloadScreen() {
-//        userSettings.applyFullScreen(stage);
-        stage.centerOnScreen();
         MenuScreen menuScreen = new MenuScreen(userSettings);
         menuScreen.show(stage);
+        stage.centerOnScreen();
     }
 }
