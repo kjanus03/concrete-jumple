@@ -12,7 +12,6 @@ public class Enemy extends Entity {
     private Image[] idleSprites; // Array of idle sprite images
     private Image[] walkRightSprites;
     private Image[] walkLeftSprites;
-    private boolean idle;
     private Timeline currentAnimation;
     private final ImageView spriteView;
     private String direction;
@@ -21,7 +20,6 @@ public class Enemy extends Entity {
         super(x, y, 64, 64);  // Initialize a 30x30 rectangle for the enemy
         this.target = target;
         this.isChasing = false;
-        this.idle = true;
         loadAnimations();
 
         entityView.setOpacity(0);
@@ -89,26 +87,19 @@ public class Enemy extends Entity {
                 })
         );
         currentAnimation.setCycleCount(Timeline.INDEFINITE);
+
     }
 
-    @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
-        this.spriteView.setTranslateX(x);
-        this.spriteView.setTranslateY(y);
 
-        if (isChasing) {
-            chasePlayer();
-        }
 
-        isChasing = target.hasCollisionCooldown() && isPlayerInRange();
-    }
 
     private boolean isPlayerInRange() {
         return Math.abs(target.getY() - this.getView().getTranslateY()) < 180;
     }
 
     private void moveRight() {
+
+        direction = "right";
         velocityX = 100;
         if (direction != "right"){
             setupWalkingRightAnimation();
@@ -118,24 +109,28 @@ public class Enemy extends Entity {
     }
 
     private void moveLeft() {
-        if (direction != "left"){
+        if (direction != "left") {
             setupWalkingLeftAnimation();
             currentAnimation.play();
+
+            velocityX = -100;
+            direction = "left";
         }
-        velocityX = -100;
-        direction = "left";
     }
 
     private void chasePlayer() {
         if (target.getX() > this.getX()) {
+            direction = "right";
             moveRight();
         } else if (target.getX() < this.getX()) {
+            direction = "left";
             moveLeft();
         } else {
             stopHorizontalMovement();
         }
     }
-    public ImageView getSpriteView() {
+
+    private ImageView getSpriteView() {
         return spriteView;
     }
 }
