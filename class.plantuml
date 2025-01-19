@@ -1,0 +1,124 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class AbstractEntityGenerator<T> {
+  + AbstractEntityGenerator(Map, double, int): 
+}
+class Buff {
+  + Buff(double, double, int, BuffType, int): 
+  - buffAmount: int
+  - spriteView: ImageView
+  - type: BuffType
+   remainingTime: double
+   spriteView: ImageView
+   buffAmount: int
+   type: BuffType
+}
+class BuffGenerator {
+  + BuffGenerator(Map, double, int): 
+}
+class CollisionManager {
+  + CollisionManager(double, double): 
+}
+class Enemy {
+  + Enemy(double, double, Player, int, int): 
+  - speed: int
+  - spriteView: ImageView
+   spriteView: ImageView
+   playerInRange: boolean
+   speed: int
+}
+class EnemyGenerator {
+  + EnemyGenerator(Map, double, Player, int, int): 
+}
+class Entity {
+  + Entity(double, double, double, double): 
+  # x: double
+  # y: double
+   x: double
+   view: Rectangle
+   y: double
+}
+class GameController {
+  + GameController(Pane, Scene, ImageView, BuffSidebar, int): 
+  - gameEndListener: GameEndListener
+   gameEndListener: GameEndListener
+}
+class GameTimer {
+  + GameTimer(int, int): 
+  - timerText: Text
+  - elapsedTime: double
+   timerText: Text
+   elapsedTime: double
+}
+class Goal {
+  + Goal(double, double): 
+  # x: double
+  # y: double
+  - spriteView: ImageView
+   x: double
+   spriteView: ImageView
+   y: double
+}
+class Map {
+  + Map(Pane, int, int, int, int): 
+  - platforms: List<Platform>
+   groundPlatform: Platform
+   platforms: List<Platform>
+}
+class Platform {
+  + Platform(double, double, int, int): 
+  - x: int
+  - y: int
+   height: int
+   view: Group
+   width: int
+   y: int
+   x: int
+}
+class PlatformGenerator {
+  + PlatformGenerator(int, int, int): 
+}
+class Player {
+  + Player(double, double, int, int): 
+  - isInvincible: boolean
+  - spriteView: ImageView
+  - activeBuffs: ArrayList<Buff>
+   x: double
+   spriteView: ImageView
+   remainingCooldownTime: double
+   activeBuffs: ArrayList<Buff>
+   isInvincible: boolean
+   state: PlayerState
+   y: double
+}
+
+AbstractEntityGenerator  -[#595959,dashed]->  Entity                  
+AbstractEntityGenerator "1" *-[#595959,plain]-> "map\n1" Map                     
+AbstractEntityGenerator "1" *-[#595959,plain]-> "platformOffsets\n*" Platform                
+Buff                     -[#000082,plain]-^  Entity                  
+BuffGenerator            -[#000082,plain]-^  AbstractEntityGenerator 
+BuffGenerator            -[#595959,dashed]->  Buff                    
+Enemy                    -[#000082,plain]-^  Entity                  
+Enemy                   "1" *-[#595959,plain]-> "target\n1" Player                  
+EnemyGenerator           -[#000082,plain]-^  AbstractEntityGenerator 
+EnemyGenerator           -[#595959,dashed]->  Enemy                   
+EnemyGenerator          "1" *-[#595959,plain]-> "player\n1" Player                  
+GameController          "1" *-[#595959,plain]-> "buffs\n*" Buff                    
+GameController          "1" *-[#595959,plain]-> "collisionManager\n1" CollisionManager        
+GameController          "1" *-[#595959,plain]-> "enemies\n*" Enemy                   
+GameController          "1" *-[#595959,plain]-> "enemyGenerator\n1" EnemyGenerator          
+GameController          "1" *-[#595959,plain]-> "gameTimer\n1" GameTimer               
+GameController          "1" *-[#595959,plain]-> "goal\n1" Goal                    
+GameController          "1" *-[#595959,plain]-> "map\n1" Map                     
+GameController          "1" *-[#595959,plain]-> "player\n1" Player                  
+Goal                     -[#000082,plain]-^  Entity                  
+Map                     "1" *-[#595959,plain]-> "platforms\n*" Platform                
+Map                     "1" *-[#595959,plain]-> "platformGenerator\n1" PlatformGenerator       
+PlatformGenerator        -[#595959,dashed]->  Platform                
+Player                  "1" *-[#595959,plain]-> "activeBuffs\n*" Buff                    
+Player                   -[#000082,plain]-^  Entity                  
+@enduml

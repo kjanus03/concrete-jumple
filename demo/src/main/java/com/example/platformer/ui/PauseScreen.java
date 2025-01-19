@@ -1,5 +1,6 @@
 package com.example.platformer.ui;
 
+import com.example.platformer.core.GameAbortListener;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,10 +18,12 @@ public class PauseScreen extends StackPane {
     private final Text timerText;
     private final Button restartButton;
     private final Button menuButton;
+    private final GameAbortListener gameAbortListener;
 
-    public PauseScreen(double width, double height, Scene scene, Stage primaryStage, boolean isFullscreen) {
+    public PauseScreen(double width, double height, Scene scene, Stage primaryStage, boolean isFullscreen, GameAbortListener listener) {
         // Set up the pause screen
         setPrefSize(width, height);
+        this.gameAbortListener = listener;
 
         // Semi-transparent background
         Rectangle overlay = new Rectangle(width, height);
@@ -52,6 +55,7 @@ public class PauseScreen extends StackPane {
         menuButton.setFont(Font.font("Press Start 2P", 20));
         menuButton.getStyleClass().add("pause-button");
         menuButton.setOnAction(e -> {
+            this.gameAbortListener.onGameAbort();
             // Close the current game stage
             Stage currentStage = (Stage) ((Pane) scene.getRoot()).getScene().getWindow();
             currentStage.close();

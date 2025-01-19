@@ -35,6 +35,7 @@ public class GameController extends GameLoop {
     private BuffSidebar buffSidebar;
 
     private GameEndListener gameEndListener;
+    private GameAbortListener gameAbortListener;
     private ImageView backgroundView;
 
     private final int scalingFactor;
@@ -44,7 +45,7 @@ public class GameController extends GameLoop {
 
     private Scene endScreen;
 
-    public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar, int scalingFactor, Stage primaryStage, boolean isFullscreen) {
+    public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar, int scalingFactor) {
         this.gameRoot = root;
         this.scene = scene;
         this.backgroundView = backgroundImage;
@@ -55,12 +56,8 @@ public class GameController extends GameLoop {
         this.buffs = new ArrayList<>();
         this.goal = new Goal(100, 100);
         this.paused = false;
-        this.pauseScreen = new PauseScreen(scene.getWidth(), scene.getHeight(), scene, primaryStage, isFullscreen);
-        pauseScreen.getRestartButton().setOnAction(event -> restartGame());
-
         setupInputHandling(scene);  // Setup keyboard input handling
 
-        gameRoot.getChildren().add(pauseScreen);
     }
 
     public void startGame() {
@@ -256,6 +253,16 @@ public class GameController extends GameLoop {
 
     public void setGameEndListener(GameEndListener listener) {
         this.gameEndListener = listener;
+    }
+    public void setGameAbortListener(GameAbortListener listener, Stage primaryStage, boolean isFullscreen) {
+        this.gameAbortListener = listener;
+        createPauseScreen(primaryStage, isFullscreen, listener);
+    }
+
+    private void createPauseScreen( Stage primaryStage, boolean isFullscreen, GameAbortListener listener) {
+        this.pauseScreen = new PauseScreen(scene.getWidth(), scene.getHeight(), scene, primaryStage, isFullscreen, listener);
+        pauseScreen.getRestartButton().setOnAction(event -> restartGame());
+        gameRoot.getChildren().add(pauseScreen);
     }
 
     private void endGame() {

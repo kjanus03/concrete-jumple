@@ -1,0 +1,111 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class BuffSidebar {
+  + BuffSidebar(int): 
+  - sidebar: VBox
+  - sideBarWidth: int
+   sideBarWidth: int
+   sidebar: VBox
+}
+class DatabaseManager {
+  + DatabaseManager(): 
+   highScores: List<HighScore>
+}
+class EndScreen {
+  + EndScreen(double): 
+  - username: String
+   username: String
+}
+class GameController {
+  + GameController(Pane, Scene, ImageView, BuffSidebar, int): 
+  - gameEndListener: GameEndListener
+   gameEndListener: GameEndListener
+}
+interface GameEndListener << interface >>
+class GameLoop {
+  + GameLoop(): 
+}
+class GameStarter {
+  + GameStarter(MusicPlayer, UserSettings, Stage): 
+}
+class GameTimer {
+  + GameTimer(int, int): 
+  - timerText: Text
+  - elapsedTime: double
+   timerText: Text
+   elapsedTime: double
+}
+class HighScore {
+  + HighScore(String, Date, double): 
+  - date: Date
+  - username: String
+  - score: double
+   score: double
+   username: String
+   date: Date
+}
+class HighScoresScreen {
+  + HighScoresScreen(StackPane, UserSettings, Stage, MusicPlayer): 
+}
+class MenuScreen {
+  + MenuScreen(UserSettings, MusicPlayer): 
+}
+class MusicPlayer {
+  + MusicPlayer(): 
+   playing: boolean
+   gameMusic: String
+   volume: double
+   music: String
+   menuMusic: String
+}
+class PauseScreen {
+  + PauseScreen(double, double): 
+  - restartButton: Button
+   restartButton: Button
+}
+class SettingsScreen {
+  + SettingsScreen(StackPane, Stage, UserSettings, MusicPlayer): 
+}
+class UserSettings {
+  + UserSettings(): 
+   fullscreen: boolean
+   height: int
+   volume: double
+   scalingFactor: int
+   width: int
+}
+
+DatabaseManager   -[#595959,dashed]->  HighScore        
+GameController   "1" *-[#595959,plain]-> "buffSidebar\n1" BuffSidebar      
+GameController    -[#595959,dashed]->  EndScreen        
+GameController   "1" *-[#595959,plain]-> "gameEndListener\n1" GameEndListener  
+GameController    -[#000082,plain]-^  GameLoop         
+GameController   "1" *-[#595959,plain]-> "gameTimer\n1" GameTimer        
+GameController    -[#595959,dashed]->  HighScore        
+GameController   "1" *-[#595959,plain]-> "pauseScreen\n1" PauseScreen      
+GameEndListener   -[#595959,dashed]->  HighScore        
+GameStarter       -[#595959,dashed]->  BuffSidebar      
+GameStarter      "1" *-[#595959,plain]-> "databaseManager\n1" DatabaseManager  
+GameStarter       -[#595959,dashed]->  GameController   
+GameStarter       -[#008200,dashed]-^  GameEndListener  
+GameStarter       -[#595959,dashed]->  HighScore        
+GameStarter      "1" *-[#595959,plain]-> "musicPlayer\n1" MusicPlayer      
+GameStarter      "1" *-[#595959,plain]-> "userSettings\n1" UserSettings     
+HighScoresScreen  -[#595959,dashed]->  DatabaseManager  
+HighScoresScreen  -[#595959,dashed]->  HighScore        
+HighScoresScreen  -[#595959,dashed]->  MenuScreen       
+HighScoresScreen "1" *-[#595959,plain]-> "musicPlayer\n1" MusicPlayer      
+HighScoresScreen "1" *-[#595959,plain]-> "userSettings\n1" UserSettings     
+MenuScreen        -[#595959,dashed]->  GameStarter      
+MenuScreen        -[#595959,dashed]->  HighScoresScreen 
+MenuScreen       "1" *-[#595959,plain]-> "musicPlayer\n1" MusicPlayer      
+MenuScreen        -[#595959,dashed]->  SettingsScreen   
+MenuScreen       "1" *-[#595959,plain]-> "userSettings\n1" UserSettings     
+SettingsScreen    -[#595959,dashed]->  MenuScreen       
+SettingsScreen   "1" *-[#595959,plain]-> "menuPlayer\n1" MusicPlayer      
+SettingsScreen   "1" *-[#595959,plain]-> "userSettings\n1" UserSettings     
+@enduml

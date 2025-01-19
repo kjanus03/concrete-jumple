@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class GameStarter implements GameEndListener {
+public class GameStarter implements GameEndListener, GameAbortListener {
 
     private MusicPlayer musicPlayer;
     private MusicPlayer menuPlayer;
@@ -62,9 +62,10 @@ public class GameStarter implements GameEndListener {
         this.scene = new Scene(root, screenWidth, screenHeight);
 
         // GameController
-        GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar, scalingFactor, primaryStage, userSettings.isFullscreen());
+        GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar, scalingFactor);
         gameController.startGame();
         gameController.setGameEndListener(this);
+        gameController.setGameAbortListener(this, primaryStage, userSettings.isFullscreen());
 
         // Music and Database
         musicPlayer.setVolume(userSettings.getVolume());
@@ -106,5 +107,14 @@ public class GameStarter implements GameEndListener {
         if (!userSettings.isFullscreen()) {
             primaryStage.setMaximized(true);
         }
+    }
+
+    public void onGameAbort() {
+        // Handle game restart logic, such as stopping music and closing the stage
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer = null;
+        }
+        this.menuPlayer.play();
     }
 }
