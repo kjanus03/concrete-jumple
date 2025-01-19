@@ -38,7 +38,7 @@ public class PlatformGenerator {
         screenWidth -= sideBarWidth;  // Adjust screen width to account for the sidebar
 
         // Create the ground platform
-        Platform groundPlatform = new Platform(0, screenHeight - platformHeight*scalingFactor, screenWidth, platformHeight*scalingFactor);
+        Platform groundPlatform = new Platform(0, screenHeight - platformHeight*scalingFactor, screenWidth+sideBarWidth, platformHeight*scalingFactor);
         platforms.add(groundPlatform);
 
         // Generate random platforms

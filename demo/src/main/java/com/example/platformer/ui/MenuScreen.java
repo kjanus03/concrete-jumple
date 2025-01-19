@@ -16,9 +16,14 @@ public class MenuScreen {
 
     private final UserSettings userSettings;
     private Stage primaryStage;
+    private MusicPlayer musicPlayer;
 
-    public MenuScreen(UserSettings userSettings) {
+    public MenuScreen(UserSettings userSettings, MusicPlayer musicPlayer) {
         this.userSettings = userSettings;
+        this.musicPlayer = musicPlayer;
+        musicPlayer.setVolume(userSettings.getVolume());
+        musicPlayer.setMenuMusic("src/main/resources/audio/menu_music.mp3");
+        musicPlayer.play();
     }
 
     public void setRoot(StackPane root, Stage stage) {
@@ -47,12 +52,12 @@ public class MenuScreen {
         });
 
         Button highScoresButton = createMenuButton("High Scores", event -> {
-            HighScoresScreen highScoresScreen = new HighScoresScreen(root, userSettings, stage);  // Pass stage
+            HighScoresScreen highScoresScreen = new HighScoresScreen(root, userSettings, stage, musicPlayer);  // Pass stage
             highScoresScreen.setRoot();  // Switch to HighScoresScreen
         });
 
         Button settingsButton = createMenuButton("Settings", event -> {
-            SettingsScreen settingsScreen = new SettingsScreen(root, stage, userSettings, new MusicPlayer());
+            SettingsScreen settingsScreen = new SettingsScreen(root, stage, userSettings, musicPlayer);
             settingsScreen.setRoot();  // Switch to SettingsScreen with the current stage
         });
 
@@ -77,15 +82,14 @@ public class MenuScreen {
     }
 
     private void startGame(Stage stage) {
-        // Initialize MusicPlayer for the game
-        MusicPlayer gameMusicPlayer = new MusicPlayer();
-        gameMusicPlayer.setGameMusic("src/main/resources/audio/gameMusic.mp3");  // Example game music
+
+        musicPlayer.setGameMusic("src/main/resources/audio/gameMusic.mp3");  // Example game music
 
         // Stop the menu music
-        gameMusicPlayer.stop();
+        musicPlayer.stop();
 
         // Create GameStarter to launch the game
-        GameStarter gameStarter = new GameStarter(gameMusicPlayer, userSettings, primaryStage);
+        GameStarter gameStarter = new GameStarter(musicPlayer, userSettings, primaryStage);
 
         // Hide the MenuScreen stage and start the game
         primaryStage.hide(); // Hide the menu screen

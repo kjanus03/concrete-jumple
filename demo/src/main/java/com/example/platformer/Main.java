@@ -2,6 +2,7 @@ package com.example.platformer;
 
 import com.example.platformer.core.UserSettings;
 import com.example.platformer.ui.MenuScreen;
+import com.example.platformer.ui.MusicPlayer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -19,7 +20,8 @@ public class Main extends Application {
         Scene scene = new Scene(root, userSettings.getWidth(), userSettings.getHeight());
 
         // Initialize the MenuScreen and pass the Stage to it
-        MenuScreen menuScreen = new MenuScreen(userSettings);
+        MusicPlayer musicPlayer = new MusicPlayer();
+        MenuScreen menuScreen = new MenuScreen(userSettings, musicPlayer);
         menuScreen.setRoot(root, primaryStage);  // Pass the root and the primary stage to the MenuScreen
 
         // Apply any stylesheets (if you have them)

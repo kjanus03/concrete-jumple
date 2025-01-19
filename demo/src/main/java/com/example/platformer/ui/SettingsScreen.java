@@ -76,6 +76,7 @@ public class SettingsScreen {
             if (!fullscreen){
                 stage.setMaximized(true);
             }
+            menuPlayer.setVolume(volumeSlider.getValue());
 
             reloadScreen();  // Optionally reload settings or apply other changes
         });
@@ -84,7 +85,7 @@ public class SettingsScreen {
         backButton.getStyleClass().add("menu-button");
         backButton.setOnAction(event -> {
             // Return to MenuScreen
-            MenuScreen menuScreen = new MenuScreen(userSettings);
+            MenuScreen menuScreen = new MenuScreen(userSettings, menuPlayer);
             menuScreen.setRoot(root, stage);  // Pass the root and the stage to MenuScreen to switch back to the menu
         });
 

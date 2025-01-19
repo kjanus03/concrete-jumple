@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public class GameStarter implements GameEndListener {
 
-    private MusicPlayer gamePlayer;
+    private MusicPlayer musicPlayer;
     private MusicPlayer menuPlayer;
     private DatabaseManager databaseManager;
     private Scene scene;
@@ -23,8 +23,8 @@ public class GameStarter implements GameEndListener {
 
     public GameStarter(MusicPlayer menuPlayer, UserSettings userSettings, Stage primaryStage) {
         this.menuPlayer = menuPlayer;
-        this.gamePlayer = new MusicPlayer();
-        this.gamePlayer.setGameMusic("src/main/resources/audio/soundtrack.mp3");
+        this.musicPlayer = new MusicPlayer();
+        this.musicPlayer.setGameMusic("src/main/resources/audio/soundtrack.mp3");
         this.databaseManager = new DatabaseManager();
         this.userSettings = userSettings;
         this.primaryStage = primaryStage;
@@ -67,7 +67,8 @@ public class GameStarter implements GameEndListener {
         gameController.setGameEndListener(this);
 
         // Music and Database
-        gamePlayer.playGame();
+        musicPlayer.setVolume(userSettings.getVolume());
+        musicPlayer.play();
 
         Stage stage = new Stage();
         stage.setTitle("ConcreteJumple");
@@ -85,11 +86,11 @@ public class GameStarter implements GameEndListener {
     @Override
     public void onGameEnd(HighScore score) {
         // Handle game end logic, such as stopping music and closing the stage
-        if (gamePlayer != null) {
-            gamePlayer.stop();
-            gamePlayer = null;
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer = null;
         }
-        this.menuPlayer.playMenu();
+        this.menuPlayer.play();
 
         // Save the score to the database
         databaseManager.insertHighScore(score);

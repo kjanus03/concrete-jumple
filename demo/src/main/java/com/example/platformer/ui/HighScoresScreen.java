@@ -14,7 +14,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.util.Comparator;
@@ -25,11 +24,13 @@ public class HighScoresScreen {
     private final StackPane root;
     private final UserSettings userSettings;
     private final Stage stage;
+    private final MusicPlayer musicPlayer;
 
-    public HighScoresScreen(StackPane root, UserSettings userSettings, Stage stage) {
+    public HighScoresScreen(StackPane root, UserSettings userSettings, Stage stage, MusicPlayer musicPlayer) {
         this.root = root;
         this.userSettings = userSettings;
         this.stage = stage;
+        this.musicPlayer = musicPlayer;
     }
 
     public void setRoot() {
@@ -93,11 +94,19 @@ public class HighScoresScreen {
         backButton.getStyleClass().add("menu-button");  // Applying the CSS class for buttons
         backButton.setOnAction(event -> {
             // Return to MenuScreen
-            MenuScreen menuScreen = new MenuScreen(userSettings);
+            MenuScreen menuScreen = new MenuScreen(userSettings, musicPlayer);
             menuScreen.setRoot(root, this.stage);  // Use the class-level stage
         });
+
+        Button cleanButton = new Button("Reset Highscores");
+        cleanButton.getStyleClass().add("menu-button");
+        cleanButton.setOnAction(e -> {
+            databaseManager.cleanHighscores();
+            this.setRoot();
+        });
+
         // Add title, table, and back button to the layout
-        highScoresLayout.getChildren().addAll(title, highScoresTable, backButton);
+        highScoresLayout.getChildren().addAll(title, highScoresTable, cleanButton, backButton);
 
         // Create a dark overlay rectangle (similar to MenuScreen)
         Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);

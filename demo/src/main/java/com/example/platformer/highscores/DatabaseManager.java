@@ -51,4 +51,15 @@ public class DatabaseManager {
         return highScores;
     }
 
+
+    public void cleanHighscores(){
+        try{
+            highScoresCollection.deleteMany(new Document());
+        }
+        catch(Exception e){
+            System.err.println("Error cleaning the highscores collection: " + e.getMessage());
+        }
+    }
+
+
 }
