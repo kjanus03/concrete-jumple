@@ -1,7 +1,9 @@
 package com.example.platformer.ui;
 
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -9,12 +11,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 public class PauseScreen extends StackPane {
     private final Text timerText;
     private final Button restartButton;
+    private final Button menuButton;
 
-    public PauseScreen(double width, double height) {
+    public PauseScreen(double width, double height, Scene scene, Stage primaryStage, boolean isFullscreen) {
         // Set up the pause screen
         setPrefSize(width, height);
 
@@ -44,8 +48,24 @@ public class PauseScreen extends StackPane {
         restartButton.setFont(Font.font("Press Start 2P", 20));
         restartButton.getStyleClass().add("pause-button");
 
+        menuButton = new Button("Go To Menu");
+        menuButton.setFont(Font.font("Press Start 2P", 20));
+        menuButton.getStyleClass().add("pause-button");
+        menuButton.setOnAction(e -> {
+            // Close the current game stage
+            Stage currentStage = (Stage) ((Pane) scene.getRoot()).getScene().getWindow();
+            currentStage.close();
+
+            // Re-show the MenuScreen stage
+            primaryStage.show();
+            primaryStage.setFullScreen(isFullscreen);
+            if (!isFullscreen) {
+                primaryStage.setMaximized(true);
+            }
+        });
+
         // Layout container
-        VBox layout = new VBox(20, pauseText, unpauseText, timerText, restartButton);
+        VBox layout = new VBox(20, pauseText, unpauseText, timerText, restartButton, menuButton);
         layout.setAlignment(Pos.CENTER);
 
         // Add elements to the stack pane

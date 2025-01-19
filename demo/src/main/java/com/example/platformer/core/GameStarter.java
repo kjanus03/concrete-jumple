@@ -36,7 +36,7 @@ public class GameStarter implements GameEndListener {
 
         int screenWidth = userSettings.getWidth();
         int screenHeight = userSettings.getHeight();
-        int sidebarWidth = (int) screenHeight/4;
+        int sidebarWidth = (int) screenWidth/4;
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();
@@ -62,7 +62,7 @@ public class GameStarter implements GameEndListener {
         this.scene = new Scene(root, screenWidth, screenHeight);
 
         // GameController
-        GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar, scalingFactor);
+        GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar, scalingFactor, primaryStage, userSettings.isFullscreen());
         gameController.startGame();
         gameController.setGameEndListener(this);
 

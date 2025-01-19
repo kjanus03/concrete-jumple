@@ -44,7 +44,7 @@ public class GameController extends GameLoop {
 
     private Scene endScreen;
 
-    public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar, int scalingFactor) {
+    public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar, int scalingFactor, Stage primaryStage, boolean isFullscreen) {
         this.gameRoot = root;
         this.scene = scene;
         this.backgroundView = backgroundImage;
@@ -55,7 +55,7 @@ public class GameController extends GameLoop {
         this.buffs = new ArrayList<>();
         this.goal = new Goal(100, 100);
         this.paused = false;
-        this.pauseScreen = new PauseScreen(scene.getWidth(), scene.getHeight());
+        this.pauseScreen = new PauseScreen(scene.getWidth(), scene.getHeight(), scene, primaryStage, isFullscreen);
         pauseScreen.getRestartButton().setOnAction(event -> restartGame());
 
         setupInputHandling(scene);  // Setup keyboard input handling
