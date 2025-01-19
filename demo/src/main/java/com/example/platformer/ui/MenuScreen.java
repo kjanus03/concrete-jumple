@@ -1,6 +1,5 @@
 package com.example.platformer.ui;
 
-import com.example.platformer.core.GameEndListener;
 import com.example.platformer.core.GameStarter;
 import com.example.platformer.highscores.DatabaseManager;
 import com.example.platformer.highscores.HighScore;

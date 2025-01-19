@@ -1,6 +1,6 @@
 /* Buff Sidebar */
 .buff-sidebar {
-    -fx-background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+    -fx-background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent dark background */
     -fx-border-color: #a58c05; /* Golden border for steampunk style */
     -fx-border-width: 5px;
     -fx-border-radius: 10px;

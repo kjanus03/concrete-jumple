@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -18,20 +19,22 @@ public class EndScreen {
 
     public Scene createEndScreenScene() {
         // Create the title text and elapsed time
-        Text title = new Text("Game Over!");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        Text title = new Text("You win!");
+        title.setFill(Color.WHITE);
+        title.getStyleClass().add("end-screen-title");
 
         Text timeText = new Text("Elapsed Time: " + String.format("%.2f", elapsedTime) + " seconds");
-        timeText.setStyle("-fx-font-size: 18px;");
+        timeText.setFill(Color.WHITE);
+        timeText.getStyleClass().add("end-screen-text");
 
         // Create a text field for the player to enter their username
         TextField usernameField = new TextField();
         usernameField.setPromptText("Enter your username");
-        usernameField.setStyle("-fx-font-size: 16px;");
+        usernameField.getStyleClass().add("end-screen-textfield");
 
         // Create the submit button
         Button submitButton = new Button("Submit");
-        submitButton.setStyle("-fx-font-size: 16px;");
+        submitButton.getStyleClass().add("end-screen-button");
         submitButton.setOnAction(event -> {
             // Store the username entered by the player
             this.username = usernameField.getText();
@@ -49,9 +52,14 @@ public class EndScreen {
 
         // Layout
         VBox layout = new VBox(10, title, timeText, usernameField, submitButton);
-        layout.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+        layout.getStyleClass().add("end-screen-layout");
 
-        return new Scene(layout, 400, 300);
+        // Create the scene and apply the stylesheet
+        Scene scene = new Scene(layout, 400, 300);
+        String stylesheetUrl = getClass().getResource("/css/endscreen.css").toExternalForm();
+        scene.getStylesheets().add(stylesheetUrl);
+
+        return scene;
     }
 
     // Method to return the username

@@ -40,7 +40,7 @@ public class GameStarter implements GameEndListener {
         // Add background image
         Image backgroundImage = new Image(getClass().getResource("/sprites/background/Steampunk/darkblue1.png").toExternalForm());
         ImageView backgroundView = new ImageView(backgroundImage);
-        backgroundView.setFitWidth(screenWidth - sidebarWidth); // Set width to match your scene or window
+        backgroundView.setFitWidth(screenWidth); // Set width to match your scene or window
         backgroundView.setFitHeight(screenHeight); // Set height to match your scene or window
         backgroundView.setPreserveRatio(false); // Stretch to fill, or true to maintain aspect ratio
         gamePane.getChildren().add(backgroundView);
