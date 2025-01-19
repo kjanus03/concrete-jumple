@@ -67,8 +67,11 @@ public class GameStarter implements GameEndListener {
 
         Stage stage = new Stage();
         stage.setTitle("ConcreteJumple");
-        stage.setResizable(false);
         stage.setFullScreen(userSettings.isFullscreen());
+        if (!userSettings.isFullscreen()) {
+            stage.setMaximized(true);
+        }
+        stage.setResizable(false);
         stage.setFullScreenExitHint("");
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);

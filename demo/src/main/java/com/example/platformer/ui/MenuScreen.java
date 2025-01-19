@@ -6,6 +6,7 @@ import com.example.platformer.core.UserSettings;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,7 +20,7 @@ public class MenuScreen {
         this.userSettings = userSettings;
     }
 
-    public void setRoot(Pane root, Stage stage) {
+    public void setRoot(StackPane root, Stage stage) {
         root.getChildren().clear();  // Clear the current root contents
 
         int screenWidth = userSettings.getWidth();
@@ -40,7 +41,7 @@ public class MenuScreen {
         return darkOverlay;
     }
 
-    private VBox createMenuLayout(Pane root, Stage stage) {
+    private VBox createMenuLayout(StackPane root, Stage stage) {
         Label gameTitle = new Label("CONCRETE JUMPLE");
         gameTitle.getStyleClass().add("game-title");
 

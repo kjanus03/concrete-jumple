@@ -16,12 +16,12 @@ import javafx.stage.Stage;
 
 public class SettingsScreen {
 
-    private final Pane root;
+    private final StackPane root;
     private final Stage stage;
     private UserSettings userSettings;
     private final MusicPlayer menuPlayer;
 
-    public SettingsScreen(Pane root, Stage stage, UserSettings userSettings, MusicPlayer menuPlayer) {
+    public SettingsScreen(StackPane root, Stage stage, UserSettings userSettings, MusicPlayer menuPlayer) {
         this.root = root;
         this.stage = stage;  // Stage is now passed to handle fullscreen mode changes
         this.userSettings = userSettings;

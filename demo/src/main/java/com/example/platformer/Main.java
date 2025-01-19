@@ -5,6 +5,7 @@ import com.example.platformer.ui.MenuScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -15,7 +16,7 @@ public class Main extends Application {
         UserSettings userSettings = new UserSettings();
 
         // Create a root pane for your UI elements
-        Pane root = new Pane();
+        StackPane root = new StackPane();
         Scene scene = new Scene(root, userSettings.getWidth(), userSettings.getHeight());
 
         // Initialize the MenuScreen and pass the Stage to it

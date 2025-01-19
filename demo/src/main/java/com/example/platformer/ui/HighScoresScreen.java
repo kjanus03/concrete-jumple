@@ -22,11 +22,11 @@ import java.util.List;
 
 public class HighScoresScreen {
 
-    private final Pane root;
+    private final StackPane root;
     private final UserSettings userSettings;
     private final Stage stage;
 
-    public HighScoresScreen(Pane root, UserSettings userSettings, Stage stage) {
+    public HighScoresScreen(StackPane root, UserSettings userSettings, Stage stage) {
         this.root = root;
         this.userSettings = userSettings;
         this.stage = stage;
