@@ -7,21 +7,23 @@ import com.example.platformer.highscores.HighScore;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 public class GameStarter implements GameEndListener {
 
-    private MusicPlayer musicPlayer;
+    private MusicPlayer gamePlayer;
+    private MusicPlayer menuPlayer;
     private DatabaseManager databaseManager;
     private Scene scene;
 
-    public GameStarter() {
-        this.musicPlayer = new MusicPlayer("src/main/resources/audio/soundtrack.mp3");
+    public GameStarter(MusicPlayer menuPlayer) {
+        this.menuPlayer = menuPlayer;
+        this.gamePlayer = new MusicPlayer();
+        this.gamePlayer.setGameMusic("src/main/resources/audio/soundtrack.mp3");
         this.databaseManager = new DatabaseManager();
     }
 
@@ -46,7 +48,7 @@ public class GameStarter implements GameEndListener {
         ImageView backgroundView = new ImageView(backgroundImage);
         backgroundView.setFitWidth(screenWidth); // Set width to match your scene or window
         backgroundView.setFitHeight(screenHeight); // Set height to match your scene or window
-        backgroundView.setPreserveRatio(false); // Stretch to fill, or true to maintain aspect ratio
+        backgroundView.setPreserveRatio(false);
         gamePane.getChildren().add(backgroundView);
 
         root.setCenter(gamePane);
@@ -64,20 +66,25 @@ public class GameStarter implements GameEndListener {
         gameController.setGameEndListener(this);
 
         // Music and Database
-        musicPlayer.play();
+        gamePlayer.playGame();
 
         Stage stage = new Stage();
-        stage.setTitle("Platformer Game");
+        stage.setTitle("ConcreteJumple");
+        stage.setResizable(false);
+        stage.setFullScreen(true);
+        stage.setFullScreenExitHint(""); // Removes the fullscreen exit hint
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
         stage.show();
     }
     @Override
     public void onGameEnd(HighScore score) {
         // Stop the background music
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer = null;
+        if (gamePlayer != null) {
+            gamePlayer.stop();
+            gamePlayer = null;
         }
+        this.menuPlayer.playMenu();
 
         // Save the score to the database
         databaseManager.insertHighScore(score);

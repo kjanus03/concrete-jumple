@@ -55,7 +55,7 @@ public class Enemy extends Entity {
     public void update(double deltaTime) {
         super.update(deltaTime);
         this.spriteView.setTranslateX(x);
-        this.spriteView.setTranslateY(y-55);
+        this.spriteView.setTranslateY(y-51);
 
         if (isChasing) {
             chasePlayer();
@@ -65,13 +65,10 @@ public class Enemy extends Entity {
     }
 
     private void setupIdleAnimation() {
-        // Create a timeline to cycle through idle sprites
         currentAnimation = new Timeline(
                 new KeyFrame(Duration.seconds(0.5), event -> {
                     if (spriteView.getImage() == idleSprites[0]) {
-                        spriteView.setImage(idleSprites[1]);
-                    } else {
-                        spriteView.setImage(idleSprites[0]);
+                        // do nothing
                     }
                 })
         );

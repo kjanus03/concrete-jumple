@@ -20,11 +20,13 @@ public class SettingsScreen {
     private Stage stage;
     private final Scene previousScene;
     private final UserSettings userSettings;
+    private final MusicPlayer menuPlayer;
 
-    public SettingsScreen(Stage stage, Scene previousScene, UserSettings userSettings) {
+    public SettingsScreen(Stage stage, Scene previousScene, UserSettings userSettings, MusicPlayer menuPlayer) {
         this.stage = stage;
         this.previousScene = previousScene;
         this.userSettings = new UserSettings();
+        this.menuPlayer = menuPlayer;
     }
 
     public void show() {
@@ -110,7 +112,7 @@ public class SettingsScreen {
 
 
     private void reloadScreen() {
-        MenuScreen menuScreen = new MenuScreen(userSettings);
+        MenuScreen menuScreen = new MenuScreen(userSettings, menuPlayer);
         menuScreen.show(stage);
         stage.centerOnScreen();
     }
