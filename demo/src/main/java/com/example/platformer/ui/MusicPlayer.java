@@ -1,4 +1,5 @@
 package com.example.platformer.ui;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -24,4 +25,12 @@ public class MusicPlayer {
         mediaPlayer.stop();
     }
 
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
+    // Method to change the volume
+    public void setVolume(double volume) {
+        mediaPlayer.setVolume(volume);
+    }
 }
