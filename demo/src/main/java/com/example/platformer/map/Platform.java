@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 public class Platform {
     private Group platformView; // Group to hold all parts of the platform
     private double x, y;
+    private int platformSpriteHeight = 32;
 
     public Platform(double x, double y, double width, double height) {
         platformView = new Group(); // Initialize the container for platform parts
@@ -18,8 +19,8 @@ public class Platform {
 
         // Create ImageView for the left part
         ImageView leftPart = new ImageView(platformImageLeft);
-        leftPart.setFitWidth(height); // Adjust width if needed
-        leftPart.setFitHeight(height); // Adjust height
+        leftPart.setFitWidth(platformSpriteHeight); // Adjust width if needed
+        leftPart.setFitHeight(platformSpriteHeight); // Adjust height
         leftPart.setTranslateX(0);
 
         // Add the left part to the group
@@ -33,15 +34,15 @@ public class Platform {
         for (int i = 0; i < numMiddleParts; i++) {
             ImageView middlePart = new ImageView(platformImageMiddle);
             middlePart.setFitWidth(middleWidth);
-            middlePart.setFitHeight(height);
+            middlePart.setFitHeight(platformSpriteHeight);
             middlePart.setTranslateX(platformImageLeft.getWidth() + i * middleWidth);
             platformView.getChildren().add(middlePart);
         }
 
         // Create ImageView for the right part
         ImageView rightPart = new ImageView(platformImageRight);
-        rightPart.setFitWidth(height); // Adjust width if needed
-        rightPart.setFitHeight(height); // Adjust height
+        rightPart.setFitWidth(platformSpriteHeight); // Adjust width if needed
+        rightPart.setFitHeight(platformSpriteHeight); // Adjust height
         rightPart.setTranslateX(platformImageLeft.getWidth() + numMiddleParts * middleWidth);
 
         // Add the right part to the group
