@@ -130,7 +130,7 @@ public class Enemy extends Entity {
         }
     }
 
-    private ImageView getSpriteView() {
+    public ImageView getSpriteView() {
         return spriteView;
     }
 }
