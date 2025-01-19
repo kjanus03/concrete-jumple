@@ -25,8 +25,8 @@ public class Enemy extends Entity {
         entityView.setOpacity(0);
 
         spriteView = new ImageView(idleSprites[0]);
-        spriteView.setFitWidth(128); // Match entity size
-        spriteView.setFitHeight(128);
+        spriteView.setFitWidth(48); // Match entity size
+        spriteView.setFitHeight(96);
 
         this.spriteView.setImage(idleSprites[0]);
 
@@ -36,8 +36,8 @@ public class Enemy extends Entity {
     private void loadAnimations() {
         // Idle animations
         idleSprites = new Image[]{
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_left_0.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_right_0.png").toExternalForm())};
+                new Image(getClass().getResource("/sprites/characters/enemy/idle_0.png").toExternalForm())
+        };
         walkRightSprites = new Image[]{
                 new Image(getClass().getResource("/sprites/characters/enemy/right_0.png").toExternalForm()),
                 new Image(getClass().getResource("/sprites/characters/enemy/right_1.png").toExternalForm())
@@ -51,7 +51,7 @@ public class Enemy extends Entity {
     public void update(double deltaTime) {
         super.update(deltaTime);
         this.spriteView.setTranslateX(x);
-        this.spriteView.setTranslateY(y-55);
+        this.spriteView.setTranslateY(y-29);
 
         if (isChasing) {
             chasePlayer();
@@ -61,13 +61,10 @@ public class Enemy extends Entity {
     }
 
     private void setupIdleAnimation() {
-        // Create a timeline to cycle through idle sprites
         currentAnimation = new Timeline(
                 new KeyFrame(Duration.seconds(0.5), event -> {
                     if (spriteView.getImage() == idleSprites[0]) {
-                        spriteView.setImage(idleSprites[1]);
-                    } else {
-                        spriteView.setImage(idleSprites[0]);
+                        // do nothing
                     }
                 })
         );
