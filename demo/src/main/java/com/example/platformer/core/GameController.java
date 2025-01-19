@@ -61,7 +61,7 @@ public class GameController extends GameLoop {
         map = new Map(gameRoot, screenWidth, screenHeight, buffSidebar.getSideBarWidth(), scalingFactor);
 
         // Generate buffs
-        BuffGenerator buffGenerator = new BuffGenerator(map, 0.4, scalingFactor);
+        BuffGenerator buffGenerator = new BuffGenerator(map, 0.65, scalingFactor);
         buffs = buffGenerator.generateEntities();
         for (Buff buff : buffs) {
             gameRoot.getChildren().add(buff.getView());

@@ -30,10 +30,9 @@ public abstract class AbstractEntityGenerator<T extends Entity> {
                 double baseX = platform.getView().getTranslateX();
                 double baseY = platform.getView().getTranslateY() - 50;
 
-                // Adjust x-position to avoid overlap
-                double xOffset = platformOffsets.getOrDefault(platform, 0.0);
+                // generate a random x-offset for the entity
+                double xOffset = Math.random() * platform.getWidth();
                 double newX = baseX + xOffset;
-                platformOffsets.put(platform, xOffset + 40); // Increment offset by 40px
 
                 T entity = createEntity(newX, baseY, platform, scalingFactor);
                 entities.add(entity);

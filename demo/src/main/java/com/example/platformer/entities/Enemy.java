@@ -54,7 +54,7 @@ public class Enemy extends Entity {
     public void update(double deltaTime) {
         super.update(deltaTime);
         this.spriteView.setTranslateX(x);
-        this.spriteView.setTranslateY(y-29);
+        this.spriteView.setTranslateY(y-51);
 
         if (isChasing) {
             chasePlayer();

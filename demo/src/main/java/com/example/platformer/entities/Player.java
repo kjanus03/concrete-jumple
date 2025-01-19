@@ -290,7 +290,7 @@ public class Player extends Entity {
 
         // Update sprite position
         spriteView.setTranslateX(x);
-        spriteView.setTranslateY(y-29);
+        spriteView.setTranslateY(y-51);
     }
 
     public void jump() {

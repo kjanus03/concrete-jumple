@@ -8,11 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 
 public class MenuScreen extends Application {
@@ -20,6 +18,11 @@ public class MenuScreen extends Application {
     private GameStarter gameStarter;
     private UserSettings userSettings;
     private MusicPlayer menuPlayer;
+
+    public MenuScreen(UserSettings userSettings, MusicPlayer menuPlayer) {
+        this.menuPlayer = menuPlayer;
+        this.userSettings = userSettings;
+    }
 
     public MenuScreen(UserSettings userSettings) {
         this.userSettings = userSettings;
@@ -42,9 +45,12 @@ public class MenuScreen extends Application {
         Scene scene = new Scene(root, screenWidth, screenHeight);
         scene.getStylesheets().add(getClass().getResource("/css/menu.css").toExternalForm());
 
-        this.menuPlayer = new MusicPlayer();
-        this.menuPlayer.setMenuMusic("src/main/resources/audio/menu_music.mp3");
-        this.menuPlayer.playMenu();
+        if (menuPlayer == null) {
+            this.menuPlayer = new MusicPlayer();
+            this.menuPlayer.setMenuMusic("src/main/resources/audio/menu_music.mp3");
+            this.menuPlayer.playMenu();
+        }
+
 
         primaryStage.setTitle("Platformer Game");
         primaryStage.setScene(scene);
@@ -64,7 +70,10 @@ public class MenuScreen extends Application {
 //        gameTitle.setTranslateY(-100);  // Adjust position as needed
 
         Button startButton = createMenuButton("Start Game", event -> {
+
             this.menuPlayer.stop();
+
+            System.out.println("Stopping menu music");
             this.gameStarter = new GameStarter(menuPlayer);
             this.gameStarter.startGame();
         });
@@ -75,7 +84,7 @@ public class MenuScreen extends Application {
         });
 
         Button settingsButton = createMenuButton("Settings", event -> {
-            SettingsScreen settingsScreen = new SettingsScreen(primaryStage, primaryStage.getScene(), userSettings);
+            SettingsScreen settingsScreen = new SettingsScreen(primaryStage, primaryStage.getScene(), userSettings, menuPlayer);
             settingsScreen.show();
         });
 
