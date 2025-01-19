@@ -11,7 +11,7 @@ public class PlatformGenerator {
     private double platformWidthMax; // Maximum width for platforms
     private double platformHeight = 32;  // Height of platforms
     private double maxVerticalGap = 140;  // Maximum vertical gap between platforms
-    private double minVerticalGap = 50;  // Minimum vertical gap between platforms
+    private double minVerticalGap = 90;  // Minimum vertical gap between platforms
     private int platformCount = 100;  // Number of platforms to generate
 
     private int lastGeneratedX = 0;  // X position of the last generated platform\

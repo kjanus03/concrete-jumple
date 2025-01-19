@@ -30,8 +30,8 @@ public class MenuScreen extends Application {
     @Override
     public void start(Stage primaryStage) {
         StackPane root = new StackPane();
-        int screenWidth = 1920;
-        int screenHeight = 1080;
+        int screenWidth = 1280;
+        int screenHeight = 720;
 
         // Dark overlay for the menu background
         Rectangle darkOverlay = createDarkOverlay(screenWidth, screenHeight);
