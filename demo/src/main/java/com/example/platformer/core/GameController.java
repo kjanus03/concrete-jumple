@@ -28,14 +28,13 @@ public class GameController extends GameLoop {
     private Pane gameRoot;
     private Scene scene;
     private Goal goal;
-    private CollisionManager collisionManager;  // Use CollisionManager for all collision analysis
+    private CollisionManager collisionManager;
 
     private EnemyGenerator enemyGenerator;
     private GameTimer gameTimer;
     private BuffSidebar buffSidebar;
 
     private GameEndListener gameEndListener;
-    private GameAbortListener gameAbortListener;
     private ImageView backgroundView;
 
     private final int scalingFactor;
@@ -120,7 +119,6 @@ public class GameController extends GameLoop {
         if (paused) {
             return;
         }
-        // Update player and enemies
         player.update(deltaTime);
 
         for (Enemy enemy : enemies) {
@@ -141,7 +139,6 @@ public class GameController extends GameLoop {
             buffSidebar.removeBuffs(new HashSet<>(player.getActiveBuffs()));
         }
 
-        // Follow the player's vertical position with the camera
         if (player.getY() < gameRoot.getHeight() / 2) {
             followPlayer();
         }
@@ -154,7 +151,6 @@ public class GameController extends GameLoop {
     }
 
     private void handleCollisions() {
-        // Get platforms from the com.example.platformer.map and check for collisions
         List<Platform> platforms = map.getPlatforms();
 
         // Check collisions for player
@@ -205,7 +201,6 @@ public class GameController extends GameLoop {
         }
     }
 
-    // Handle keyboard input for player movement and jumping
     private void setupInputHandling(Scene scene) {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -231,7 +226,6 @@ public class GameController extends GameLoop {
         });
     }
 
-    // Method to follow the player's vertical position with the camera
     public void followPlayer() {
         double playerY = player.getY();
         double offset = playerY - gameRoot.getHeight() / 2;  // Offset to center the player on the screen
@@ -255,7 +249,6 @@ public class GameController extends GameLoop {
         this.gameEndListener = listener;
     }
     public void setGameAbortListener(GameAbortListener listener, Stage primaryStage, boolean isFullscreen) {
-        this.gameAbortListener = listener;
         createPauseScreen(primaryStage, isFullscreen, listener);
     }
 
@@ -269,43 +262,35 @@ public class GameController extends GameLoop {
         double time = gameTimer.getElapsedTime();
         System.out.println("You win with time " + time);
 
-        // Create the EndScreen and show it
         EndScreen endScreen = new EndScreen(time);
         Scene endScene = endScreen.createEndScreenScene();
 
-        // Create a new stage for the end screen
         Stage endStage = new Stage();
         endStage.setTitle("Game Over");
         endStage.setScene(endScene);
         endStage.show();
 
-        // Wait for the end screen to be submitted
         endStage.setOnHiding(event -> {
-            // Once the window is closed (after the user clicked submit), fetch the username
             String username = endScreen.getUsername(); // Get the username entered by the player
 
-            // Now you can pass this username to the HighScore listener
             if (gameEndListener != null) {
-                // Pass the username and time to the gameEndListener
                 gameEndListener.onGameEnd(new HighScore(username, new Date(), time));
             }
-            // turn off the game
 
         });
 
-        // Stop the timer and the game loop
         gameTimer.stop();
         stop();
     }
 
     private void restartGame() {
-        gameRoot.getChildren().clear(); // Clear all children
-        gameRoot.getChildren().add(backgroundView); // Re-add the background
-        gameRoot.getChildren().add(pauseScreen); // Re-add the pause screen
-        pauseScreen.setVisible(false); // Ensure the pause screen is hidden initially
-        gameRoot.setTranslateY(0); // Reset camera position
-        paused = false; // Ensure the game is unpaused
-        startGame(); // Reinitialize the game
+        gameRoot.getChildren().clear();
+        gameRoot.getChildren().add(backgroundView);
+        gameRoot.getChildren().add(pauseScreen);
+        pauseScreen.setVisible(false);
+        gameRoot.setTranslateY(0);
+        paused = false;
+        startGame();
 
     }
 

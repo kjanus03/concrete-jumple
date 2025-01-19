@@ -38,13 +38,11 @@ public class GameStarter implements GameEndListener, GameAbortListener {
         int screenHeight = userSettings.getHeight();
         int sidebarWidth = (int) screenWidth/4;
 
-        // Root layout with a BorderPane
         BorderPane root = new BorderPane();
 
         // Gameplay Pane
         Pane gamePane = new Pane();
 
-        // Add background image
         Image backgroundImage = new Image(getClass().getResource("/sprites/background/Steampunk/darkblue1.png").toExternalForm());
         ImageView backgroundView = new ImageView(backgroundImage);
         backgroundView.setFitWidth(screenWidth);
@@ -109,8 +107,8 @@ public class GameStarter implements GameEndListener, GameAbortListener {
         }
     }
 
+    @Override
     public void onGameAbort() {
-        // Handle game restart logic, such as stopping music and closing the stage
         if (musicPlayer != null) {
             musicPlayer.stop();
             musicPlayer = null;
