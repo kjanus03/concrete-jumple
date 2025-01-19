@@ -27,10 +27,13 @@ public class GameStarter implements GameEndListener {
 
     public void startGame() {
 
+        UserSettings userSettings = new UserSettings(); // Instantiate UserSettings
+        int scalingFactor = userSettings.getScalingFactor(); // Get scaling factor
+
         // hardcoded resolution
-        int screenWidth = 1280;
-        int screenHeight = 720;
-        int sidebarWidth = 180;
+        int screenWidth = userSettings.getWidth();
+        int screenHeight = userSettings.getHeight();
+        int sidebarWidth = screenWidth / 4;
 
         // Root layout with a BorderPane
         BorderPane root = new BorderPane();
@@ -56,7 +59,7 @@ public class GameStarter implements GameEndListener {
         this.scene = new Scene(root, screenWidth, screenHeight); // Adjusted width for the sidebar
 
         // GameController
-        GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar);
+        GameController gameController = new GameController(gamePane, scene, backgroundView, buffSidebar, scalingFactor);
         gameController.startGame();
         gameController.setGameEndListener(this);
 

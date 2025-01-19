@@ -16,17 +16,20 @@ public class Enemy extends Entity {
     private final ImageView spriteView;
     private String direction;
 
-    public Enemy(double x, double y, Player target) {
-        super(x, y, 64, 64);  // Initialize a 30x30 rectangle for the enemy
+    private int scalingFactor;
+
+    public Enemy(double x, double y, Player target, int scalingFactor) {
+        super(x, y, 32, 64);  // Initialize a 30x30 rectangle for the enemy
         this.target = target;
         this.isChasing = false;
+        this.scalingFactor = scalingFactor;
         loadAnimations();
 
         entityView.setOpacity(0);
 
         spriteView = new ImageView(idleSprites[0]);
-        spriteView.setFitWidth(128); // Match entity size
-        spriteView.setFitHeight(128);
+        spriteView.setFitWidth(32*scalingFactor); // Match entity size
+        spriteView.setFitHeight(64*scalingFactor);
 
         this.spriteView.setImage(idleSprites[0]);
 
@@ -36,8 +39,8 @@ public class Enemy extends Entity {
     private void loadAnimations() {
         // Idle animations
         idleSprites = new Image[]{
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_left_0.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_right_0.png").toExternalForm())};
+                new Image(getClass().getResource("/sprites/characters/enemy/idle_0.png").toExternalForm()),
+                new Image(getClass().getResource("/sprites/characters/enemy/idle_1.png").toExternalForm())};
         walkRightSprites = new Image[]{
                 new Image(getClass().getResource("/sprites/characters/enemy/right_0.png").toExternalForm()),
                 new Image(getClass().getResource("/sprites/characters/enemy/right_1.png").toExternalForm())
@@ -107,7 +110,7 @@ public class Enemy extends Entity {
 
 
     private boolean isPlayerInRange() {
-        return Math.abs(target.getY() - this.getView().getTranslateY()) < 250;
+        return Math.abs(target.getY() - this.getView().getTranslateY()) < 128 * scalingFactor;
     }
 
     private void moveRight() {
@@ -116,7 +119,7 @@ public class Enemy extends Entity {
             setupWalkingRightAnimation();
             currentAnimation.play();
         }
-        velocityX = 100;
+        velocityX = 50*scalingFactor;
         direction = "right";
     }
 
@@ -125,7 +128,7 @@ public class Enemy extends Entity {
             setupWalkingLeftAnimation();
             currentAnimation.play();
         }
-        velocityX = -100;
+        velocityX = -50*scalingFactor;
         direction = "left";
     }
 
