@@ -12,6 +12,7 @@ public abstract class Entity {
     protected double x, y;  // Position in the world
     protected static final double GRAVITY = 800;  // Shared gravity
 
+
     public Entity(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;

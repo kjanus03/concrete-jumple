@@ -18,7 +18,7 @@ public class Buff extends Entity {
     private Timeline currentAnimation;
     private final ImageView spriteView;
 
-    public Buff(double x, double y, int buffAmount, BuffType type) {
+    public Buff(double x, double y, int buffAmount, BuffType type, int scalingFactor) {
         super(x, y, 56, 50);
         this.buffAmount = buffAmount;
         this.type = type;

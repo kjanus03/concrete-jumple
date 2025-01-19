@@ -10,16 +10,18 @@ import java.util.HashMap;
 public abstract class AbstractEntityGenerator<T extends Entity> {
     protected Map map;
     protected double entityDensity;
+    private int scalingFactor;
 
     // Tracks the x-offset for com.example.platformer.entities generated on each platform
     private final java.util.Map<Platform, Double> platformOffsets = new HashMap<>();
 
-    public AbstractEntityGenerator(Map map, double entityDensity) {
+    public AbstractEntityGenerator(Map map, double entityDensity, int scalingFactor) {
         this.map = map;
         this.entityDensity = entityDensity;
+        this.scalingFactor = scalingFactor;
     }
 
-    protected abstract T createEntity(double x, double y, Platform platform);
+    protected abstract T createEntity(double x, double y, Platform platform, int scalingFactor);
 
     public ArrayList<T> generateEntities() {
         ArrayList<T> entities = new ArrayList<>();
@@ -33,7 +35,7 @@ public abstract class AbstractEntityGenerator<T extends Entity> {
                 double newX = baseX + xOffset;
                 platformOffsets.put(platform, xOffset + 40); // Increment offset by 40px
 
-                T entity = createEntity(newX, baseY, platform);
+                T entity = createEntity(newX, baseY, platform, scalingFactor);
                 entities.add(entity);
             }
         }

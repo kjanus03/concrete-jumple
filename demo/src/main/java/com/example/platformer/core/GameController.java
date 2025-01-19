@@ -35,13 +35,16 @@ public class GameController extends GameLoop {
 
     private GameEndListener gameEndListener;
     private ImageView backgroundView;
+    private int scalingFactor;
 
 
-    public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar) {
+
+    public GameController(Pane root, Scene scene, ImageView backgroundImage, BuffSidebar buffSidebar, int scalingFactor) {
         this.gameRoot = root;
         this.scene = scene;
         this.backgroundView = backgroundImage;
         this.buffSidebar = buffSidebar;
+        this.scalingFactor = scalingFactor;
         this.collisionManager = new CollisionManager(buffSidebar.getSideBarWidth(), scene.getWidth());
         this.enemies = new ArrayList<>();
         this.buffs = new ArrayList<>();
@@ -55,10 +58,10 @@ public class GameController extends GameLoop {
         int screenWidth = (int) scene.getWidth();
         int screenHeight = (int) scene.getHeight();
         System.out.println("screenWidth: " + screenWidth + " screenHeight: " + screenHeight);
-        map = new Map(gameRoot, screenWidth, screenHeight, buffSidebar.getSideBarWidth());
+        map = new Map(gameRoot, screenWidth, screenHeight, buffSidebar.getSideBarWidth(), scalingFactor);
 
         // Generate buffs
-        BuffGenerator buffGenerator = new BuffGenerator(map, 0.4);
+        BuffGenerator buffGenerator = new BuffGenerator(map, 0.4, scalingFactor);
         buffs = buffGenerator.generateEntities();
         for (Buff buff : buffs) {
             gameRoot.getChildren().add(buff.getView());
@@ -80,14 +83,16 @@ public class GameController extends GameLoop {
             e.printStackTrace();
         }
         Platform groundPlatform = map.getGroundPlatform();
-        player = new Player(groundPlatform.getX() + groundPlatform.getWidth() / 2, groundPlatform.getY() - 200, (int) (screenWidth/4.7));
+        player = new Player(groundPlatform.getX() + screenWidth/2,
+                groundPlatform.getY() - groundPlatform.getHeight()*scalingFactor,
+                (int) (screenWidth/4.7), scalingFactor);
         gameRoot.getChildren().add(player.getView());
         gameRoot.getChildren().add(player.getSpriteView());
 
 
 
         // Generate enemies
-        enemyGenerator = new EnemyGenerator(map, 0.24, player);
+        enemyGenerator = new EnemyGenerator(map, 0.24, player, scalingFactor);
         enemies = enemyGenerator.generateEntities();
         for (Enemy enemy : enemies) {
             gameRoot.getChildren().add(enemy.getView());
