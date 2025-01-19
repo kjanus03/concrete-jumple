@@ -26,9 +26,10 @@ public class GameStarter implements GameEndListener {
     }
 
     public void startGame() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) screenSize.getWidth();
-        int screenHeight = (int) screenSize.getHeight();
+
+        // hardcoded resolution
+        int screenWidth = 1280;
+        int screenHeight = 720;
         int sidebarWidth = 180;
 
         // Root layout with a BorderPane
@@ -65,7 +66,6 @@ public class GameStarter implements GameEndListener {
         Stage stage = new Stage();
         stage.setTitle("Platformer Game");
         stage.setScene(scene);
-        stage.setFullScreen(true);
         stage.show();
     }
     @Override

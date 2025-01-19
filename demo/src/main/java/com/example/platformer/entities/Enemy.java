@@ -9,38 +9,35 @@ import javafx.util.Duration;
 public class Enemy extends Entity {
     private Player target;
     private boolean isChasing;
+    private Image[] idleSprites; // Array of idle sprite images
     private Image[] walkRightSprites;
     private Image[] walkLeftSprites;
-    private String direction; // right or left
-    private final ImageView spriteView; // ImageView for displaying the sprite
-
-    private Image[] idleSprites; // Array of idle sprite images
     private Timeline currentAnimation;
-    private boolean idle = true;
-
-
-
-
+    private final ImageView spriteView;
+    private String direction;
 
     public Enemy(double x, double y, Player target) {
-        super(x, y, 32, 32);  // Initialize a 30x30 rectangle for the enemy
-        loadAnimations();
+        super(x, y, 64, 64);  // Initialize a 30x30 rectangle for the enemy
         this.target = target;
         this.isChasing = false;
+        loadAnimations();
 
-        spriteView = new ImageView(idleSprites[0]); // Start with the first idle sprite
-        spriteView.setFitWidth(32); // Match entity size
-        spriteView.setFitHeight(32);
         entityView.setOpacity(0);
 
+        spriteView = new ImageView(idleSprites[0]);
+        spriteView.setFitWidth(64); // Match entity size
+        spriteView.setFitHeight(64);
+
+        this.spriteView.setImage(idleSprites[0]);
+
+        setupIdleAnimation();
+        currentAnimation.play();
     }
     private void loadAnimations() {
         // Idle animations
         idleSprites = new Image[]{
                 new Image(getClass().getResource("/sprites/characters/enemy/idle_left_0.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_right_0.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_left_1.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_right_1.png").toExternalForm())};
+                new Image(getClass().getResource("/sprites/characters/enemy/idle_right_0.png").toExternalForm())};
         walkRightSprites = new Image[]{
                 new Image(getClass().getResource("/sprites/characters/enemy/right_0.png").toExternalForm()),
                 new Image(getClass().getResource("/sprites/characters/enemy/right_1.png").toExternalForm())
@@ -50,7 +47,18 @@ public class Enemy extends Entity {
                 new Image(getClass().getResource("/sprites/characters/enemy/left_0.png").toExternalForm())
         };
     }
+    @Override
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+        this.spriteView.setTranslateX(x);
+        this.spriteView.setTranslateY(y);
 
+        if (isChasing) {
+            chasePlayer();
+        }
+
+        isChasing = target.hasCollisionCooldown() && isPlayerInRange();
+    }
 
     private void setupIdleAnimation() {
         // Create a timeline to cycle through idle sprites
@@ -65,31 +73,11 @@ public class Enemy extends Entity {
         );
         currentAnimation.setCycleCount(Timeline.INDEFINITE);
     }
-    private void changeAnimation() {
-        // Stop the current animation
-
-        if (isChasing) {
-            // Change animation to walking based on direction
-            if ("right".equals(direction)) {
-                setupWalkingRightAnimation();
-            } else if ("left".equals(direction)) {
-                setupWalkingLeftAnimation();
-            }
-        } else {
-            // If not chasing, return to idle animation
-            setupIdleAnimation();
-        }
-
-        // Start the new animation
-        if (currentAnimation != null) {
-            currentAnimation.play();
-        }
-    }
-
     private void setupWalkingRightAnimation() {
+        currentAnimation.stop();
         spriteView.setImage(walkRightSprites[0]); // Immediately show the first frame
         currentAnimation = new Timeline(
-                new KeyFrame(Duration.seconds(0.25), event -> {
+                new KeyFrame(Duration.seconds(0.5), event -> {
                     if (spriteView.getImage() == walkRightSprites[0]) {
                         spriteView.setImage(walkRightSprites[1]);
                     } else {
@@ -99,11 +87,11 @@ public class Enemy extends Entity {
         );
         currentAnimation.setCycleCount(Timeline.INDEFINITE);
     }
-
     private void setupWalkingLeftAnimation() {
+        currentAnimation.stop();
         spriteView.setImage(walkLeftSprites[0]); // Immediately show the first frame
         currentAnimation = new Timeline(
-                new KeyFrame(Duration.seconds(0.25), event -> {
+                new KeyFrame(Duration.seconds(0.5), event -> {
                     if (spriteView.getImage() == walkLeftSprites[0]) {
                         spriteView.setImage(walkLeftSprites[1]);
                     } else {
@@ -112,59 +100,46 @@ public class Enemy extends Entity {
                 })
         );
         currentAnimation.setCycleCount(Timeline.INDEFINITE);
+
     }
 
 
-
-
-    @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
-
-        // Update chasing state and animations
-        boolean wasChasing = isChasing;
-        isChasing = target.hasCollisionCooldown() && isPlayerInRange();
-
-        if (isChasing) {
-            chasePlayer();
-        } else {
-            stopHorizontalMovement();
-            idle = true;
-        }
-
-        // If the chasing state has changed, update the animation
-        if (wasChasing != isChasing) {
-            changeAnimation();
-        }
-        spriteView.setTranslateX(x);
-        spriteView.setTranslateY(y);
-    }
 
 
     private boolean isPlayerInRange() {
-        return Math.abs(target.getY() - this.getView().getTranslateY()) < 180;
+        return Math.abs(target.getY() - this.getView().getTranslateY()) < 250;
     }
 
     private void moveRight() {
 
-        direction = "right";
+        if (direction != "right"){
+            setupWalkingRightAnimation();
+            currentAnimation.play();
+        }
         velocityX = 100;
+        direction = "right";
     }
 
     private void moveLeft() {
-        direction = "left";
+        if (direction != "left") {
+            setupWalkingLeftAnimation();
+            currentAnimation.play();
+        }
         velocityX = -100;
+        direction = "left";
     }
 
     private void chasePlayer() {
         if (target.getX() > this.getX()) {
-            direction = "right";
             moveRight();
         } else if (target.getX() < this.getX()) {
-            direction = "left";
             moveLeft();
         } else {
             stopHorizontalMovement();
         }
+    }
+
+    public ImageView getSpriteView() {
+        return spriteView;
     }
 }

@@ -92,6 +92,7 @@ public class GameController extends GameLoop {
         enemies = enemyGenerator.generateEntities();
         for (Enemy enemy : enemies) {
             gameRoot.getChildren().add(enemy.getView());
+            gameRoot.getChildren().add(enemy.getSpriteView());
         }
 
         // Start the game loop
@@ -157,6 +158,7 @@ public class GameController extends GameLoop {
                     enemyToRemove = enemy;
                     // delete the enemy
                     gameRoot.getChildren().remove(enemy.getView());
+                    gameRoot.getChildren().remove(enemy.getSpriteView());
                     buffSidebar.enemyCollision(player);
                 }
             }
