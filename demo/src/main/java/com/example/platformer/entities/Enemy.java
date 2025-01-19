@@ -36,15 +36,15 @@ public class Enemy extends Entity {
     private void loadAnimations() {
         // Idle animations
         idleSprites = new Image[]{
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_left_0.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_right_0.png").toExternalForm())};
+                new Image(getClass().getResource("/sprites/characters/enemy/idle.png").toExternalForm()),
+                new Image(getClass().getResource("/sprites/characters/enemy/idle.png").toExternalForm())};
         walkRightSprites = new Image[]{
                 new Image(getClass().getResource("/sprites/characters/enemy/right_0.png").toExternalForm()),
                 new Image(getClass().getResource("/sprites/characters/enemy/right_1.png").toExternalForm())
         };
         walkLeftSprites = new Image[]{
-                new Image(getClass().getResource("/sprites/characters/enemy/left_1.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/left_0.png").toExternalForm())
+                new Image(getClass().getResource("/sprites/characters/enemy/left_0.png").toExternalForm()),
+                new Image(getClass().getResource("/sprites/characters/enemy/left_1.png").toExternalForm())
         };
     }
     @Override
