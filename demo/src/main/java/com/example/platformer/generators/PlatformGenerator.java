@@ -14,7 +14,6 @@ public class PlatformGenerator {
     private double minVerticalGap = 50;  // Minimum vertical gap between platforms
     private int platformCount = 100;  // Number of platforms to generate
 
-    private int lastGeneratedX = 0;  // X position of the last generated platform\
     private int screenWidth;
     private int screenHeight;
 
@@ -24,8 +23,6 @@ public class PlatformGenerator {
         this.screenHeight = screenHeight;
         platformWidthMin = screenWidth / 7.2;
         platformWidthMax = screenWidth / 2.9;
-
-
     }
 
     public List<Platform> generatePlatforms(int sideBarWidth) {
@@ -36,7 +33,6 @@ public class PlatformGenerator {
         Platform groundPlatform = new Platform(0, screenHeight - platformHeight, screenWidth, platformHeight);
         platforms.add(groundPlatform);
 
-        // Generate random platforms up to the 100th platform
         double lastPlatformY = screenHeight - platformHeight;  // Start from the ground platform
         for (int i = 0; i < platformCount; i++) {
             double platformWidth = (random.nextDouble() * (platformWidthMax - platformWidthMin) + platformWidthMin) / platformHeight * platformHeight;
