@@ -64,8 +64,8 @@ public class Player extends Entity {
         // Load idle sprites
 
         spriteView = new ImageView(idleSprites[0]); // Start with the first idle sprite
-        spriteView.setFitWidth(32); // Match entity size
-        spriteView.setFitHeight(64);
+        spriteView.setFitWidth(64); // Match entity size
+        spriteView.setFitHeight(128);
 
         // make entity view transparent
         entityView.setOpacity(0);
@@ -290,7 +290,7 @@ public class Player extends Entity {
 
         // Update sprite position
         spriteView.setTranslateX(x);
-        spriteView.setTranslateY(y);
+        spriteView.setTranslateY(y-55);
     }
 
 
