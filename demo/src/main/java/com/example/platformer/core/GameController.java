@@ -8,6 +8,7 @@ import com.example.platformer.generators.BuffGenerator;
 import com.example.platformer.generators.EnemyGenerator;
 import com.example.platformer.highscores.HighScore;
 import com.example.platformer.ui.EndScreen;
+import com.example.platformer.ui.PauseScreen;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -36,6 +37,8 @@ public class GameController extends GameLoop {
     private GameEndListener gameEndListener;
     private ImageView backgroundView;
     private int scalingFactor;
+    private boolean paused;
+    private PauseScreen pauseScreen;
 
 
 
@@ -49,7 +52,13 @@ public class GameController extends GameLoop {
         this.enemies = new ArrayList<>();
         this.buffs = new ArrayList<>();
         this.goal = new Goal(100, 100);
+        this.paused = false;
+        this.pauseScreen = new PauseScreen(scene.getWidth(), scene.getHeight());
+        pauseScreen.getRestartButton().setOnAction(event -> restartGame());
+
         setupInputHandling(scene);  // Setup keyboard input handling
+
+        gameRoot.getChildren().add(pauseScreen);
     }
 
     public void startGame() {
@@ -99,12 +108,17 @@ public class GameController extends GameLoop {
             gameRoot.getChildren().add(enemy.getSpriteView());
         }
 
+
         // Start the game loop
         start();
     }
 
     @Override
     protected void update(double deltaTime) {
+        // skip updating if the game is paused
+        if (paused) {
+            return;
+        }
         // Update player and enemies
         player.update(deltaTime);
 
@@ -135,10 +149,7 @@ public class GameController extends GameLoop {
         double timerY = -gameRoot.getTranslateY() + 30;
         gameTimer.update(deltaTime, timerY);
         backgroundView.setTranslateY(-gameRoot.getTranslateY());
-
-
-
-
+        pauseScreen.setTranslateY(-gameRoot.getTranslateY());
     }
 
     private void handleCollisions() {
@@ -196,20 +207,24 @@ public class GameController extends GameLoop {
     // Handle keyboard input for player movement and jumping
     private void setupInputHandling(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            if (player.hasCollisionCooldown()) {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                togglePause();
+                event.consume();
+            }
+
+            if (!paused && player.hasCollisionCooldown()) {
                 if (event.getCode() == KeyCode.LEFT) {
-                    player.moveLeft();  // Move player left
+                    player.moveLeft();
                 } else if (event.getCode() == KeyCode.RIGHT) {
-                    player.moveRight();  // Move player right
+                    player.moveRight();
                 } else if (event.getCode() == KeyCode.SPACE) {
-                    player.jump();  // Make player jump if possible
+                    player.jump();
                 }
             }
         });
 
         scene.setOnKeyReleased(event -> {
-            // Stop horizontal movement when left or right keys are released
-            if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
+            if (!paused && (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)) {
                 player.stopMoving();
             }
         });
@@ -221,6 +236,19 @@ public class GameController extends GameLoop {
         double offset = playerY - gameRoot.getHeight() / 2;  // Offset to center the player on the screen
         gameRoot.setTranslateY(-offset);
     }
+
+    private void togglePause() {
+        paused = !paused;
+        pauseScreen.setVisible(paused);
+        if (paused) {
+            pauseScreen.updateTimer(gameTimer.getElapsedTime());
+            pauseScreen.toFront();
+            System.out.println("Game paused");
+        } else {
+            System.out.println("Game resumed");
+        }
+    }
+
 
     public void setGameEndListener(GameEndListener listener) {
         this.gameEndListener = listener;
@@ -259,6 +287,15 @@ public class GameController extends GameLoop {
         stop();
     }
 
+    private void restartGame() {
+        gameRoot.getChildren().clear(); // Clear all children
+        gameRoot.getChildren().add(backgroundView); // Re-add the background
+        gameRoot.getChildren().add(pauseScreen); // Re-add the pause screen
+        pauseScreen.setVisible(false); // Ensure the pause screen is hidden initially
+        gameRoot.setTranslateY(0); // Reset camera position
+        paused = false; // Ensure the game is unpaused
+        startGame(); // Reinitialize the game
 
+    }
 
 }

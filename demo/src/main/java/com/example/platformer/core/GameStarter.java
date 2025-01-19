@@ -7,6 +7,8 @@ import com.example.platformer.highscores.HighScore;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -67,9 +69,11 @@ public class GameStarter implements GameEndListener {
         gamePlayer.playGame();
 
         Stage stage = new Stage();
-        stage.setTitle("Platformer Game");
+        stage.setTitle("ConcreteJumple");
         stage.setResizable(false);
         stage.setFullScreen(true);
+        stage.setFullScreenExitHint(""); // Removes the fullscreen exit hint
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
         stage.show();
     }
