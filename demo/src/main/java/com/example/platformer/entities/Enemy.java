@@ -36,8 +36,8 @@ public class Enemy extends Entity {
     private void loadAnimations() {
         // Idle animations
         idleSprites = new Image[]{
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_0.png").toExternalForm()),
-                new Image(getClass().getResource("/sprites/characters/enemy/idle_1.png").toExternalForm())};
+                new Image(getClass().getResource("/sprites/characters/enemy/idle_left_0.png").toExternalForm()),
+                new Image(getClass().getResource("/sprites/characters/enemy/idle_right_0.png").toExternalForm())};
         walkRightSprites = new Image[]{
                 new Image(getClass().getResource("/sprites/characters/enemy/right_0.png").toExternalForm()),
                 new Image(getClass().getResource("/sprites/characters/enemy/right_1.png").toExternalForm())
@@ -47,6 +47,19 @@ public class Enemy extends Entity {
                 new Image(getClass().getResource("/sprites/characters/enemy/left_0.png").toExternalForm())
         };
     }
+    @Override
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+        this.spriteView.setTranslateX(x);
+        this.spriteView.setTranslateY(y);
+
+        if (isChasing) {
+            chasePlayer();
+        }
+
+        isChasing = target.hasCollisionCooldown() && isPlayerInRange();
+    }
+
     private void setupIdleAnimation() {
         // Create a timeline to cycle through idle sprites
         currentAnimation = new Timeline(
@@ -94,17 +107,16 @@ public class Enemy extends Entity {
 
 
     private boolean isPlayerInRange() {
-        return Math.abs(target.getY() - this.getView().getTranslateY()) < 180;
+        return Math.abs(target.getY() - this.getView().getTranslateY()) < 250;
     }
 
     private void moveRight() {
 
-        direction = "right";
-        velocityX = 100;
         if (direction != "right"){
             setupWalkingRightAnimation();
             currentAnimation.play();
         }
+        velocityX = 100;
         direction = "right";
     }
 
@@ -112,18 +124,15 @@ public class Enemy extends Entity {
         if (direction != "left") {
             setupWalkingLeftAnimation();
             currentAnimation.play();
-
-            velocityX = -100;
-            direction = "left";
         }
+        velocityX = -100;
+        direction = "left";
     }
 
     private void chasePlayer() {
         if (target.getX() > this.getX()) {
-            direction = "right";
             moveRight();
         } else if (target.getX() < this.getX()) {
-            direction = "left";
             moveLeft();
         } else {
             stopHorizontalMovement();
