@@ -5,15 +5,13 @@ import com.example.platformer.map.Map;
 import com.example.platformer.map.Platform;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 public abstract class AbstractEntityGenerator<T extends Entity> {
+    private final int scalingFactor;
     protected Map map;
     protected double entityDensity;
-    private int scalingFactor;
 
-    // Tracks the x-offset for com.example.platformer.entities generated on each platform
-    private final java.util.Map<Platform, Double> platformOffsets = new HashMap<>();
 
     public AbstractEntityGenerator(Map map, double entityDensity, int scalingFactor) {
         this.map = map;
