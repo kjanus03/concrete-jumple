@@ -22,6 +22,20 @@ Concrete Jumple is a 2D platformer game built for speedrunning using JavaFX. Pla
 
 ---
 
+## Visual Highlights
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; margin-bottom: 16px;">
+  <img src="https://github.com/user-attachments/assets/fa40b34d-fa38-403f-b34f-e2807ccc32d5" width="480" height="270">
+  <img src="https://github.com/user-attachments/assets/b6961fc0-8241-40e5-9bf3-4673b9a858ef" width="480" height="270">
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center;">
+  <img src="https://github.com/user-attachments/assets/df6502ce-4843-4fe2-b2e3-92260dbe28da" width="480" height="270">
+  <img src="https://github.com/user-attachments/assets/f3ab4c86-bbe3-41da-a3e6-662532078945" width="480" height="270">
+</div>
+
+---
+
 ## Features
 
 - **Randomly Generated Levels**: Each playthrough features a unique set of platforms with gaps that are always jumpable.
@@ -52,6 +66,7 @@ Concrete Jumple is a 2D platformer game built for speedrunning using JavaFX. Pla
 - **Java 19**: The game is built using Java 19 to ensure modern performance and compatibility.
 
 ---
+
 
 ## High Score System
 
