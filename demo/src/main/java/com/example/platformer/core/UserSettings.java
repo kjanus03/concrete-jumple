@@ -1,8 +1,5 @@
 package com.example.platformer.core;
 
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,13 +8,12 @@ import java.util.Properties;
 
 public class UserSettings {
     private static final String CONFIG_FILE = "src/main/resources/config/user_settings.properties";
-    private Properties properties;
+    private final Properties properties;
     private int[] screenDimension;
 
     public UserSettings() {
         properties = new Properties();
         loadSettings();
-
     }
 
     // Load settings from the properties file

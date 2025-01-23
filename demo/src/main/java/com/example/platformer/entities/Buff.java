@@ -6,28 +6,31 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.util.Objects;
+
 public class Buff extends Entity {
+    private static final int SPRITE_WIDTH = 28;
+    private static final int SPRITE_HEIGHT = 25;
 
-    private int buffAmount;
-
+    private final int buffAmount;
+    private final Image[] buffSprites;
+    private final ImageView spriteView;
     private int duration;
     private Timeline timer;
     private Runnable onBuffEnd; // action to perform when buff ends
-    private BuffType type;
-    private Image[] buffSprites;
+    private final BuffType type;
     private Timeline currentAnimation;
-    private final ImageView spriteView;
 
     public Buff(double x, double y, int buffAmount, BuffType type, int scalingFactor) {
-        super(x, y, 28*scalingFactor,25*scalingFactor );
+        super(x, y, SPRITE_WIDTH * scalingFactor, SPRITE_HEIGHT * scalingFactor);
         this.buffAmount = buffAmount;
         this.type = type;
         this.buffSprites = new Image[2];
         loadAnimations();
 
         spriteView = new ImageView(buffSprites[0]);
-        spriteView.setFitWidth(28*scalingFactor); // Match entity size
-        spriteView.setFitHeight(25*scalingFactor);
+        spriteView.setFitWidth(SPRITE_WIDTH * scalingFactor); // Match entity size
+        spriteView.setFitHeight(SPRITE_HEIGHT * scalingFactor);
 
 //        spriteView.setTranslateY(-32*scalingFactor);
 
@@ -40,8 +43,7 @@ public class Buff extends Entity {
 
         } else if (type == BuffType.SPEED) {
             this.duration = 4;
-        }
-        else if (type == BuffType.INVINCIBILITY) {
+        } else if (type == BuffType.INVINCIBILITY) {
             this.duration = 6;
         }
         setupAnimation();
@@ -81,23 +83,20 @@ public class Buff extends Entity {
         return 0;
     }
 
-    private void loadAnimations()
-    {
+    private void loadAnimations() {
         if (type == BuffType.JUMP) {
-            buffSprites[0] = new Image(getClass().getResource("/sprites/buffs/jump_buff_0.png").toExternalForm());
-            buffSprites[1] = new Image(getClass().getResource("/sprites/buffs/jump_buff_1.png").toExternalForm());
-        }
-       else if (type == BuffType.SPEED) {
-            buffSprites[0] = new Image(getClass().getResource("/sprites/buffs/speed_buff_0.png").toExternalForm());
-            buffSprites[1] = new Image(getClass().getResource("/sprites/buffs/speed_buff_1.png").toExternalForm());
+            buffSprites[0] = new Image(Objects.requireNonNull(getClass().getResource("/sprites/buffs/jump_buff_0.png")).toExternalForm());
+            buffSprites[1] = new Image(Objects.requireNonNull(getClass().getResource("/sprites/buffs/jump_buff_1.png")).toExternalForm());
+        } else if (type == BuffType.SPEED) {
+            buffSprites[0] = new Image(Objects.requireNonNull(getClass().getResource("/sprites/buffs/speed_buff_0.png")).toExternalForm());
+            buffSprites[1] = new Image(Objects.requireNonNull(getClass().getResource("/sprites/buffs/speed_buff_1.png")).toExternalForm());
         } else if (type == BuffType.INVINCIBILITY) {
-            buffSprites[0] = new Image(getClass().getResource("/sprites/buffs/invincibility_buff_0.png").toExternalForm());
-            buffSprites[1] = new Image(getClass().getResource("/sprites/buffs/invincibility_buff_1.png").toExternalForm());
+            buffSprites[0] = new Image(Objects.requireNonNull(getClass().getResource("/sprites/buffs/invincibility_buff_0.png")).toExternalForm());
+            buffSprites[1] = new Image(Objects.requireNonNull(getClass().getResource("/sprites/buffs/invincibility_buff_1.png")).toExternalForm());
         }
     }
 
-    private void setupAnimation()
-    {
+    private void setupAnimation() {
         currentAnimation = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
             if (spriteView.getImage() == buffSprites[0]) {
                 spriteView.setImage(buffSprites[1]);

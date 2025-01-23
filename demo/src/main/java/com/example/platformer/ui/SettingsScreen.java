@@ -2,12 +2,8 @@ package com.example.platformer.ui;
 
 import com.example.platformer.core.UserSettings;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -59,26 +55,37 @@ public class SettingsScreen {
 
         Label fullscreenLabel = new Label("Fullscreen:");
         fullscreenLabel.getStyleClass().add("settings-label");
-        ComboBox<String> fullscreenComboBox = new ComboBox<>();
-        fullscreenComboBox.getItems().addAll("Yes", "No");
-        fullscreenComboBox.setValue(userSettings.isFullscreen() ? "Yes" : "No");
+
+// Create a ToggleButton for fullscreen
+        ToggleButton fullscreenToggle = new ToggleButton(userSettings.isFullscreen() ? "ON" : "OFF");
+        fullscreenToggle.setSelected(userSettings.isFullscreen());
+        fullscreenToggle.getStyleClass().add("toggle-button");
+
+// Update the label and settings when toggled
+        fullscreenToggle.setOnAction(event -> {
+            if (fullscreenToggle.isSelected()) {
+                fullscreenToggle.setText("ON");
+            } else {
+                fullscreenToggle.setText("OFF");
+            }
+        });
 
         Button saveButton = new Button("Save Settings");
         saveButton.getStyleClass().add("menu-button");
         saveButton.setOnAction(event -> {
             userSettings.setVolume(volumeSlider.getValue());
-            boolean fullscreen = fullscreenComboBox.getValue().equals("Yes");
+            boolean fullscreen = fullscreenToggle.isSelected();
             userSettings.setFullscreen(fullscreen);
-            userSettings.saveSettings();  // Save settings to the properties file
+            userSettings.saveSettings();
 
-            // Update the stage fullscreen mode based on the saved settings
+            // Update the stage fullscreen mode
             stage.setFullScreen(fullscreen);
-            if (!fullscreen){
+            if (!fullscreen) {
                 stage.setMaximized(true);
             }
             menuPlayer.setVolume(volumeSlider.getValue());
 
-            reloadScreen();  // Optionally reload settings or apply other changes
+            reloadScreen();
         });
 
         Button backButton = new Button("Back to Menu");
@@ -91,7 +98,7 @@ public class SettingsScreen {
 
         VBox settingsLayout = new VBox(20);
         settingsLayout.setAlignment(Pos.CENTER);
-        settingsLayout.getChildren().addAll(titleLabel, volumeSection, fullscreenLabel, fullscreenComboBox, saveButton, backButton);
+        settingsLayout.getChildren().addAll(titleLabel, volumeSection, fullscreenLabel, fullscreenToggle, saveButton, backButton);
 
         Rectangle darkOverlay = new Rectangle(screenWidth, screenHeight);
         darkOverlay.setFill(Color.rgb(0, 0, 0, 0.8));

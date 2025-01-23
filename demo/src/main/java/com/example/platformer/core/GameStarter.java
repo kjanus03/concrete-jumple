@@ -12,19 +12,26 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class GameStarter implements GameEndListener, GameAbortListener {
+    private static final String GAME_MUSIC_PATH = "src/main/resources/audio/soundtrack.mp3";
+    private static final double SIDEBAR_WIDTH_RATIO = 0.25;
+    private static final String BACKGROUND_IMAGE_PATH = "/sprites/background/Steampunk/darkblue1.png";
+    private static final String GAME_TITLE = "ConcreteJumple";
+
 
     private MusicPlayer musicPlayer;
-    private MusicPlayer menuPlayer;
-    private DatabaseManager databaseManager;
     private Scene scene;
-    private Stage primaryStage;
-    private UserSettings userSettings;
+    private final MusicPlayer menuPlayer;
+    private final DatabaseManager databaseManager;
+    private final Stage primaryStage;
+    private final UserSettings userSettings;
 
     public GameStarter(MusicPlayer menuPlayer, UserSettings userSettings, Stage primaryStage) {
         this.menuPlayer = menuPlayer;
         this.musicPlayer = new MusicPlayer();
-        this.musicPlayer.setGameMusic("src/main/resources/audio/soundtrack.mp3");
+        this.musicPlayer.setGameMusic(GAME_MUSIC_PATH);
         this.databaseManager = new DatabaseManager();
         this.userSettings = userSettings;
         this.primaryStage = primaryStage;
@@ -36,14 +43,14 @@ public class GameStarter implements GameEndListener, GameAbortListener {
 
         int screenWidth = userSettings.getWidth();
         int screenHeight = userSettings.getHeight();
-        int sidebarWidth = (int) screenWidth/4;
+        int sidebarWidth = (int) (screenWidth * SIDEBAR_WIDTH_RATIO);
 
         BorderPane root = new BorderPane();
 
-        // Gameplay Pane
+        // The Gameplay Pane
         Pane gamePane = new Pane();
 
-        Image backgroundImage = new Image(getClass().getResource("/sprites/background/Steampunk/darkblue1.png").toExternalForm());
+        Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResource(BACKGROUND_IMAGE_PATH)).toExternalForm());
         ImageView backgroundView = new ImageView(backgroundImage);
         backgroundView.setFitWidth(screenWidth);
         backgroundView.setFitHeight(screenHeight);
@@ -70,7 +77,7 @@ public class GameStarter implements GameEndListener, GameAbortListener {
         musicPlayer.play();
 
         Stage stage = new Stage();
-        stage.setTitle("ConcreteJumple");
+        stage.setTitle(GAME_TITLE);
         stage.setFullScreen(userSettings.isFullscreen());
         if (!userSettings.isFullscreen()) {
             stage.setMaximized(true);
@@ -84,19 +91,15 @@ public class GameStarter implements GameEndListener, GameAbortListener {
 
     @Override
     public void onGameEnd(HighScore score) {
-        // Handle game end logic, such as stopping music and closing the stage
         if (musicPlayer != null) {
             musicPlayer.stop();
             musicPlayer = null;
         }
         this.menuPlayer.play();
-
-        // Save the score to the database
         databaseManager.insertHighScore(score);
-        System.out.println("Score saved to the database: " + score);
 
         // Close the current game stage
-        Stage currentStage = (Stage) ((Pane) scene.getRoot()).getScene().getWindow();
+        Stage currentStage = (Stage) scene.getRoot().getScene().getWindow();
         currentStage.close();
 
         // Re-show the MenuScreen stage

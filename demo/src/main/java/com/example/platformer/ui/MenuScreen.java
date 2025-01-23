@@ -1,11 +1,9 @@
 package com.example.platformer.ui;
 
 import com.example.platformer.core.GameStarter;
-import com.example.platformer.ui.MusicPlayer;
 import com.example.platformer.core.UserSettings;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
