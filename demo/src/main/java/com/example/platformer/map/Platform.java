@@ -6,10 +6,9 @@ import javafx.scene.image.ImageView;
 
 public class Platform {
     private Group platformView; // Group to hold all parts of the platform
-    private double x, y;
-    private int platformSpriteHeight = 32;
+    private int x, y;
 
-    public Platform(double x, double y, double width, double height) {
+    public Platform(double x, double y, int width, int height) {
         platformView = new Group(); // Initialize the container for platform parts
 
         // Load the images for the platform parts
@@ -17,40 +16,40 @@ public class Platform {
         Image platformImageMiddle = new Image(getClass().getResource("/sprites/platforms/platform_middle.png").toExternalForm());
         Image platformImageRight = new Image(getClass().getResource("/sprites/platforms/platform_right.png").toExternalForm());
 
-        // Create ImageView for the left part
-        ImageView leftPart = new ImageView(platformImageLeft);
-        leftPart.setFitWidth(platformSpriteHeight); // Adjust width if needed
-        leftPart.setFitHeight(platformSpriteHeight); // Adjust height
-        leftPart.setTranslateX(0);
+        // Calculate scaling factors for the sprites
+        double originalSpriteHeight = 32; // Assume original height of the sprite is 16px
+        double scalingFactor = height / originalSpriteHeight; // Scaling factor for height
 
-        // Add the left part to the group
+        // Scale the left part
+        ImageView leftPart = new ImageView(platformImageLeft);
+        leftPart.setFitWidth(platformImageLeft.getWidth() * scalingFactor); // Scale width proportionally
+        leftPart.setFitHeight(height); // Set height to match scaling factor
+        leftPart.setTranslateX(0); // Position the left part
         platformView.getChildren().add(leftPart);
 
-        // Calculate the number of middle parts based on width
-        double middleWidth = platformImageMiddle.getWidth();
-        int numMiddleParts = (int) ((width - platformImageLeft.getWidth() - platformImageRight.getWidth()) / middleWidth);
+        // Calculate middle part dimensions
+        double middleWidth = platformImageMiddle.getWidth() * scalingFactor; // Scale middle part width
+        int numMiddleParts = (int) ((width - leftPart.getFitWidth() - platformImageRight.getWidth() * scalingFactor) / middleWidth);
 
-        // Add middle parts to the group
+        // Add middle parts
         for (int i = 0; i < numMiddleParts; i++) {
             ImageView middlePart = new ImageView(platformImageMiddle);
             middlePart.setFitWidth(middleWidth);
-            middlePart.setFitHeight(platformSpriteHeight);
-            middlePart.setTranslateX(platformImageLeft.getWidth() + i * middleWidth);
+            middlePart.setFitHeight(height); // Match the scaled height
+            middlePart.setTranslateX(leftPart.getFitWidth() + i * middleWidth);
             platformView.getChildren().add(middlePart);
         }
 
-        // Create ImageView for the right part
+        // Scale the right part
         ImageView rightPart = new ImageView(platformImageRight);
-        rightPart.setFitWidth(platformSpriteHeight); // Adjust width if needed
-        rightPart.setFitHeight(platformSpriteHeight); // Adjust height
-        rightPart.setTranslateX(platformImageLeft.getWidth() + numMiddleParts * middleWidth);
-
-        // Add the right part to the group
+        rightPart.setFitWidth(platformImageRight.getWidth() * scalingFactor); // Scale width proportionally
+        rightPart.setFitHeight(height); // Set height to match scaling factor
+        rightPart.setTranslateX(leftPart.getFitWidth() + numMiddleParts * middleWidth);
         platformView.getChildren().add(rightPart);
 
         // Position the entire platform
-        this.x = x;
-        this.y = y;
+        this.x = (int) x;
+        this.y = (int) y;
         platformView.setTranslateX(x);
         platformView.setTranslateY(y);
     }
@@ -59,15 +58,20 @@ public class Platform {
         return platformView;
     }
 
-    public double getX() {
+    public int getX() {
         return x;
     }
 
-    public double getY() {
+    public int getY() {
         return y;
     }
 
     public int getWidth() {
         return (int) platformView.getBoundsInParent().getWidth();
     }
+
+    public int getHeight() {
+        return (int) platformView.getBoundsInParent().getHeight();
+    }
 }
+

@@ -46,6 +46,7 @@
     -fx-font-weight: bold;
     -fx-alignment: center;
     -fx-font-family: "Press Start 2P";
+    -fx-padding: 50;
 }
 
 /* Styles for the high scores table */
@@ -57,6 +58,7 @@
     -fx-font-size: 16px;
     -fx-text-fill: white;
 }
+
 
 /* Header row styles */
 .high-scores-table .column-header-background {
@@ -70,16 +72,16 @@
 
 /* Table row styles */
 .high-scores-table .table-row-cell {
-    -fx-background-color: rgba(255, 255, 255, 0.15); /* Subtle row background */
+    -fx-background-color: rgba(255, 255, 255, 0.20); /* Subtle row background */
     -fx-text-fill: white; /* White text */
 }
 
 .high-scores-table .table-row-cell:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.25); /* Slight highlight on hover */
+    -fx-background-color: rgba(255, 255, 255, 0.30); /* Slight highlight on hover */
 }
 
 /* Title styles */
-.high-score-title {
+.high-score-title, .settings-title {
     -fx-font-size: 64px; /* Larger font size for better readability */
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -89,5 +91,39 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 10, 0, 2, 2);
 }
 
+.settings-label {
+    -fx-font-size: 32px;
+    -fx-text-fill: white;
+    -fx-font-family: 'Press Start 2P';
+    -fx-alignment: center;
+}
 
+/* Styles for the toggle button */
+.toggle-button {
+    -fx-font-size: 24px;
+    -fx-font-family: 'Press Start 2P';
+    -fx-background-color: #444; /* Neutral dark gray background */
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-border-color: lightgray;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0, 3, 3);
+    -fx-transition: all 0.3s ease;
+}
 
+.toggle-button:hover {
+    -fx-background-color: #555; /* Slightly lighter gray on hover */
+}
+
+.toggle-button:selected {
+    -fx-background-color: #28a745; /* Green to indicate ON state */
+    -fx-text-fill: white; /* Ensure text is visible */
+    -fx-border-color: #1c7a30; /* Darker green border for selected state */
+}
+
+.toggle-button:focused {
+    -fx-effect: dropshadow(gaussian, rgba(50, 205, 50, 0.8), 10, 0.5, 0, 0); /* Subtle glow for focus */
+}

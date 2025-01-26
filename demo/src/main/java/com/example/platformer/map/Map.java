@@ -12,9 +12,9 @@ public class Map {
     private PlatformGenerator platformGenerator;
 
 
-    public Map(Pane root, int screenWidth, int screenHeight, int sideBarWidth) {
+    public Map(Pane root, int screenWidth, int screenHeight, int sideBarWidth, int scalingFactor) {
         this.gameRoot = root;
-        this.platformGenerator = new PlatformGenerator(screenWidth, screenHeight);
+        this.platformGenerator = new PlatformGenerator(screenWidth, screenHeight, scalingFactor);
         this.platforms = platformGenerator.generatePlatforms(sideBarWidth);
         addPlatformsToGameRoot();
     }

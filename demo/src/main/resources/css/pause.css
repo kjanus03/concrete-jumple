@@ -1,0 +1,23 @@
+/* Pause Screen Styles */
+.pause-button {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Press Start 2P';
+    -fx-background-color: rgba(255, 215, 0, 0.8); /* Gold color */
+    -fx-text-fill: #333333; /* Dark text */
+    -fx-padding: 10 30;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-color: #333333;
+    -fx-border-width: 3;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 4, 0, 2, 2);
+}
+
+.pause-button:hover {
+    -fx-background-color: rgba(255, 215, 0, 1); /* Brighter gold */
+}
+
+.pause-button:pressed {
+    -fx-background-color: rgba(200, 160, 0, 1); /* Darker gold */
+    -fx-effect: none;
+}

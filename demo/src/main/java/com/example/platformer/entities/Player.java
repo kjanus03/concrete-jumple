@@ -57,23 +57,27 @@ public class Player extends Entity {
 
     private PlayerState currentState = null;
 
+    private int scalingFactor;
 
-    public Player(double x, double y, int speed) {
+    public Player(double x, double y, int speed, int scalingFactor) {
         super(x, y, 32, 64);  // Initialize a rectangle for the
         loadAnimations();
         // Load idle sprites
+        this.scalingFactor = scalingFactor;
 
         spriteView = new ImageView(idleSprites[0]); // Start with the first idle sprite
-        spriteView.setFitWidth(64); // Match entity size
-        spriteView.setFitHeight(128);
+        spriteView.setFitWidth(32*scalingFactor); // Match entity size
+        spriteView.setFitHeight(64*scalingFactor);
 
         // make entity view transparent
         entityView.setOpacity(0);
 
+        spriteView.setTranslateX(x);
+        spriteView.setTranslateY(y);
 
 
-        jumpForce = 750;  // Set the initial jump force
-        this.speed = speed;  // Set the initial speed
+        jumpForce = 500*scalingFactor;  // Set the initial jump force
+        this.speed = speed*scalingFactor/2;  // Set the initial speed
         activeBuffs = new ArrayList<>();
         isInvincible = false;
     }
@@ -241,6 +245,10 @@ public class Player extends Entity {
     public void update(double deltaTime) {
         super.update(deltaTime);
 
+        // Update sprite position to match the entity's position (align with hitbox)
+        spriteView.setTranslateX(x); // Align sprite with the entity's x position
+        spriteView.setTranslateY(y - 55*scalingFactor); // Align sprite with the entity's y position (adjust vertical offset if needed)
+
         // Determine the current state
         if (collisionCooldown) {
             setState(PlayerState.FREEZE);
@@ -290,11 +298,8 @@ public class Player extends Entity {
 
         // Update sprite position
         spriteView.setTranslateX(x);
-        spriteView.setTranslateY(y-55);
+        spriteView.setTranslateY(y-51);
     }
-
-
-
 
     public void jump() {
         if (canJump) {

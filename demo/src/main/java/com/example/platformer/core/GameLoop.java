@@ -15,9 +15,8 @@ public abstract class GameLoop extends AnimationTimer {
         long deltaTime = now - previousTime;
         previousTime = now;
 
-        update(deltaTime / 1e9);  // Convert nanoseconds to seconds
+        update(deltaTime / 1e9);
     }
 
-    // Method that each game should implement to handle updates
     protected abstract void update(double deltaTime);
 }

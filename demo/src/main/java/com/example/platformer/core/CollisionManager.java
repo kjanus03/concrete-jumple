@@ -7,8 +7,8 @@ import javafx.scene.shape.Rectangle;
 import com.example.platformer.map.Platform;
 
 public class CollisionManager {
-    private double sideBarWidth;
-    private double screenWidth;
+    private final double sideBarWidth;
+    private final double screenWidth;
     public CollisionManager(double sideBarWidth, double screenWidth) {
         this.sideBarWidth = sideBarWidth;
         this.screenWidth = screenWidth;
@@ -33,7 +33,7 @@ public class CollisionManager {
                 !(entityBounds.getTranslateY() + entityBounds.getHeight() <= platformBounds.getTranslateY());
     }
 
-    public boolean isEntityCollidingWalls(Entity entity) {
+    public boolean isEntityCollidingWithWall(Entity entity) {
         Rectangle entityBounds = entity.getView();
         boolean colliding = entityBounds.getTranslateX() <= 0 ||
                 entityBounds.getTranslateX() + entityBounds.getWidth() >= screenWidth - sideBarWidth;
